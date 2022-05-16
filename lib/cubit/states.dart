@@ -1,6 +1,8 @@
 import 'package:dar_altep/models/auth/check_code_model.dart';
-import 'package:dar_altep/models/auth/offers_model.dart';
+import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
+import 'package:dar_altep/models/test_details_model.dart';
+import 'package:dar_altep/models/tests_model.dart';
 
 abstract class AppStates{}
 
@@ -62,4 +64,40 @@ class AppGetOffersErrorState extends AppStates{
   AppGetOffersErrorState(this.error);
 }
 
+class AppGetTestsLoadingState extends AppStates{}
+
+class AppGetTestsSuccessState extends AppStates{
+  final TestsModel testsModel;
+  AppGetTestsSuccessState(this.testsModel);
+}
+
+class AppGetTestsErrorState extends AppStates{
+  final String error;
+  AppGetTestsErrorState(this.error);
+}
+
+class AppGetTestDetailsLoadingState extends AppStates{}
+
+class AppGetTestDetailsSuccessState extends AppStates{
+  final TestDetailsModel testDetailsModel;
+  AppGetTestDetailsSuccessState(this.testDetailsModel);
+}
+
+class AppGetTestDetailsErrorState extends AppStates{
+  final String error;
+  AppGetTestDetailsErrorState(this.error);
+}
+
+
+class AppEditProfileLoadingState extends AppStates{}
+
+class AppEditProfileSuccessState extends AppStates{
+  final UserModel userModel;
+  AppEditProfileSuccessState(this.userModel);
+}
+
+class AppEditProfileErrorState extends AppStates{
+  final String error;
+  AppEditProfileErrorState(this.error);
+}
 

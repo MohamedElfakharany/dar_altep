@@ -1,9 +1,9 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
-import 'package:dar_altep/screens/drawer_screen.dart';
+import 'package:dar_altep/screens/drawer/drawer_screen.dart';
 import 'package:dar_altep/screens/home/components/widet_components.dart';
-import 'package:dar_altep/screens/home/test_library_screen.dart';
+import 'package:dar_altep/screens/home/test_screen/test_library_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state) {},
-      builder: (context, state){
+      builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
             leading: const Icon(
@@ -134,25 +134,28 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 247.0,
-                  child: ConditionalBuilder(
-                    condition: state is AppGetOffersLoadingState,
-                    builder: (context) => ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => HomeOffersCard(context: context, offersModel: AppCubit.get(context).offersModel!, index: index,),
-                      separatorBuilder: (context, index) => const SizedBox(
-                        width: 10.0,
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 20.0),
+                  child: SizedBox(
+                    height: 247.0,
+                    child: ConditionalBuilder(
+                      condition: state is! AppGetOffersLoadingState,
+                      builder: (context) => ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) => HomeOffersCard(context: context, offersModel: AppCubit.get(context).offersModel, index: index,),
+                        separatorBuilder: (context, index) => const SizedBox(
+                          width: 10.0,
+                        ),
+                        itemCount: AppCubit.get(context).offersModel!.data!.length,
                       ),
-                      itemCount: AppCubit.get(context).offersModel!.data!.length,
+                      fallback: (context) => const Center(child: CircularProgressIndicator()),
                     ),
-                    fallback: (context) => const Center(child: CircularProgressIndicator()),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
-                      top: 20.0, start: 10.0, end: 20.0),
+                      top: 20.0, start: 10.0, end: 20.0,),
                   child: Column(
                     children: [
                       InkWell(
@@ -369,7 +372,7 @@ class HomeScreen extends StatelessWidget {
             ),
             child: const DrawerScreen(),
           ),
-        );
+        ) ;
       },
     );
   }

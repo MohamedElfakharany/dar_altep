@@ -6,4 +6,8 @@ const registerURL = mainURL+'register';
 
 const verificationURL = mainURL+'code_check';
 
-const getOffersURL = mainURL+'code_check';
+const getOffersURL = mainURL+'UserOffers';
+
+const getTestsURL = mainURL+'test';
+
+const getOffersDetailsURL = mainURL+'OfferDetails';

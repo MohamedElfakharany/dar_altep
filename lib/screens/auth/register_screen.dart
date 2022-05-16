@@ -347,7 +347,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   dateOfBirthController.text,
                                               nationality: nationalValue ?? '',
                                               gender: genderValue ?? '',
-                                              age: ageController.text,
                                             );
                                           } else {
                                             if (kDebugMode) {

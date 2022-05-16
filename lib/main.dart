@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
     ));
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getFavoritesData(),
+      create: (BuildContext context) => AppCubit()..getOffersData()..getTestsData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

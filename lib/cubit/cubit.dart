@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/auth/check_code_model.dart';
-import 'package:dar_altep/models/auth/offers_model.dart';
+import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
+import 'package:dar_altep/models/tests_model.dart';
 import 'package:dar_altep/screens/auth/onboarding/onboarding_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/network/local/cache_helper.dart';
@@ -22,6 +23,8 @@ class AppCubit extends Cubit<AppStates> {
   UserModel? userModel;
   VerificationModel? verificationModel;
   OffersModel? offersModel;
+  TestsModel? testsModel;
+  int offersCount = 1;
 
   Future login({
     required String phone,
@@ -29,7 +32,7 @@ class AppCubit extends Cubit<AppStates> {
   }) async {
     var headers = {
       'Accept': 'application/json',
-      'lang': lang,
+      'lang': lang ?? 'en',
     };
     var formData = json.encode({
       'phone': phone,
@@ -74,7 +77,6 @@ class AppCubit extends Cubit<AppStates> {
     required String birthdate,
     required String nationality,
     required String gender,
-    required String age,
     String lang = 'en',
   }) async {
     var headers = {
@@ -87,7 +89,6 @@ class AppCubit extends Cubit<AppStates> {
       'email': email,
       'password': password,
       'birthrate': birthdate,
-      'age': age,
       'gender': gender,
       'nationality': nationality,
     });
@@ -166,12 +167,58 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  Future getFavoritesData() async {
+  Future editProfile({
+    required String name,
+    required String phone,
+    required String email,
+    required String image,
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': lang ?? 'en',
+    };
+    var formData = json.encode({
+      'name': name,
+      'phone': phone,
+      'email': email,
+      'image': image,
+    });
+
+    try {
+      emit(AppRegisterLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        registerURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      if (kDebugMode) {
+        print('responseJson $responseJson');
+      }
+      userModel = UserModel.fromJson(responseJson);
+      emit(AppRegisterSuccessState(userModel!));
+    } catch (e) {
+      emit(AppRegisterErrorState(e.toString()));
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future getOffersData() async {
     emit(AppGetOffersLoadingState());
     var headers = {
-      'Content-Type': 'application/json',
-      'lang': 'en',
-      'Authorization': token ?? '',
+      'Accept': 'application/json',
+      'lang': lang ?? 'en',
+      'Authorization': 'Bearer $token',
     };
     try {
       Dio dio = Dio();
@@ -184,13 +231,96 @@ class AppCubit extends Cubit<AppStates> {
           headers: headers,
         ),
       );
-      var responseJson = response.data;
-      var convertedResponsetoUTF = utf8.decode(responseJson);
-      offersModel = offersModelFromJson(convertedResponsetoUTF);
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      offersModel = OffersModel.fromJson(responseJson);
+      if (kDebugMode) {
+        print(getOffersURL);
+        print(responseJson);
+        print('offersModel?.data.length ${offersModel?.data?.length}');
+        print('offersModel?.data ${offersModel?.data?[0].name}');
+      }
       emit(AppGetOffersSuccessState(offersModel!));
     } catch (error) {
-      // print(error.toString());
+      if (kDebugMode) {
+        print('error ${error.toString()}');
+      }
       emit(AppGetOffersErrorState(error.toString()));
+    }
+  }
+
+  Future getTestsData() async {
+    emit(AppGetTestsLoadingState());
+    var headers = {
+      'Accept': 'application/json',
+      'lang': lang ?? 'en',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      Dio dio = Dio();
+      var response = await dio.get(
+        getTestsURL,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      testsModel = TestsModel.fromJson(responseJson);
+      if (kDebugMode) {
+        print('getTestsURL ${getTestsURL}');
+        print('responseJson ${responseJson}');
+        print('testsModel?.data.length ${testsModel?.data?.length}');
+        print('testsModel?.data?[0].id ${testsModel?.data?[0].id}');
+      }
+      emit(AppGetTestsSuccessState(testsModel!));
+    } catch (error) {
+      if (kDebugMode) {
+        print('error ${error.toString()}');
+      }
+      emit(AppGetTestsErrorState(error.toString()));
+    }
+  }
+
+  Future getTestDetailsData() async {
+    emit(AppGetTestsLoadingState());
+    var headers = {
+      'Accept': 'application/json',
+      'lang': lang ?? 'en',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      Dio dio = Dio();
+      var response = await dio.get(
+        getTestsURL,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      testsModel = TestsModel.fromJson(responseJson);
+      if (kDebugMode) {
+        print('getTestsURL ${getTestsURL}');
+        print('responseJson ${responseJson}');
+        print('testsModel?.data.length ${testsModel?.data?.length}');
+        print('testsModel?.data?[0].id ${testsModel?.data?[0].id}');
+      }
+      emit(AppGetTestsSuccessState(testsModel!));
+    } catch (error) {
+      if (kDebugMode) {
+        print('error ${error.toString()}');
+      }
+      emit(AppGetTestsErrorState(error.toString()));
     }
   }
 
