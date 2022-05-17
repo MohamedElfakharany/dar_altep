@@ -44,7 +44,8 @@ class Data {
       this.age,
       this.gender,
       this.verificationCode,
-      this.token});
+      this.token,
+      this.idImage});
 
   dynamic name;
   dynamic email;
@@ -56,6 +57,7 @@ class Data {
   dynamic gender;
   dynamic verificationCode;
   dynamic token;
+  dynamic idImage;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         name: json["name"],
@@ -68,6 +70,7 @@ class Data {
         gender: json["gender"],
         verificationCode: json["verification_code"],
         token: json["token"],
+        idImage: json["ID_image"],
       );
 
   Map<dynamic, dynamic> toJson() => {
@@ -81,5 +84,6 @@ class Data {
         "gender": gender,
         "verification_code": verificationCode,
         "token": token,
+        "ID_image": idImage,
       };
 }

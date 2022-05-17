@@ -4,6 +4,10 @@ const loginURL = mainURL+'login';
 
 const registerURL = mainURL+'register';
 
+const updateProfileURL = mainURL+'update_profile';
+
+const getProfileURL = mainURL+'profile';
+
 const verificationURL = mainURL+'code_check';
 
 const getOffersURL = mainURL+'UserOffers';

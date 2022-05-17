@@ -52,6 +52,10 @@ class AppVerificationErrorState extends AppStates{
 
 class AppLogoutSuccessState extends AppStates{}
 
+class AppProfileImagePickedSuccessState extends AppStates{}
+
+class AppProfileImagePickedErrorState extends AppStates{}
+
 class AppGetOffersLoadingState extends AppStates{}
 
 class AppGetOffersSuccessState extends AppStates{
@@ -101,3 +105,11 @@ class AppEditProfileErrorState extends AppStates{
   AppEditProfileErrorState(this.error);
 }
 
+class AppGetProfileLoadingState extends AppStates{}
+
+class AppGetProfileSuccessState extends AppStates{}
+
+class AppGetProfileErrorState extends AppStates{
+  final String error;
+  AppGetProfileErrorState(this.error);
+}

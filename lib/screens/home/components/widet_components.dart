@@ -18,154 +18,154 @@ class HomeOffersCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(
           start: 10.0, top: 12.0, bottom: 12.0,),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 4,
-              blurRadius: 6,
-              offset: const Offset(0, 1), // changes position of shadow
-            ),
-          ],
-          border: Border.all(color: whiteColor),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        width: 160.0,
-        height: 227.0,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 110,
-              child: CachedNetworkImageNormal(
-                imageUrl:
-                    offersModel?.data?[index].image,
-                imageBoxFit: BoxFit.fill,
-                height: 100.0,
-              ),
-            ),
-            Positioned.fill(
-              top: 100,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: whiteColor,
-                ),
-                height: 122,
-                padding: const EdgeInsetsDirectional.only(
-                    top: 10.0, start: 10.0, end: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${offersModel?.data?[index].name}',
-                      style: TextStyle(
-                        fontFamily: fontFamily,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    verticalMicroSpace,
-                    Text(
-                      offersModel?.data?[index].duration,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: fontFamily,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    verticalMicroSpace,
-                    Positioned.fill(
-                      right: 0,
-                      bottom: 0,
-                      left: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                offersModel?.data?[index].price,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: fontFamily,
-                                  decoration: TextDecoration.lineThrough,
-                                  color: darkColor,
-                                ),
-                              ),
-                              horizontalSmallSpace,
-                              horizontalSmallSpace,
-                              Text(
-                                offersModel?.data?[index].discount,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.bold,
-                                  color: blueDark,
-                                ),
-                              ),
-                            ],
-                          ),
-                          verticalMicroSpace,
-                          Container(
-                            width: double.infinity,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              gradient: const LinearGradient(
-                                colors: [blueDark, blueLight],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: blueDark.withOpacity(0.25),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 5), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: MaterialButton(
-                              onPressed: () {},
-                              child: const Center(
-                                child: Text(
-                                  'Get Offers',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      // child: Container(
+      //   decoration: BoxDecoration(
+      //     boxShadow: [
+      //       BoxShadow(
+      //         color: Colors.grey.withOpacity(0.1),
+      //         spreadRadius: 4,
+      //         blurRadius: 6,
+      //         offset: const Offset(0, 1), // changes position of shadow
+      //       ),
+      //     ],
+      //     border: Border.all(color: whiteColor),
+      //     color: Colors.white,
+      //     borderRadius: BorderRadius.circular(15),
+      //   ),
+      //   width: 160.0,
+      //   height: 227.0,
+      //   child: Stack(
+      //     children: [
+      //       Positioned.fill(
+      //         top: 0,
+      //         left: 0,
+      //         right: 0,
+      //         bottom: 110,
+      //         child: CachedNetworkImageNormal(
+      //           imageUrl:
+      //               offersModel?.data?[index].image,
+      //           imageBoxFit: BoxFit.fill,
+      //           height: 100.0,
+      //         ),
+      //       ),
+      //       Positioned.fill(
+      //         top: 100,
+      //         left: 0,
+      //         right: 0,
+      //         bottom: 0,
+      //         child: Container(
+      //           decoration: BoxDecoration(
+      //             borderRadius: BorderRadius.circular(20),
+      //             color: whiteColor,
+      //           ),
+      //           height: 122,
+      //           padding: const EdgeInsetsDirectional.only(
+      //               top: 10.0, start: 10.0, end: 10.0),
+      //           child: Column(
+      //             crossAxisAlignment: CrossAxisAlignment.start,
+      //             children: [
+      //               Text(
+      //                 '${offersModel?.data?[index].name}',
+      //                 style: TextStyle(
+      //                   fontFamily: fontFamily,
+      //                   fontWeight: FontWeight.bold,
+      //                 ),
+      //                 maxLines: 1,
+      //                 overflow: TextOverflow.ellipsis,
+      //               ),
+      //               verticalMicroSpace,
+      //               Text(
+      //                 offersModel?.data?[index].duration,
+      //                 maxLines: 1,
+      //                 overflow: TextOverflow.ellipsis,
+      //                 style: TextStyle(
+      //                   fontSize: 14,
+      //                   fontFamily: fontFamily,
+      //                   color: Colors.black54,
+      //                 ),
+      //               ),
+      //               verticalMicroSpace,
+      //               Positioned.fill(
+      //                 right: 0,
+      //                 bottom: 0,
+      //                 left: 0,
+      //                 child: Column(
+      //                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                   children: [
+      //                     Row(
+      //                       mainAxisAlignment: MainAxisAlignment.center,
+      //                       children: [
+      //                         Text(
+      //                           offersModel?.data?[index].price,
+      //                           maxLines: 1,
+      //                           overflow: TextOverflow.ellipsis,
+      //                           style: TextStyle(
+      //                             fontSize: 12,
+      //                             fontFamily: fontFamily,
+      //                             decoration: TextDecoration.lineThrough,
+      //                             color: darkColor,
+      //                           ),
+      //                         ),
+      //                         horizontalSmallSpace,
+      //                         horizontalSmallSpace,
+      //                         Text(
+      //                           offersModel?.data?[index].discount,
+      //                           maxLines: 1,
+      //                           overflow: TextOverflow.ellipsis,
+      //                           style: TextStyle(
+      //                             fontSize: 16,
+      //                             fontFamily: fontFamily,
+      //                             fontWeight: FontWeight.bold,
+      //                             color: blueDark,
+      //                           ),
+      //                         ),
+      //                       ],
+      //                     ),
+      //                     verticalMicroSpace,
+      //                     Container(
+      //                       width: double.infinity,
+      //                       height: 30,
+      //                       decoration: BoxDecoration(
+      //                         borderRadius: BorderRadius.circular(8),
+      //                         gradient: const LinearGradient(
+      //                           colors: [blueDark, blueLight],
+      //                           begin: Alignment.centerLeft,
+      //                           end: Alignment.centerRight,
+      //                         ),
+      //                         boxShadow: [
+      //                           BoxShadow(
+      //                             color: blueDark.withOpacity(0.25),
+      //                             spreadRadius: 2,
+      //                             blurRadius: 5,
+      //                             offset: const Offset(
+      //                                 0, 5), // changes position of shadow
+      //                           ),
+      //                         ],
+      //                       ),
+      //                       child: MaterialButton(
+      //                         onPressed: () {},
+      //                         child: const Center(
+      //                           child: Text(
+      //                             'Get Offers',
+      //                             style: TextStyle(
+      //                               fontSize: 12,
+      //                               color: Colors.white,
+      //                             ),
+      //                             maxLines: 1,
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

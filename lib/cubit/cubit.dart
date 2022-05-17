@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/auth/check_code_model.dart';
@@ -14,6 +15,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(InitialAppStates());
@@ -24,6 +26,7 @@ class AppCubit extends Cubit<AppStates> {
   VerificationModel? verificationModel;
   OffersModel? offersModel;
   TestsModel? testsModel;
+  UserModel? userdata;
   int offersCount = 1;
 
   Future login({
@@ -60,6 +63,9 @@ class AppCubit extends Cubit<AppStates> {
         print('responseJson $responseJson');
       }
       userModel = UserModel.fromJson(responseJson);
+      if (kDebugMode) {
+        print('user model ${userModel?.data?.idImage}');
+      }
       emit(AppLoginSuccessState(userModel!));
     } catch (e) {
       emit(AppLoginErrorState(e.toString()));
@@ -176,19 +182,23 @@ class AppCubit extends Cubit<AppStates> {
     var headers = {
       'Accept': 'application/json',
       'lang': lang ?? 'en',
+      'Authorization': 'Bearer $token',
     };
-    var formData = json.encode({
+    var formData = FormData.fromMap({
       'name': name,
       'phone': phone,
       'email': email,
-      'image': image,
+      'ID_image': await MultipartFile.fromFile(
+        profileImage!.path,
+        filename: image,
+      ),
     });
 
     try {
-      emit(AppRegisterLoadingState());
+      emit(AppEditProfileLoadingState());
       Dio dio = Dio();
       var response = await dio.post(
-        registerURL,
+        updateProfileURL,
         data: formData,
         options: Options(
           followRedirects: false,
@@ -202,14 +212,54 @@ class AppCubit extends Cubit<AppStates> {
       var responseJson = json.decode(convertedResponse);
       if (kDebugMode) {
         print('responseJson $responseJson');
+        print('form data $formData');
       }
       userModel = UserModel.fromJson(responseJson);
-      emit(AppRegisterSuccessState(userModel!));
+      getProfileData();
+      emit(AppEditProfileSuccessState(userModel!));
     } catch (e) {
-      emit(AppRegisterErrorState(e.toString()));
+      emit(AppEditProfileErrorState(e.toString()));
       if (kDebugMode) {
         print(e.toString());
       }
+    }
+  }
+
+  Future getProfileData() async {
+    emit(AppGetProfileLoadingState());
+    var headers = {
+      'Accept': 'application/json',
+      'lang': lang ?? 'en',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      Dio dio = Dio();
+      var response = await dio.get(
+        getProfileURL,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      userdata = UserModel.fromJson(responseJson);
+      var user = userdata?.data;
+
+      if (kDebugMode) {
+        print('user data name is : ${user?.name}');
+        print(getProfileURL);
+        print(responseJson);
+      }
+      emit(AppGetProfileSuccessState());
+    } catch (error) {
+      if (kDebugMode) {
+        print('error ${error.toString()}');
+      }
+      emit(AppGetProfileErrorState(error.toString()));
     }
   }
 
@@ -273,8 +323,6 @@ class AppCubit extends Cubit<AppStates> {
       var responseJson = json.decode(convertedResponse);
       testsModel = TestsModel.fromJson(responseJson);
       if (kDebugMode) {
-        print('getTestsURL ${getTestsURL}');
-        print('responseJson ${responseJson}');
         print('testsModel?.data.length ${testsModel?.data?.length}');
         print('testsModel?.data?[0].id ${testsModel?.data?[0].id}');
       }
@@ -310,8 +358,6 @@ class AppCubit extends Cubit<AppStates> {
       var responseJson = json.decode(convertedResponse);
       testsModel = TestsModel.fromJson(responseJson);
       if (kDebugMode) {
-        print('getTestsURL ${getTestsURL}');
-        print('responseJson ${responseJson}');
         print('testsModel?.data.length ${testsModel?.data?.length}');
         print('testsModel?.data?[0].id ${testsModel?.data?[0].id}');
       }
@@ -366,5 +412,35 @@ class AppCubit extends Cubit<AppStates> {
       }
       emit(AppLogoutSuccessState());
     });
+  }
+
+  File? profileImage;
+  var picker = ImagePicker();
+
+  Future<void> getProfileImage() async {
+    try {
+      XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedImage != null) {
+        profileImage = File(pickedImage.path);
+        if (kDebugMode) {
+          print('dfsdfdfsdf');
+          print(profileImage);
+          print('${Uri.file(profileImage!.path).pathSegments.last}');
+        }
+        emit(AppProfileImagePickedSuccessState());
+      } else {
+        if (kDebugMode) {
+          print('no image selected');
+          print(profileImage);
+        }
+        emit(AppProfileImagePickedErrorState());
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('no');
+        print(profileImage);
+        print(e.toString());
+      }
+    }
   }
 }

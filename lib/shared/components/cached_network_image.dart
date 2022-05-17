@@ -42,7 +42,7 @@ class CachedNetworkImageCircular extends StatelessWidget {
         decoration: const BoxDecoration(
             shape: BoxShape.circle, color: Color(0xffDEDEDE)),
         child: Image.asset(
-          'assets/profileImagePlaceHolder.png',
+          'assets/images/placeholder.png',
         ),
       ),
     );

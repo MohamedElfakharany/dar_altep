@@ -273,6 +273,7 @@ class DefaultFormField extends StatelessWidget {
   double height;
   EdgeInsetsGeometry? contentPadding;
   String? validatedText;
+  String? hintText;
 
   DefaultFormField(
       {Key? key,
@@ -282,6 +283,7 @@ class DefaultFormField extends StatelessWidget {
       this.onSubmit,
       this.onChange,
       this.onTap,
+      this.hintText,
       this.removeBorder = true,
       this.obscureText = false,
       this.prefixColor = blueDark,
@@ -339,18 +341,19 @@ class DefaultFormField extends StatelessWidget {
           // validator: (val) {
           //   validate(val);
           // },
-          onTap: (){
+          onTap: () {
             onTap();
           },
           cursorColor: blueDark,
           decoration: InputDecoration(
             labelText: label,
+            hintText: hintText,
             border: const OutlineInputBorder(
-              // borderSide: BorderSide(
-              //   width: 2,
-              //   color: blueDark,
-              // ),
-            ),
+                // borderSide: BorderSide(
+                //   width: 2,
+                //   color: blueDark,
+                // ),
+                ),
             prefixIcon: prefixIcon != null
                 ? IconButton(
                     icon: prefixIcon!,

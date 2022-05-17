@@ -20,10 +20,19 @@ void main() async {
   DioHelper.init();
 
   token = CacheHelper.getData(key: 'token');
+  // name = CacheHelper.getData(key: 'name');
+  // mobile = CacheHelper.getData(key: 'mobile');
+  // email = CacheHelper.getData(key: 'email');
+  // image = CacheHelper.getData(key: 'image');
+  // birthrate = CacheHelper.getData(key: 'birthrate');
+  // nationality = CacheHelper.getData(key: 'nationality');
+  // gender = CacheHelper.getData(key: 'gender');
+
   Widget widget;
   // token = token;
   if (kDebugMode) {
     print('from main the token is $token');
+    print('from main the token is $name');
   }
 
   if (token != null) {
@@ -72,7 +81,10 @@ class MyApp extends StatelessWidget {
     ));
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getOffersData()..getTestsData(),
+      create: (BuildContext context) => AppCubit()
+        ..getOffersData()
+        ..getTestsData()
+        ..getProfileData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

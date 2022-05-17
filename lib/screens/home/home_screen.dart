@@ -68,13 +68,15 @@ class HomeScreen extends StatelessWidget {
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
                       child: Text(
-                        '${LocaleKeys.homeTxtWelcome.tr()} Mohamed,',
+                        '${LocaleKeys.homeTxtWelcome.tr()} ${AppCubit.get(context).userdata?.data?.name},',
                         style: TextStyle(
                           color: whiteColor,
                           fontWeight: FontWeight.bold,
                           fontFamily: fontFamily,
                           fontSize: 26,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
@@ -147,7 +149,8 @@ class HomeScreen extends StatelessWidget {
                         separatorBuilder: (context, index) => const SizedBox(
                           width: 10.0,
                         ),
-                        itemCount: AppCubit.get(context).offersModel!.data!.length,
+                        // itemCount: AppCubit.get(context).offersModel!.data!.length,
+                        itemCount: 10,
                       ),
                       fallback: (context) => const Center(child: CircularProgressIndicator()),
                     ),

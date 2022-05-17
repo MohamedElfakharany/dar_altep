@@ -32,13 +32,36 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is AppLoginSuccessState) {
             if (state.userModel.status) {
-              // print(state.loginModel.message);
-              // print(state.loginModel.data.token);
+
               CacheHelper.saveData(
                 key: 'token',
                 value: state.userModel.data?.token,
               ).then((value) {
+                CacheHelper.saveData(key: 'name', value: state.userModel.data?.name);
+                CacheHelper.saveData(key: 'mobile', value: state.userModel.data?.phone);
+                CacheHelper.saveData(key: 'email', value: state.userModel.data?.email);
+                CacheHelper.saveData(key: 'image', value: state.userModel.data?.idImage);
+                CacheHelper.saveData(key: 'nationality', value: state.userModel.data?.nationality);
+                CacheHelper.saveData(key: 'birthrate', value: state.userModel.data?.birthrate);
+                CacheHelper.saveData(key: 'gender', value: state.userModel.data?.gender);
+
+                name = CacheHelper.getData(key: 'name');
+                mobile = CacheHelper.getData(key: 'mobile');
+                email = CacheHelper.getData(key: 'email');
+                image = CacheHelper.getData(key: 'image');
+                birthrate = CacheHelper.getData(key: 'birthrate');
+                nationality = CacheHelper.getData(key: 'nationality');
+                gender = CacheHelper.getData(key: 'gender');
+
                 token = state.userModel.data?.token;
+                name = state.userModel.data?.name;
+                mobile = state.userModel.data?.phone;
+                email = state.userModel.data?.email;
+                image = state.userModel.data?.idImage;
+                birthrate = state.userModel.data?.birthrate;
+                nationality = state.userModel.data?.nationality;
+                gender = state.userModel.data?.gender;
+
                 navigateAndFinish(
                   context,
                   const HomeScreen(),
