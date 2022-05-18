@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, body_might_complete_normally_nullable
 
 import 'package:dar_altep/shared/constants/colors.dart';
+import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -115,12 +116,14 @@ class GeneralButton extends StatelessWidget {
 
 class GeneralUnfilledButton extends StatelessWidget {
   final String title;
+  final String? image;
   final Color color;
   final Color borderColor;
   final Function onPress;
   final double width;
   final double height;
   final double btnRadius;
+  final double borderWidth;
 
   const GeneralUnfilledButton({
     Key? key,
@@ -131,6 +134,8 @@ class GeneralUnfilledButton extends StatelessWidget {
     this.width = 50,
     this.height = 50,
     this.btnRadius = 15,
+    this.borderWidth = 2,
+    this.image,
   }) : super(key: key);
 
   @override
@@ -144,17 +149,52 @@ class GeneralUnfilledButton extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(btnRadius),
-          border: Border.all(color: borderColor, width: 2.0),
-        ),
-        child: Center(
-          child: Text(
-            title,
-            maxLines: 1,
-            style: TextStyle(
-              fontSize: 14,
-              color: color,
+          border: Border.all(color: borderColor, width: borderWidth),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.15),
+              spreadRadius: 2,
+              blurRadius: 2,
+              offset: const Offset(0, 2),
             ),
-          ),
+          ],
+          color: whiteColor,
+        ),
+        child: Row(
+          children: [
+            if (image != null) horizontalSmallSpace,
+            if (image != null)
+              Image.asset(
+                '$image',
+                fit: BoxFit.cover,
+                height: 30,
+                width: 30,
+              ),
+            if (image != null)
+              horizontalSmallSpace,
+            if (image != null)
+              Expanded(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: color,
+                  ),
+                ),
+              ),
+            if (image == null)
+              Expanded(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: color,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -431,6 +471,11 @@ class FadeRoute extends PageRouteBuilder {
 void showPopUp(BuildContext context, Widget widget) {
   showDialog(
     context: context,
-    builder: (context) => AlertDialog(content: widget),
+    builder: (context) => AlertDialog(
+      content: widget,
+      contentPadding: const EdgeInsets.all(0.0),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(radius))),
+    ),
   );
 }

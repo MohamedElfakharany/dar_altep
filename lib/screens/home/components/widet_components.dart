@@ -1,5 +1,6 @@
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
+import 'package:dar_altep/screens/home/test_screen/home_visit_screen.dart';
 import 'package:dar_altep/screens/home/test_screen/test_details_screen.dart';
 import 'package:dar_altep/shared/components/cached_network_image.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
@@ -18,154 +19,154 @@ class HomeOffersCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(
           start: 10.0, top: 12.0, bottom: 12.0,),
-      // child: Container(
-      //   decoration: BoxDecoration(
-      //     boxShadow: [
-      //       BoxShadow(
-      //         color: Colors.grey.withOpacity(0.1),
-      //         spreadRadius: 4,
-      //         blurRadius: 6,
-      //         offset: const Offset(0, 1), // changes position of shadow
-      //       ),
-      //     ],
-      //     border: Border.all(color: whiteColor),
-      //     color: Colors.white,
-      //     borderRadius: BorderRadius.circular(15),
-      //   ),
-      //   width: 160.0,
-      //   height: 227.0,
-      //   child: Stack(
-      //     children: [
-      //       Positioned.fill(
-      //         top: 0,
-      //         left: 0,
-      //         right: 0,
-      //         bottom: 110,
-      //         child: CachedNetworkImageNormal(
-      //           imageUrl:
-      //               offersModel?.data?[index].image,
-      //           imageBoxFit: BoxFit.fill,
-      //           height: 100.0,
-      //         ),
-      //       ),
-      //       Positioned.fill(
-      //         top: 100,
-      //         left: 0,
-      //         right: 0,
-      //         bottom: 0,
-      //         child: Container(
-      //           decoration: BoxDecoration(
-      //             borderRadius: BorderRadius.circular(20),
-      //             color: whiteColor,
-      //           ),
-      //           height: 122,
-      //           padding: const EdgeInsetsDirectional.only(
-      //               top: 10.0, start: 10.0, end: 10.0),
-      //           child: Column(
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             children: [
-      //               Text(
-      //                 '${offersModel?.data?[index].name}',
-      //                 style: TextStyle(
-      //                   fontFamily: fontFamily,
-      //                   fontWeight: FontWeight.bold,
-      //                 ),
-      //                 maxLines: 1,
-      //                 overflow: TextOverflow.ellipsis,
-      //               ),
-      //               verticalMicroSpace,
-      //               Text(
-      //                 offersModel?.data?[index].duration,
-      //                 maxLines: 1,
-      //                 overflow: TextOverflow.ellipsis,
-      //                 style: TextStyle(
-      //                   fontSize: 14,
-      //                   fontFamily: fontFamily,
-      //                   color: Colors.black54,
-      //                 ),
-      //               ),
-      //               verticalMicroSpace,
-      //               Positioned.fill(
-      //                 right: 0,
-      //                 bottom: 0,
-      //                 left: 0,
-      //                 child: Column(
-      //                   crossAxisAlignment: CrossAxisAlignment.start,
-      //                   children: [
-      //                     Row(
-      //                       mainAxisAlignment: MainAxisAlignment.center,
-      //                       children: [
-      //                         Text(
-      //                           offersModel?.data?[index].price,
-      //                           maxLines: 1,
-      //                           overflow: TextOverflow.ellipsis,
-      //                           style: TextStyle(
-      //                             fontSize: 12,
-      //                             fontFamily: fontFamily,
-      //                             decoration: TextDecoration.lineThrough,
-      //                             color: darkColor,
-      //                           ),
-      //                         ),
-      //                         horizontalSmallSpace,
-      //                         horizontalSmallSpace,
-      //                         Text(
-      //                           offersModel?.data?[index].discount,
-      //                           maxLines: 1,
-      //                           overflow: TextOverflow.ellipsis,
-      //                           style: TextStyle(
-      //                             fontSize: 16,
-      //                             fontFamily: fontFamily,
-      //                             fontWeight: FontWeight.bold,
-      //                             color: blueDark,
-      //                           ),
-      //                         ),
-      //                       ],
-      //                     ),
-      //                     verticalMicroSpace,
-      //                     Container(
-      //                       width: double.infinity,
-      //                       height: 30,
-      //                       decoration: BoxDecoration(
-      //                         borderRadius: BorderRadius.circular(8),
-      //                         gradient: const LinearGradient(
-      //                           colors: [blueDark, blueLight],
-      //                           begin: Alignment.centerLeft,
-      //                           end: Alignment.centerRight,
-      //                         ),
-      //                         boxShadow: [
-      //                           BoxShadow(
-      //                             color: blueDark.withOpacity(0.25),
-      //                             spreadRadius: 2,
-      //                             blurRadius: 5,
-      //                             offset: const Offset(
-      //                                 0, 5), // changes position of shadow
-      //                           ),
-      //                         ],
-      //                       ),
-      //                       child: MaterialButton(
-      //                         onPressed: () {},
-      //                         child: const Center(
-      //                           child: Text(
-      //                             'Get Offers',
-      //                             style: TextStyle(
-      //                               fontSize: 12,
-      //                               color: Colors.white,
-      //                             ),
-      //                             maxLines: 1,
-      //                           ),
-      //                         ),
-      //                       ),
-      //                     ),
-      //                   ],
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 4,
+              blurRadius: 6,
+              offset: const Offset(0, 1), // changes position of shadow
+            ),
+          ],
+          border: Border.all(color: whiteColor),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        width: 160.0,
+        height: 227.0,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 110,
+              child: CachedNetworkImageNormal(
+                imageUrl:
+                    offersModel?.data?[index].image,
+                imageBoxFit: BoxFit.fill,
+                height: 100.0,
+              ),
+            ),
+            Positioned.fill(
+              top: 100,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: whiteColor,
+                ),
+                height: 122,
+                padding: const EdgeInsetsDirectional.only(
+                    top: 10.0, start: 10.0, end: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${offersModel?.data?[index].name}',
+                      style: TextStyle(
+                        fontFamily: fontFamily,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    verticalMicroSpace,
+                    Text(
+                      offersModel?.data?[index].duration,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: fontFamily,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    verticalMicroSpace,
+                    Positioned.fill(
+                      right: 0,
+                      bottom: 0,
+                      left: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                offersModel?.data?[index].price,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: fontFamily,
+                                  decoration: TextDecoration.lineThrough,
+                                  color: darkColor,
+                                ),
+                              ),
+                              horizontalSmallSpace,
+                              horizontalSmallSpace,
+                              Text(
+                                offersModel?.data?[index].discount,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.bold,
+                                  color: blueDark,
+                                ),
+                              ),
+                            ],
+                          ),
+                          verticalMicroSpace,
+                          Container(
+                            width: double.infinity,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              gradient: const LinearGradient(
+                                colors: [blueDark, blueLight],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: blueDark.withOpacity(0.25),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(
+                                      0, 5), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: MaterialButton(
+                              onPressed: () {},
+                              child: const Center(
+                                child: Text(
+                                  'Get Offers',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -263,47 +264,70 @@ class TestLibraryCard extends StatelessWidget {
             Positioned(
               top: 10,
               right: 15,
-              child: InkWell(
-                onTap: (){
-                  showPopUp(context,Container(
-                    height: 200,
-                    width: width * 0.9,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 10.0),
-                    child: Column(
-                      children: [
-                        verticalSmallSpace,
-                        Text(
-                          'Mohamed Elfakharany',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: fontFamily,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        verticalMediumSpace,
-                        const Text('Do you want to logout?'),
-                        verticalMediumSpace,
-                        GeneralButton(
-                          radius: radius,
-                          title: 'Logout',
-                          onPress: () {
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  );
-                },
-                child: const CircleAvatar(
-                  radius: 15,
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: blueDark,
+                child: FloatingActionButton(
+                  elevation: 10,
                   backgroundColor: blueDark,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_rounded,
                     color: whiteColor,
                     size: 25,
                   ),
+                  onPressed: () {
+                    showPopUp(
+                      context,
+                      Container(
+                        height: 280,
+                        width: width * 0.9,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            verticalMediumSpace,
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(start: 20.0),
+                              child: Text(
+                                'Reservation type',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            verticalMicroSpace,
+                            myDivider(),
+                            verticalLargeSpace,
+                            GeneralUnfilledButton(
+                              borderWidth: 1,
+                              btnRadius: radius - 5,
+                              borderColor: blueLight,
+                              title: 'At Home',
+                              image: 'assets/images/homeIcon.png',
+                              width: double.infinity,
+                              onPress: () {
+                                Navigator.push(context, FadeRoute(page: const HomeVisitScreen()));
+                              },
+                            ),
+                            verticalLargeSpace,
+                            GeneralUnfilledButton(
+                              btnRadius: radius - 5,
+                              borderColor: whiteColor,
+                              title: 'At laboratory',
+                              image: 'assets/images/labIcon.png',
+                              width: double.infinity,
+                              onPress: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

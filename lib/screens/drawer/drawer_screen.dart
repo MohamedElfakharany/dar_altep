@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
+import 'package:dar_altep/screens/drawer/reservation_screen.dart';
 import 'package:dar_altep/screens/drawer/settings_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
@@ -138,20 +139,7 @@ class DrawerScreen extends StatelessWidget {
                     verticalMediumSpace,
                     InkWell(
                       onTap: () {
-                        showPopUp(
-                          context,
-                          Container(
-                            height: height * 0.4,
-                            width: width * 0.8,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10.0),
-                            child: Column(
-                              children: const [
-                                Text('Reservation type'),
-                              ],
-                            ),
-                          ),
-                        );
+                        Navigator.push(context, FadeRoute(page: ReservationScreen()));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -225,7 +213,7 @@ class DrawerScreen extends StatelessWidget {
                               children: [
                                 verticalSmallSpace,
                                 Text(
-                                  'Mohamed Elfakharany',
+                                  AppCubit.get(context).userdata?.data?.name ?? '',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: fontFamily,

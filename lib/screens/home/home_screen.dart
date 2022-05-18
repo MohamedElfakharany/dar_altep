@@ -3,6 +3,7 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/drawer/drawer_screen.dart';
 import 'package:dar_altep/screens/home/components/widet_components.dart';
+import 'package:dar_altep/screens/home/test_screen/home_visit_screen.dart';
 import 'package:dar_altep/screens/home/test_screen/test_library_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
@@ -149,8 +150,8 @@ class HomeScreen extends StatelessWidget {
                         separatorBuilder: (context, index) => const SizedBox(
                           width: 10.0,
                         ),
-                        // itemCount: AppCubit.get(context).offersModel!.data!.length,
-                        itemCount: 10,
+                        itemCount: AppCubit.get(context).offersModel!.data!.length,
+                        // itemCount: 10,
                       ),
                       fallback: (context) => const Center(child: CircularProgressIndicator()),
                     ),
@@ -364,7 +365,59 @@ class HomeScreen extends StatelessWidget {
               color: whiteColor,
               size: 35,
             ),
-            onPressed: () {},
+            onPressed: () {
+              showPopUp(
+                context,
+                Container(
+                  height: 280,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      verticalMediumSpace,
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 20.0),
+                        child: Text(
+                          'Reservation type',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: fontFamily,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      verticalMicroSpace,
+                      myDivider(),
+                      verticalLargeSpace,
+                      GeneralUnfilledButton(
+                        borderWidth: 1,
+                        btnRadius: radius - 5,
+                        borderColor: blueLight,
+                        title: 'At Home',
+                        image: 'assets/images/homeIcon.png',
+                        width: double.infinity,
+                        onPress: () {
+                          Navigator.push(context, FadeRoute(page: const HomeVisitScreen()));
+                        },
+                      ),
+                      verticalLargeSpace,
+                      GeneralUnfilledButton(
+                        btnRadius: radius - 5,
+                        borderColor: whiteColor,
+                        title: 'At laboratory',
+                        image: 'assets/images/labIcon.png',
+                        width: double.infinity,
+                        onPress: () {},
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
           drawer: Container(
             decoration: const BoxDecoration(

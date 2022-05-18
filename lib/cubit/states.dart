@@ -1,7 +1,10 @@
 import 'package:dar_altep/models/auth/check_code_model.dart';
+import 'package:dar_altep/models/home_reservation_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
+import 'package:dar_altep/models/reservation_model.dart';
 import 'package:dar_altep/models/test_details_model.dart';
+import 'package:dar_altep/models/test_results_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
 
 abstract class AppStates{}
@@ -68,6 +71,18 @@ class AppGetOffersErrorState extends AppStates{
   AppGetOffersErrorState(this.error);
 }
 
+class AppGetReservationsLoadingState extends AppStates{}
+
+class AppGetReservationsSuccessState extends AppStates{
+  final ReservationsModel reservationModel;
+  AppGetReservationsSuccessState(this.reservationModel);
+}
+
+class AppGetReservationsErrorState extends AppStates{
+  final String error;
+  AppGetReservationsErrorState(this.error);
+}
+
 class AppGetTestsLoadingState extends AppStates{}
 
 class AppGetTestsSuccessState extends AppStates{
@@ -92,6 +107,17 @@ class AppGetTestDetailsErrorState extends AppStates{
   AppGetTestDetailsErrorState(this.error);
 }
 
+class AppGetTestResultLoadingState extends AppStates{}
+
+class AppGetTestResultSuccessState extends AppStates{
+  final TestResultModel testResultModel;
+  AppGetTestResultSuccessState(this.testResultModel);
+}
+
+class AppGetTestResultErrorState extends AppStates{
+  final String error;
+  AppGetTestResultErrorState(this.error);
+}
 
 class AppEditProfileLoadingState extends AppStates{}
 
@@ -103,6 +129,18 @@ class AppEditProfileSuccessState extends AppStates{
 class AppEditProfileErrorState extends AppStates{
   final String error;
   AppEditProfileErrorState(this.error);
+}
+
+class AppHomeReservationsLoadingState extends AppStates{}
+
+class AppHomeReservationsSuccessState extends AppStates{
+  final HomeReservationsModel homeReservationsModel;
+  AppHomeReservationsSuccessState(this.homeReservationsModel);
+}
+
+class AppHomeReservationsErrorState extends AppStates{
+  final String error;
+  AppHomeReservationsErrorState(this.error);
 }
 
 class AppGetProfileLoadingState extends AppStates{}

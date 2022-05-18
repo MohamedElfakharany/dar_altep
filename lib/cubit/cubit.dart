@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/auth/check_code_model.dart';
+import 'package:dar_altep/models/home_reservation_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
+import 'package:dar_altep/models/reservation_model.dart';
+import 'package:dar_altep/models/test_results_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
 import 'package:dar_altep/screens/auth/onboarding/onboarding_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
@@ -26,7 +29,10 @@ class AppCubit extends Cubit<AppStates> {
   VerificationModel? verificationModel;
   OffersModel? offersModel;
   TestsModel? testsModel;
+  ReservationsModel? reservationModel;
+  HomeReservationsModel? homeReservationsModel;
   UserModel? userdata;
+  TestResultModel? testResultModel;
   int offersCount = 1;
 
   Future login({
@@ -225,6 +231,60 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
+  Future addHomeReservation({
+    required String name,
+    required String phone,
+    required String testName,
+    required String address,
+    required String dateOfVisit,
+    required String time,
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': lang ?? 'en',
+      'Authorization': 'Bearer $token',
+    };
+    var formData = FormData.fromMap({
+      'name': name,
+      'phone': phone,
+      'test_name': testName,
+      'Address': address,
+      'date': dateOfVisit,
+      'time': time,
+    });
+
+    try {
+      emit(AppHomeReservationsLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        homeReservationURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      if (kDebugMode) {
+        print('responseJson $responseJson');
+        print('form data $formData');
+      }
+      homeReservationsModel = HomeReservationsModel.fromJson(responseJson);
+      getReservationsData();
+      emit(AppHomeReservationsSuccessState(homeReservationsModel!));
+    } catch (e) {
+      emit(AppHomeReservationsErrorState(e.toString()));
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+
   Future getProfileData() async {
     emit(AppGetProfileLoadingState());
     var headers = {
@@ -300,6 +360,46 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
+  Future getReservationsData() async {
+    emit(AppGetReservationsLoadingState());
+    var headers = {
+      'Accept': 'application/json',
+      'lang': lang ?? 'en',
+      'Authorization': 'Bearer $token',
+    };
+    // var formData = json.encode({
+    //   'type': 'test',
+    // });
+    try {
+      Dio dio = Dio();
+      var response = await dio.get(
+        userReservationUrl,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      reservationModel = ReservationsModel.fromJson(responseJson);
+      if (kDebugMode) {
+        print(userReservationUrl);
+        print(responseJson);
+        print('reservationModel?.data?.length ${reservationModel?.data?.length}');
+        print('reservationModel?.data ${reservationModel?.data?[0].time}');
+      }
+      emit(AppGetReservationsSuccessState(reservationModel!));
+    } catch (error) {
+      if (kDebugMode) {
+        print('error ${error.toString()}');
+      }
+      emit(AppGetReservationsErrorState(error.toString()));
+    }
+  }
+
   Future getTestsData() async {
     emit(AppGetTestsLoadingState());
     var headers = {
@@ -332,6 +432,48 @@ class AppCubit extends Cubit<AppStates> {
         print('error ${error.toString()}');
       }
       emit(AppGetTestsErrorState(error.toString()));
+    }
+  }
+
+  Future getTestResultData({
+    required int? reservationId,
+    String lang = 'en',
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': lang,
+      'Authorization': 'Bearer $token',
+    };
+    var formData = json.encode({
+      'reservation_id': reservationId,
+    });
+
+    try {
+      emit(AppGetTestResultLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        getTestResultURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      if (kDebugMode) {
+        print('responseJson getTestResultData $responseJson');
+      }
+      testResultModel = TestResultModel.fromJson(responseJson);
+      emit(AppGetTestResultSuccessState(testResultModel!));
+    } catch (e) {
+      emit(AppVerificationErrorState(e.toString()));
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
   }
 
@@ -395,9 +537,7 @@ class AppCubit extends Cubit<AppStates> {
   void onRememberMeChanged() {
     rememberMe = !rememberMe;
     if (rememberMe) {
-      // TODO: Here goes your functionality that remembers the user.
     } else {
-      // TODO: Forget the user
     }
     emit(AppChangeRememberMeState());
   }
@@ -423,9 +563,8 @@ class AppCubit extends Cubit<AppStates> {
       if (pickedImage != null) {
         profileImage = File(pickedImage.path);
         if (kDebugMode) {
-          print('dfsdfdfsdf');
           print(profileImage);
-          print('${Uri.file(profileImage!.path).pathSegments.last}');
+          print(Uri.file(profileImage!.path).pathSegments.last);
         }
         emit(AppProfileImagePickedSuccessState());
       } else {

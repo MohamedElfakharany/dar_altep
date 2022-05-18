@@ -84,7 +84,8 @@ class MyApp extends StatelessWidget {
       create: (BuildContext context) => AppCubit()
         ..getOffersData()
         ..getTestsData()
-        ..getProfileData(),
+        ..getProfileData()
+        ..getReservationsData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

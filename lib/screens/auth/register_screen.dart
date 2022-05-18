@@ -195,19 +195,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       },
                                     ),
                                     verticalSmallSpace,
-                                    // DefaultFormField(
-                                    //   controller: nationalityController,
-                                    //   type: TextInputType.text,
-                                    //   validate: (String value) {
-                                    //     if (value.isEmpty) {
-                                    //       return 'Enter Your Nationality';
-                                    //     }
-                                    //   },
-                                    //   label: 'Nationality',
-                                    //   suffixIcon: Icons.keyboard_arrow_down,
-                                    // ),
                                     Container(
-                                      // height: 50.0,
+                                      height: 60.0,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20.0),
                                       decoration: BoxDecoration(
@@ -230,6 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             }
                                           },
                                           decoration: const InputDecoration(
+                                            contentPadding: EdgeInsetsDirectional.only(start: 20.0,end: 10.0),
                                             fillColor: Colors.white,
                                             filled: true,
                                             errorStyle: TextStyle(
@@ -280,7 +270,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                     verticalSmallSpace,
                                     Container(
-                                      // height: 50.0,
+                                      height: 60.0,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20.0),
                                       decoration: BoxDecoration(
@@ -302,6 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             }
                                           },
                                           decoration: const InputDecoration(
+                                            contentPadding: EdgeInsetsDirectional.only(start: 20.0,end: 10.0),
                                             fillColor: Colors.white,
                                             filled: true,
                                             errorStyle: TextStyle(
