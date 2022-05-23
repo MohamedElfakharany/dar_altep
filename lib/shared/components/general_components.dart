@@ -3,13 +3,15 @@
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-void navigateAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
+void navigateAndFinish(context, widget) =>
+    Navigator.pushAndRemoveUntil(
       context,
       FadeRoute(page: widget),
-      (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
     );
 
 void showToast({
@@ -44,12 +46,13 @@ Color chooseToastColor(ToastState state) {
   return color;
 }
 
-Widget myDivider() => Padding(
+Widget myDivider() =>
+    Padding(
       padding: const EdgeInsets.only(left: 20, top: 8, bottom: 8, right: 20),
       child: Container(
         width: double.infinity,
         height: 1.0,
-        color: Colors.grey,
+        color: Colors.grey.withOpacity(0.5),
       ),
     );
 
@@ -212,16 +215,15 @@ class GeneralAppBar extends StatelessWidget with PreferredSizeWidget {
   double? appbarPreferredSize;
   Color? appbarBackButtonColor;
 
-  GeneralAppBar(
-      {Key? key,
-      required this.title,
-      this.leadingWidth,
-      this.centerTitle,
-      this.appBarColor,
-      this.leading,
-      this.actions,
-      this.appbarPreferredSize = 60,
-      this.appbarBackButtonColor = whiteColor})
+  GeneralAppBar({Key? key,
+    required this.title,
+    this.leadingWidth,
+    this.centerTitle,
+    this.appBarColor,
+    this.leading,
+    this.actions,
+    this.appbarPreferredSize = 60,
+    this.appbarBackButtonColor = whiteColor})
       : super(key: key);
 
   @override
@@ -262,13 +264,12 @@ class DefaultTextButton extends StatelessWidget {
   AlignmentDirectional align;
   FontWeight? weight;
 
-  DefaultTextButton(
-      {Key? key,
-      required this.title,
-      this.weight = FontWeight.w400,
-      this.screen,
-      this.isFinish = false,
-      this.align = AlignmentDirectional.centerEnd})
+  DefaultTextButton({Key? key,
+    required this.title,
+    this.weight = FontWeight.w400,
+    this.screen,
+    this.isFinish = false,
+    this.align = AlignmentDirectional.centerEnd})
       : super(key: key);
 
   @override
@@ -314,30 +315,31 @@ class DefaultFormField extends StatelessWidget {
   EdgeInsetsGeometry? contentPadding;
   String? validatedText;
   String? hintText;
+  bool expend;
 
-  DefaultFormField(
-      {Key? key,
-      required this.controller,
-      required this.type,
-      required this.validatedText,
-      this.onSubmit,
-      this.onChange,
-      this.onTap,
-      this.hintText,
-      this.removeBorder = true,
-      this.obscureText = false,
-      this.prefixColor = blueDark,
-      required this.label,
-      this.prefixIcon,
-      this.prefixPressed,
-      this.suffixIcon,
-      this.suffixColor = blueDark,
-      this.suffixPressed,
-      this.isClickable = true,
-      this.readOnly = false,
-      this.contentPadding,
-      this.height = 70,
-      this.autoFocus = false})
+  DefaultFormField({Key? key,
+    required this.controller,
+    required this.type,
+    required this.validatedText,
+    this.expend = false,
+    this.onSubmit,
+    this.onChange,
+    this.onTap,
+    this.hintText,
+    this.removeBorder = true,
+    this.obscureText = false,
+    this.prefixColor = blueDark,
+    required this.label,
+    this.prefixIcon,
+    this.prefixPressed,
+    this.suffixIcon,
+    this.suffixColor = blueDark,
+    this.suffixPressed,
+    this.isClickable = true,
+    this.readOnly = false,
+    this.contentPadding,
+    this.height = 70,
+    this.autoFocus = false})
       : super(key: key);
 
   @override
@@ -359,6 +361,7 @@ class DefaultFormField extends StatelessWidget {
         alignment: AlignmentDirectional.center,
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
         child: TextFormField(
+          expands: expend,
           validator: (value) {
             if (value!.isEmpty) {
               return 'Fill $validatedText';
@@ -367,6 +370,7 @@ class DefaultFormField extends StatelessWidget {
           autofocus: autoFocus,
           controller: controller,
           keyboardType: type,
+          maxLines: obscureText ? 1 : null,
           obscureText: obscureText,
           obscuringCharacter: '*',
           readOnly: readOnly,
@@ -389,18 +393,18 @@ class DefaultFormField extends StatelessWidget {
             labelText: label,
             hintText: hintText,
             border: const OutlineInputBorder(
-                // borderSide: BorderSide(
-                //   width: 2,
-                //   color: blueDark,
-                // ),
-                ),
+              // borderSide: BorderSide(
+              //   width: 2,
+              //   color: blueDark,
+              // ),
+            ),
             prefixIcon: prefixIcon != null
                 ? IconButton(
-                    icon: prefixIcon!,
-                    onPressed: () {
-                      prefixPressed;
-                    },
-                  )
+              icon: prefixIcon!,
+              onPressed: () {
+                prefixPressed;
+              },
+            )
                 : null,
             suffixIcon: IconButton(
               onPressed: () {
@@ -411,7 +415,7 @@ class DefaultFormField extends StatelessWidget {
             ),
             hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
             labelStyle: const TextStyle(
-                // color: isClickable ? Colors.grey[400] : blueDark,
+              // color: isClickable ? Colors.grey[400] : blueDark,
                 color: darkColor,
                 fontSize: 14),
             fillColor: Colors.white,
@@ -419,10 +423,10 @@ class DefaultFormField extends StatelessWidget {
             errorStyle: const TextStyle(color: Color(0xFF4F4F4F)),
             // floatingLabelBehavior: FloatingLabelBehavior.never,
             contentPadding:
-                contentPadding ?? const EdgeInsets.only(left: 20, bottom: 15),
+            contentPadding ?? const EdgeInsetsDirectional.only(start: 20.0,end: 10.0, bottom: 15.0),
           ),
           style:
-              TextStyle(color: blueLight, fontSize: 14, fontFamily: fontFamily),
+          TextStyle(color: blueLight, fontSize: 14, fontFamily: fontFamily),
         ),
       ),
     );
@@ -435,6 +439,130 @@ final otpInputDecoration = InputDecoration(
   focusedBorder: outlineInputBorder(),
   enabledBorder: outlineInputBorder(),
 );
+
+// class DownloadImage extends StatefulWidget {
+//   const DownloadImage({Key? key, required this.imageUrl}) : super(key: key);
+//   final imageUrl;
+//   @override
+//   State<DownloadImage> createState() => _DownloadImageState();
+// }
+//
+// class _DownloadImageState extends State<DownloadImage> {
+//   final Dio dio = Dio();
+//   bool loading = false;
+//   double progress = 0;
+//
+//   Future<bool> saveVideo(String url, String fileName) async {
+//     Directory? directory;
+//     try {
+//       if (Platform.isAndroid) {
+//         if (await _requestPermission(Permission.storage)) {
+//           directory = await getExternalStorageDirectory();
+//           String newPath = "";
+//           if (kDebugMode) {
+//             print(directory);
+//           }
+//           List<String> paths = directory!.path.split("/");
+//           for (int x = 1; x < paths.length; x++) {
+//             String folder = paths[x];
+//             if (folder != "Android") {
+//               newPath += "/" + folder;
+//             } else {
+//               break;
+//             }
+//           }
+//           newPath = newPath + "/DarAltepApp";
+//           directory = Directory(newPath);
+//         } else {
+//           return false;
+//         }
+//       } else {
+//         if (await _requestPermission(Permission.photos)) {
+//           directory = await getTemporaryDirectory();
+//         } else {
+//           return false;
+//         }
+//       }
+//       File saveFile = File(directory.path + "/$fileName");
+//       if (!await directory.exists()) {
+//         await directory.create(recursive: true);
+//       }
+//       if (await directory.exists()) {
+//         await dio.download(url, saveFile.path,
+//             onReceiveProgress: (value1, value2) {
+//               setState(() {
+//                 progress = value1 / value2;
+//               });
+//             });
+//         if (Platform.isIOS) {
+//           await GallerySaver.saveFile(saveFile.path);
+//         }
+//         return true;
+//       }
+//       return false;
+//     } catch (e) {
+//       if (kDebugMode) {
+//         print(e);
+//       }
+//       return false;
+//     }
+//   }
+//
+//   Future<bool> _requestPermission(Permission permission) async {
+//     if (await permission.isGranted) {
+//       return true;
+//     } else {
+//       var result = await permission.request();
+//       if (result == PermissionStatus.granted) {
+//         return true;
+//       }
+//     }
+//     return false;
+//   }
+//
+//   downloadFile() async {
+//     setState(() {
+//       loading = true;
+//       progress = 0;
+//     });
+//     bool downloaded = await saveVideo(
+//         widget.imageUrl,
+//         "DarAltep.jpeg");
+//
+//     if (downloaded) {
+//       if (kDebugMode) {
+//         print("File Downloaded");
+//       }
+//     } else {
+//       if (kDebugMode) {
+//         print("Problem Downloading File");
+//       }
+//     }
+//     setState(() {
+//       loading = false;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: loading
+//           ? Padding(
+//         padding: const EdgeInsets.all(8.0),
+//         child: LinearProgressIndicator(
+//           minHeight: 10,
+//           value: progress,
+//         ),
+//       ):GeneralButton(
+//         title: 'Download',
+//         radius: 8,
+//         btnBackgroundColor: blueLight,
+//         onPress: downloadFile,
+//       ),
+//     );
+//   }
+// }
+
 
 OutlineInputBorder outlineInputBorder() {
   return OutlineInputBorder(
@@ -449,33 +577,39 @@ class FadeRoute extends PageRouteBuilder {
   FadeRoute({
     required this.page,
   }) : super(
-          pageBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) =>
-              page,
-          transitionsBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) =>
-              FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-        );
+    pageBuilder: (BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,) =>
+    page,
+    transitionsBuilder: (BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child,) =>
+        FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+  );
 }
 
 void showPopUp(BuildContext context, Widget widget) {
   showDialog(
     context: context,
-    builder: (context) => AlertDialog(
-      content: widget,
-      contentPadding: const EdgeInsets.all(0.0),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius))),
-    ),
+    builder: (context) =>
+        AlertDialog(
+          content: widget,
+          contentPadding: const EdgeInsets.all(0.0),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(radius))),
+        ),
   );
+}
+
+void printWrapped(String text) {
+  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+  pattern.allMatches(text).forEach((match) {
+    if (kDebugMode) {
+      print(match.group(0));
+    }
+  });
 }

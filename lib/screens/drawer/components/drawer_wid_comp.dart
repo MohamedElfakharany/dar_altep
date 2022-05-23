@@ -6,6 +6,8 @@ import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,16 +25,25 @@ class ResevationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit,AppStates>(
-      listener:  (context,state){
-        if (state is AppGetTestResultSuccessState){
-          Navigator.push(context, FadeRoute(page: TestResultScreen(testName: AppCubit.get(context).testResultModel?.data?.name,testImage: AppCubit.get(context).testResultModel?.data?.file,)));
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {
+        if (state is AppGetTestResultSuccessState) {
+          Navigator.push(
+            context,
+            FadeRoute(
+              page: TestResultScreen(
+                testName: AppCubit.get(context).testResultModel?.data?.name,
+                testImage: AppCubit.get(context).testResultModel?.data?.image,
+                // testImage: 'https://avatars.githubusercontent.com/u/34916493?s=400&u=e7300b829193270fbcd03a813551a3702299cbb1&v=4',
+              ),
+            ),
+          );
         }
       },
-      builder: (context,state){
+      builder: (context, state) {
         return Padding(
-          padding:
-          const EdgeInsetsDirectional.only(start: 10.0, top: 12.0, end: 10.0),
+          padding: const EdgeInsetsDirectional.only(
+              start: 10.0, top: 12.0, end: 10.0),
           child: Container(
             decoration: BoxDecoration(
               boxShadow: [
@@ -49,14 +60,11 @@ class ResevationsCard extends StatelessWidget {
             ),
             width: double.infinity,
             height: 160.0,
-            child: Stack(
+            child: Row(
               children: [
-                Positioned.fill(
-                  top: 15,
-                  left: 20,
-                  right: 0,
-                  bottom: 15,
+                Expanded(
                   child: Container(
+                    padding: const EdgeInsetsDirectional.only(top: 15.0,bottom: 15.0,start: 20.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: whiteColor,
@@ -79,7 +87,8 @@ class ResevationsCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             horizontalMiniSpace,
-                            if (reservationsModel?.data?[index].status == 'away')
+                            if (reservationsModel?.data?[index].status ==
+                                'away')
                               Text(
                                 '(Away)',
                                 style: TextStyle(
@@ -91,7 +100,8 @@ class ResevationsCard extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                            if (reservationsModel?.data?[index].status == 'finished')
+                            if (reservationsModel?.data?[index].status ==
+                                'finished')
                               Text(
                                 '(Finished)',
                                 style: TextStyle(
@@ -103,7 +113,8 @@ class ResevationsCard extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                            if (reservationsModel?.data?[index].status == 'cancel')
+                            if (reservationsModel?.data?[index].status ==
+                                'cancel')
                               Text(
                                 '(Cancelled)',
                                 style: TextStyle(
@@ -194,117 +205,110 @@ class ResevationsCard extends StatelessWidget {
                   ),
                 ),
                 if (reservationsModel?.data?[index].status == 'cancel')
-                  Positioned(
-                    right: 0,
-                    bottom: 10,
-                    child: GeneralUnfilledButton(
-                      title: 'Delete',
-                      height: 35,
-                      width: 70,
-                      btnRadius: 8,
-                      borderColor: blueLight,
-                      onPress: () {
-                        showPopUp(
-                          context,
-                          Container(
-                            height: 200,
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10.0),
-                            child: Column(
-                              children: [
-                                verticalSmallSpace,
-                                Text(
-                                  'Are you sure to delete this reservation?',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: fontFamily,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
+                  GeneralUnfilledButton(
+                    title: LocaleKeys.BtnDelete.tr(),
+                    height: 35,
+                    width: 70,
+                    btnRadius: 8,
+                    borderColor: blueLight,
+                    onPress: () {
+                      showPopUp(
+                        context,
+                        Container(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10.0),
+                          child: Column(
+                            children: [
+                              verticalSmallSpace,
+                              Text(
+                                LocaleKeys.TxtdeleteMain.tr(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                verticalMediumSpace,
-                                GeneralUnfilledButton(
-                                  title: 'Delete',
-                                  height: 35,
-                                  width: double.infinity,
-                                  btnRadius: 8,
-                                  color: redTxtColor,
-                                  borderColor: redTxtColor,
-                                  onPress: (){},
-                                ),
-                              ],
-                            ),
+                                textAlign: TextAlign.center,
+                              ),
+                              verticalMediumSpace,
+                              GeneralUnfilledButton(
+                                title: LocaleKeys.BtnDelete.tr(),
+                                height: 35,
+                                width: double.infinity,
+                                btnRadius: 8,
+                                color: redTxtColor,
+                                borderColor: redTxtColor,
+                                onPress: () {
+                                  AppCubit.get(context).deleteReservation(reservationId: '${reservationsModel?.data?[index].id}');
+                                },
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 if (reservationsModel?.data?[index].status == 'finished')
-                  Positioned(
-                    right: 0,
-                    bottom: 10,
-                    child: GeneralButton(
-                      title: 'Result',
-                      height: 35,
-                      width: 70,
-                      radius: 8,
-                      btnBackgroundColor: blueLight,
-                      onPress: () {
-                        if (kDebugMode) {
-                          print('result');
-                        }
-                        AppCubit.get(context).getTestResultData(reservationId: reservationsModel?.data?[index].id);
-                      },
-                    ),
+                  GeneralButton(
+                    title: LocaleKeys.BtnResult.tr(),
+                    height: 35,
+                    width: 70,
+                    radius: 8,
+                    btnBackgroundColor: blueLight,
+                    onPress: () {
+                      if (kDebugMode) {
+                        print('result');
+                      }
+                      AppCubit.get(context).getTestResultData(
+                          reservationId: reservationsModel?.data?[index].id);
+                    },
                   ),
                 if (reservationsModel?.data?[index].status == 'away' ||
                     reservationsModel?.data?[index].status == 'lab')
-                  Positioned(
-                    right: 0,
-                    bottom: 10,
-                    child: GeneralUnfilledButton(
-                      title: 'Cancel',
-                      height: 35,
-                      width: 70,
-                      btnRadius: 8,
-                      borderColor: blueLight,
-                      onPress: () {
-                        showPopUp(
-                          context,
-                          Container(
-                            height: 200,
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10.0),
-                            child: Column(
-                              children: [
-                                verticalSmallSpace,
-                                Text(
-                                  'Are you sure to cancel this reservation?',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: fontFamily,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                  GeneralUnfilledButton(
+                    title: LocaleKeys.BtnCancel.tr(),
+                    height: 35,
+                    width: 70,
+                    btnRadius: 8,
+                    borderColor: blueLight,
+                    onPress: () {
+                      showPopUp(
+                        context,
+                        Container(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10.0),
+                          child: Column(
+                            children: [
+                              verticalSmallSpace,
+                              Text(
+                                LocaleKeys.TxtCancelMain.tr(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                verticalMediumSpace,
-                                GeneralUnfilledButton(
-                                  title: 'Cancel',
-                                  height: 35,
-                                  width: double.infinity,
-                                  btnRadius: 8,
-                                  color: redTxtColor,
-                                  borderColor: redTxtColor,
-                                  onPress: (){},
-                                ),
-                              ],
-                            ),
+                              ),
+                              verticalMediumSpace,
+                              GeneralUnfilledButton(
+                                title: LocaleKeys.BtnCancel.tr(),
+                                height: 35,
+                                width: double.infinity,
+                                btnRadius: 8,
+                                color: redTxtColor,
+                                borderColor: redTxtColor,
+                                onPress: () {
+                                  AppCubit.get(context).cancelReservation(reservationId: '${reservationsModel?.data?[index].id}');
+                                },
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
               ],
             ),

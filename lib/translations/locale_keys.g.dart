@@ -46,5 +46,33 @@ abstract class  LocaleKeys {
   static const homeTxtNotifications = 'homeTxtNotifications';
   static const homeTxtOffers = 'homeTxtOffers';
   static const homeTxtContactUs = 'homeTxtContactUs';
+  static const BtnPrecautions = 'BtnPrecautions';
+  static const TxtPopUpReservationType = 'TxtPopUpReservationType';
+  static const BtnAtHome = 'BtnAtHome';
+  static const BtnAtLab = 'BtnAtLab';
+  static const TxtHomeVisit = 'TxtHomeVisit';
+  static const HomeVisitTxtMain = 'HomeVisitTxtMain';
+  static const BtnSubmit = 'BtnSubmit';
+  static const TxtFieldSearch = 'TxtFieldSearch';
+  static const contactUsMainTxt = 'contactUsMainTxt';
+  static const BtnSend = 'BtnSend';
+  static const txtTestName = 'txtTestName';
+  static const TxtFieldMessage = 'TxtFieldMessage';
+  static const txtFieldDateOfBirth = 'txtFieldDateOfBirth';
+  static const txtHomeVisitAppBar = 'txtHomeVisitAppBar';
+  static const txtHomeMain = 'txtHomeMain';
+  static const txtFieldAddress = 'txtFieldAddress';
+  static const TxtFieldDateOfVisit = 'TxtFieldDateOfVisit';
+  static const TxtFieldTimeOfVisit = 'TxtFieldTimeOfVisit';
+  static const BtnSaveChanges = 'BtnSaveChanges';
+  static const BtnChangePassword = 'BtnChangePassword';
+  static const drawerLogOutMain = 'drawerLogOutMain';
+  static const BtnDelete = 'BtnDelete';
+  static const BtnCancel = 'BtnCancel';
+  static const BtnResult = 'BtnResult';
+  static const TxtdeleteMain = 'TxtdeleteMain';
+  static const TxtCancelMain = 'TxtCancelMain';
+  static const TxtTestResult = 'TxtTestResult';
+  static const TxtLabVisit = 'TxtLabVisit';
 
 }

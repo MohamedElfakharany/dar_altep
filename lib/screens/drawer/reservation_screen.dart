@@ -3,7 +3,6 @@
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/drawer/components/drawer_wid_comp.dart';
-import 'package:dar_altep/screens/test_result_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
@@ -20,6 +19,12 @@ class ReservationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
+        if (state is AppCancelReservationsSuccessState){
+          showToast(msg: 'Canceled Successfully', state: ToastState.success);
+        }
+        if (state is AppDeleteReservationsSuccessState){
+          showToast(msg: 'Deleted Successfully', state: ToastState.success);
+        }
       },
       builder: (context, state) {
         return Scaffold(

@@ -7,8 +7,6 @@ String gender = '';
 String nationality = '';
 String birthrate = '';
 
-String? lang = '';
-
 String fontFamily = 'OpenSans';
 
 double radius = 15;

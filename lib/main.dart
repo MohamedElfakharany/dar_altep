@@ -2,6 +2,7 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/screens/auth/onboarding/onboarding_screen.dart';
 import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/bloc_observer.dart';
+import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/network/local/cache_helper.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/shared/network/remote/dio_helper.dart';
@@ -31,8 +32,7 @@ void main() async {
   Widget widget;
   // token = token;
   if (kDebugMode) {
-    print('from main the token is $token');
-    print('from main the token is $name');
+    printWrapped('from main the token is $token');
   }
 
   if (token != null) {
@@ -85,7 +85,12 @@ class MyApp extends StatelessWidget {
         ..getOffersData()
         ..getTestsData()
         ..getProfileData()
-        ..getReservationsData(),
+        ..getReservationsData()
+        ..getTestNameData()
+        ..getAppointmentsData()
+        ..getHomeOffersData()
+        ..getLabOffersData()
+        ..getUserResults(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

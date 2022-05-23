@@ -1,12 +1,12 @@
 // To parse this JSON data, do
 //
-//     final testsModel = testsModelFromJson(jsonString);
+//     final testResultModel = testResultModelFromJson(jsonString);
 
 import 'dart:convert';
 
-TestsModel testsModelFromJson(dynamic str) => TestsModel.fromJson(json.decode(str));
+TestsModel testResultModelFromJson(dynamic str) => TestsModel.fromJson(json.decode(str));
 
-// dynamic testsModelToJson(TestsModel data) => json.encode(data.toJson());
+// dynamic testResultModelToJson(TestsModel data) => json.encode(data.toJson());
 
 class TestsModel {
   TestsModel({
@@ -17,7 +17,7 @@ class TestsModel {
 
   dynamic status;
   dynamic message;
-  List<Datum>? data = [];
+  List<Datum>? data;
 
   factory TestsModel.fromJson(Map<dynamic, dynamic> json) => TestsModel(
     status: json["status"],

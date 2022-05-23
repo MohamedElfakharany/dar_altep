@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable, body_might_complete_normally_nullable
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
@@ -10,6 +9,8 @@ import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +62,7 @@ class SettingsScreen extends StatelessWidget {
         return Scaffold(
           // extendBodyBehindAppBar: true,
           appBar: GeneralAppBar(
-            title: 'Settings',
+            title: LocaleKeys.drawerSettings.tr(),
           ),
           body: Container(
             padding: const EdgeInsetsDirectional.only(
@@ -157,34 +158,34 @@ class SettingsScreen extends StatelessWidget {
                         DefaultFormField(
                           controller: nameController,
                           type: TextInputType.name,
-                          label: 'Full Name',
-                          validatedText: 'Full Name',
-                          hintText: 'Full Name',
+                          label: LocaleKeys.txtFieldName.tr(),
+                          validatedText: LocaleKeys.txtFieldName.tr(),
+                          hintText: LocaleKeys.txtFieldName.tr(),
                           suffixPressed: () {},
                         ),
                         verticalSmallSpace,
                         DefaultFormField(
                           controller: emailController,
                           type: TextInputType.emailAddress,
-                          validatedText: 'Email',
-                          label: 'Email',
-                          hintText: 'Email',
+                          validatedText: LocaleKeys.txtFieldEmail.tr(),
+                          label: LocaleKeys.txtFieldEmail.tr(),
+                          hintText: LocaleKeys.txtFieldEmail.tr(),
                         ),
                         verticalSmallSpace,
                         DefaultFormField(
                           controller: mobileController,
                           type: TextInputType.phone,
-                          validatedText: 'Mobile Number',
-                          label: 'Mobile Number',
-                          hintText: 'Mobile Number',
+                          validatedText: LocaleKeys.txtFieldMobile.tr(),
+                          label: LocaleKeys.txtFieldMobile.tr(),
+                          hintText: LocaleKeys.txtFieldMobile.tr(),
                         ),
                         verticalSmallSpace,
                         DefaultFormField(
                           readOnly: true,
                           controller: nationalityController,
                           type: TextInputType.datetime,
-                          validatedText: 'Nationality',
-                          label: 'Nationality',
+                          validatedText: LocaleKeys.txtFieldNationality.tr(),
+                          label: LocaleKeys.txtFieldNationality.tr(),
                           hintText: user?.nationality,
                         ),
                         verticalSmallSpace,
@@ -192,9 +193,9 @@ class SettingsScreen extends StatelessWidget {
                           readOnly: true,
                           controller: dateOfBirthController,
                           type: TextInputType.datetime,
-                          validatedText: 'Date Of Birth',
-                          label: 'Date Of Birth',
-                          hintText: 'Date Of Birth',
+                          validatedText: LocaleKeys.txtFieldDateOfBirth.tr(),
+                          label: LocaleKeys.txtFieldDateOfBirth.tr(),
+                          hintText: LocaleKeys.txtFieldDateOfBirth.tr(),
                           onTap: () {},
                           suffixIcon: Icons.calendar_month,
                         ),
@@ -203,15 +204,15 @@ class SettingsScreen extends StatelessWidget {
                           readOnly: true,
                           controller: genderController,
                           type: TextInputType.datetime,
-                          validatedText: 'Gender',
-                          label: 'Gender',
-                          hintText: 'Gender',
+                          validatedText: LocaleKeys.txtFieldGender.tr(),
+                          label: LocaleKeys.txtFieldGender.tr(),
+                          hintText: LocaleKeys.txtFieldGender.tr(),
                         ),
                         verticalMediumSpace,
                         ConditionalBuilder(
                           condition: state is! AppEditProfileLoadingState,
                           builder: (context) => GeneralButton(
-                            title: 'Save Changes',
+                            title: LocaleKeys.BtnSaveChanges.tr(),
                             onPress: () {
                               if (formKey.currentState!.validate()) {
                                 if (kDebugMode) {
@@ -232,7 +233,7 @@ class SettingsScreen extends StatelessWidget {
                         ),
                         verticalMediumSpace,
                         GeneralButton(
-                          title: 'Change Password',
+                          title: LocaleKeys.BtnChangePassword.tr(),
                           onPress: () {
                             Navigator.push(
                                 context, FadeRoute(page: ResetPassword()));

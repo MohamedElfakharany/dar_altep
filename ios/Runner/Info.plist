@@ -51,6 +51,6 @@
 		<string>ar </string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>Your app accesses the user&apos;s photo library</string>
+	<string>DarAltep want to accesses your photo library</string>
 </dict>
 </plist>

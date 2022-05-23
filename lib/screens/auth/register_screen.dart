@@ -8,6 +8,7 @@ import 'package:dar_altep/screens/auth/otp/otp_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/network/local/cache_helper.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,20 +51,58 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
           if (state is AppRegisterSuccessState) {
-            if (state.userModel.status != 'error') {
-              Navigator.push(context, FadeRoute(page: OtpScreen(mobile: state.userModel.data?.phone,verification: state.userModel.data?.verificationCode,)));
-            } else {
-              if (kDebugMode) {
-                print(state.userModel.message);
-              }
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Error...!'),
-                      content: Text('${state.userModel.message}'),
-                    );
-                  });
+
+              if (state.userModel.status != 'error') {
+              CacheHelper.saveData(
+                key: 'token',
+                value: state.userModel.data?.token,
+              ).then((value) {
+                CacheHelper.saveData(key: 'name', value: state.userModel.data?.name);
+                CacheHelper.saveData(key: 'mobile', value: state.userModel.data?.phone);
+                CacheHelper.saveData(key: 'email', value: state.userModel.data?.email);
+                CacheHelper.saveData(key: 'image', value: state.userModel.data?.idImage);
+                CacheHelper.saveData(key: 'nationality', value: state.userModel.data?.nationality);
+                CacheHelper.saveData(key: 'birthrate', value: state.userModel.data?.birthrate);
+                CacheHelper.saveData(key: 'gender', value: state.userModel.data?.gender);
+
+                name = CacheHelper.getData(key: 'name');
+                mobile = CacheHelper.getData(key: 'mobile');
+                email = CacheHelper.getData(key: 'email');
+                image = CacheHelper.getData(key: 'image');
+                birthrate = CacheHelper.getData(key: 'birthrate');
+                nationality = CacheHelper.getData(key: 'nationality');
+                gender = CacheHelper.getData(key: 'gender');
+
+                token = state.userModel.data?.token;
+                name = state.userModel.data?.name;
+                mobile = state.userModel.data?.phone;
+                email = state.userModel.data?.email;
+                image = state.userModel.data?.idImage;
+                birthrate = state.userModel.data?.birthrate;
+                nationality = state.userModel.data?.nationality;
+                gender = state.userModel.data?.gender;
+
+                Navigator.push(
+                  context,
+                  FadeRoute(
+                    page: OtpScreen(
+                      mobile: state.userModel.data?.phone,
+                      verification: state.userModel.data?.verificationCode,
+                    ),
+                  ),
+                );
+              });
+              // if (kDebugMode) {
+              //   print(state.userModel.message);
+              // }
+              // showDialog(
+              //     context: context,
+              //     builder: (context) {
+              //       return AlertDialog(
+              //         title: const Text('Error...!'),
+              //         content: Text('${state.userModel.message}'),
+              //       );
+              //     });
             }
           } else if (state is AppRegisterErrorState) {
             showDialog(
@@ -219,7 +258,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             }
                                           },
                                           decoration: const InputDecoration(
-                                            contentPadding: EdgeInsetsDirectional.only(start: 20.0,end: 10.0),
+                                            contentPadding:
+                                                EdgeInsetsDirectional.only(
+                                                    start: 20.0, end: 10.0),
                                             fillColor: Colors.white,
                                             filled: true,
                                             errorStyle: TextStyle(
@@ -292,7 +333,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             }
                                           },
                                           decoration: const InputDecoration(
-                                            contentPadding: EdgeInsetsDirectional.only(start: 20.0,end: 10.0),
+                                            contentPadding:
+                                                EdgeInsetsDirectional.only(
+                                                    start: 20.0, end: 10.0),
                                             fillColor: Colors.white,
                                             filled: true,
                                             errorStyle: TextStyle(

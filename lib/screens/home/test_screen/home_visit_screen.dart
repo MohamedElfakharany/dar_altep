@@ -8,13 +8,15 @@ import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeVisitScreen extends StatefulWidget {
-  const HomeVisitScreen({Key? key}) : super(key: key);
+  HomeVisitScreen({Key? key, this.testName}) : super(key: key);
+  String? testName;
 
   @override
   State<HomeVisitScreen> createState() => _HomeVisitScreenState();
@@ -29,13 +31,11 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
 
   final dateOfVisitController = TextEditingController();
 
+  final testNameController = TextEditingController();
+
   final timeController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
-
-  final testItems = ['Sugar Test', 'Blood Test'];
-
-  String? testValue;
 
   @override
   Widget build(BuildContext context) {
@@ -57,23 +57,19 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
             context,
             Container(
               height: height * 0.7,
-              width: width ,
+              width: width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsetsDirectional.only(end: 30.0),
               child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   verticalMediumSpace,
                   Padding(
-                    padding:
-                    const EdgeInsetsDirectional.only(
-                        start: 20.0),
+                    padding: const EdgeInsetsDirectional.only(start: 20.0),
                     child: Column(
-                      mainAxisAlignment:
-                      MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         verticalMediumSpace,
                         Center(
@@ -108,11 +104,14 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                         verticalLargeSpace,
                         GeneralButton(
                           title: 'Done',
-                          onPress: (){
+                          onPress: () {
                             if (kDebugMode) {
                               print('done pressed');
                             }
-                            Navigator.pushAndRemoveUntil(context, FadeRoute(page: const HomeScreen()), (route) => false);
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                FadeRoute(page: const HomeScreen()),
+                                (route) => false);
                           },
                         ),
                       ],
@@ -128,10 +127,16 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
         var user = AppCubit.get(context).userdata?.data;
         nameController.text = user?.name;
         mobileController.text = user?.phone;
+        testNameController.text = widget.testName ?? '';
+        final testItems = AppCubit.get(context).testName;
+        String? testValue = testItems.first;
+        String idValue = AppCubit.get(context)
+            .testNames!
+            .where((element) => element.name == testValue)
+            .toString();
         return Scaffold(
-          // extendBodyBehindAppBar: true,
           appBar: GeneralAppBar(
-            title: 'Home Visit',
+            title: LocaleKeys.txtHomeVisitAppBar.tr(),
           ),
           body: Container(
             padding: const EdgeInsetsDirectional.only(
@@ -161,7 +166,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                       children: [
                         Center(
                           child: Text(
-                            'Enter patient data and we will contact you to confirm reservation',
+                            LocaleKeys.txtHomeMain.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20.0,
@@ -175,32 +180,32 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                         DefaultFormField(
                           controller: nameController,
                           type: TextInputType.name,
-                          label: 'Full Name',
-                          validatedText: 'Full Name',
-                          hintText: 'Full Name',
+                          label: LocaleKeys.txtFieldName.tr(),
+                          validatedText: LocaleKeys.txtFieldName.tr(),
+                          hintText: LocaleKeys.txtFieldName.tr(),
                           suffixPressed: () {},
                         ),
                         verticalSmallSpace,
                         DefaultFormField(
                           controller: mobileController,
                           type: TextInputType.phone,
-                          validatedText: 'Mobile Number',
-                          label: 'Mobile Number',
-                          hintText: 'Mobile Number',
+                          validatedText: LocaleKeys.txtFieldMobile.tr(),
+                          label: LocaleKeys.txtFieldMobile.tr(),
+                          hintText: LocaleKeys.txtFieldMobile.tr(),
                         ),
                         verticalSmallSpace,
                         DefaultFormField(
                           controller: addressController,
                           type: TextInputType.text,
-                          validatedText: 'Address',
-                          label: 'Address',
+                          validatedText: LocaleKeys.txtFieldName.tr(),
+                          label: LocaleKeys.txtFieldAddress.tr(),
                         ),
                         verticalSmallSpace,
                         DefaultFormField(
                           controller: dateOfVisitController,
                           type: TextInputType.datetime,
-                          validatedText: 'Date Of Visit',
-                          label: 'Date Of Visit',
+                          validatedText: LocaleKeys.TxtFieldDateOfVisit.tr(),
+                          label: LocaleKeys.TxtFieldDateOfVisit.tr(),
                           onTap: () {
                             showDatePicker(
                               context: context,
@@ -224,8 +229,8 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                           controller: timeController,
                           type: TextInputType.datetime,
                           suffixIcon: Icons.watch_later_outlined,
-                          label: 'choose Time',
-                          validatedText: 'Time',
+                          label: LocaleKeys.TxtFieldTimeOfVisit.tr(),
+                          validatedText: LocaleKeys.TxtFieldTimeOfVisit.tr(),
                           onTap: () async {
                             try {
                               var time = await showTimePicker(
@@ -244,56 +249,79 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                           },
                         ),
                         verticalSmallSpace,
-                        Container(
-                          height: 60.0,
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 3,
-                                blurRadius: 5,
-                                offset: const Offset(
-                                    0, 5), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButtonFormField<String>(
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Choose Test Name';
-                                }
-                              },
-                              decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                contentPadding: EdgeInsetsDirectional.only(
-                                    start: 20.0, end: 10.0),
-                                errorStyle: TextStyle(color: Color(0xFF4F4F4F)),
-                                label: Text('Test Name'),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 2,
-                                    color: blueDark,
+                        if (widget.testName == null)
+                          Container(
+                            height: 60.0,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 3,
+                                  blurRadius: 5,
+                                  offset: const Offset(
+                                      0, 5), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButtonFormField<String>(
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return LocaleKeys.txtTestName.tr();
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  contentPadding:
+                                      const EdgeInsetsDirectional.only(
+                                          start: 20.0, end: 10.0),
+                                  errorStyle:
+                                      const TextStyle(color: Color(0xFF4F4F4F)),
+                                  label: Text(LocaleKeys.txtTestName.tr()),
+                                  border: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      width: 2,
+                                      color: blueDark,
+                                    ),
                                   ),
                                 ),
+                                value: testValue,
+                                isExpanded: true,
+                                iconSize: 35,
+                                items: testItems.map(buildMenuItem).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    testValue = value;
+                                    idValue = AppCubit.get(context)
+                                        .testNames!
+                                        .where((element) =>
+                                            element.name == testValue)
+                                        .toString();
+                                  });
+                                  if (kDebugMode) {
+                                    print('idValue : $idValue');
+                                  }
+                                },
                               ),
-                              value: testValue,
-                              isExpanded: true,
-                              iconSize: 35,
-                              items: testItems.map(buildMenuItem).toList(),
-                              onChanged: (value) =>
-                                  setState(() => testValue = value),
                             ),
                           ),
-                        ),
+                        if (widget.testName != null)
+                          DefaultFormField(
+                            readOnly: true,
+                            controller: testNameController,
+                            type: TextInputType.text,
+                            label: LocaleKeys.txtTestName.tr(),
+                            validatedText: LocaleKeys.txtTestName.tr(),
+                          ),
                         verticalLargeSpace,
                         verticalLargeSpace,
                         ConditionalBuilder(
                           condition: state is! AppHomeReservationsLoadingState,
                           builder: (context) => GeneralButton(
-                            title: 'Submit',
+                            title: LocaleKeys.BtnSubmit.tr(),
                             onPress: () {
                               if (formKey.currentState!.validate()) {
                                 if (kDebugMode) {

@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final userModel = userModelFromJson(jsondynamic);
+//     final userModel = userModelFromJson(jsonString);
 
 import 'dart:convert';
 

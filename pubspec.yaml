@@ -47,6 +47,12 @@ dependencies:
   intl: ^0.17.0
   easy_localization: ^3.0.0
   image_picker: ^0.8.5+3
+  http: any
+  path_provider: ^2.0.10
+  image_downloader: ^0.31.0
+  permission_handler: ^9.2.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

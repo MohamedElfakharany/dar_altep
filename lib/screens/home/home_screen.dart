@@ -3,6 +3,9 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/drawer/drawer_screen.dart';
 import 'package:dar_altep/screens/home/components/widet_components.dart';
+import 'package:dar_altep/screens/home/contact_us_screen.dart';
+import 'package:dar_altep/screens/home/lab_visit_appointment/lab_visit_appointment_screen.dart';
+import 'package:dar_altep/screens/home/offers/offers_screen.dart';
 import 'package:dar_altep/screens/home/test_screen/home_visit_screen.dart';
 import 'package:dar_altep/screens/home/test_screen/test_library_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
@@ -20,14 +23,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit,AppStates>(
+    return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            leading: const Icon(
-              Icons.menu,
-            ),
             flexibleSpace: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
             bottom: PreferredSize(
-              preferredSize: const Size(double.infinity, 110),
+              preferredSize: const Size(double.infinity, 60),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -69,12 +69,12 @@ class HomeScreen extends StatelessWidget {
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
                       child: Text(
-                        '${LocaleKeys.homeTxtWelcome.tr()} ${AppCubit.get(context).userdata?.data?.name},',
+                        '${LocaleKeys.homeTxtWelcome.tr()} ${AppCubit.get(context).userdata?.data?.name ?? 'Sir'},',
                         style: TextStyle(
                           color: whiteColor,
                           fontWeight: FontWeight.bold,
                           fontFamily: fontFamily,
-                          fontSize: 26,
+                          fontSize: 20,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -82,91 +82,162 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   verticalSmallSpace,
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 20.0),
-                    child: Text(
-                      LocaleKeys.homeTxtAppBarSecondary.tr(),
-                      style: TextStyle(
-                        color: whiteColor,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: fontFamily,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsetsDirectional.only(start: 20.0),
+                  //   child: Text(
+                  //     LocaleKeys.homeTxtAppBarSecondary.tr(),
+                  //     style: TextStyle(
+                  //       color: whiteColor,
+                  //       fontWeight: FontWeight.normal,
+                  //       fontFamily: fontFamily,
+                  //       fontSize: 20,
+                  //     ),
+                  //   ),
+                  // ),
                   verticalSmallSpace,
                 ],
               ),
             ),
           ),
-          body: Container(
-            padding: const EdgeInsetsDirectional.only(
-              start: 10.0,
-              top: 20.0,
-              bottom: 20.0,
-            ),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: const AssetImage("assets/images/onboardingbackground.png"),
-                colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.15), BlendMode.dstATop),
-                fit: BoxFit.cover,
+          body: ConditionalBuilder(
+            condition: state is! AppGetOffersLoadingState,
+            builder: (context) => Container(
+              padding: const EdgeInsetsDirectional.only(
+                start: 10.0,
+                top: 20.0,
+                bottom: 20.0,
               ),
-            ),
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        LocaleKeys.homeTxtDiscover.tr(),
-                        style: TextStyle(
-                          color: darkColor,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: fontFamily,
-                          fontSize: 20,
-                        ),
-                      ),
-                      const Spacer(),
-                      DefaultTextButton(
-                        title: LocaleKeys.BtnSeeAll.tr(),
-                      ),
-                    ],
-                  ),
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: const AssetImage(
+                      "assets/images/onboardingbackground.png"),
+                  colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.15), BlendMode.dstATop),
+                  fit: BoxFit.cover,
                 ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(end: 20.0),
-                  child: SizedBox(
-                    height: 247.0,
-                    child: ConditionalBuilder(
-                      condition: state is! AppGetOffersLoadingState,
-                      builder: (context) => ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) => HomeOffersCard(context: context, offersModel: AppCubit.get(context).offersModel, index: index,),
-                        separatorBuilder: (context, index) => const SizedBox(
-                          width: 10.0,
+              ),
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(start: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          LocaleKeys.homeTxtDiscover.tr(),
+                          style: TextStyle(
+                            color: darkColor,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: fontFamily,
+                            fontSize: 20,
+                          ),
                         ),
-                        itemCount: AppCubit.get(context).offersModel!.data!.length,
-                        // itemCount: 10,
-                      ),
-                      fallback: (context) => const Center(child: CircularProgressIndicator()),
+                        const Spacer(),
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, FadeRoute(page: const OffersScreen()));
+                          },
+                          child: DefaultTextButton(
+                            title: LocaleKeys.BtnSeeAll.tr(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                      top: 20.0, start: 10.0, end: 20.0,),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          Navigator.push(context, FadeRoute(page: TestLibraryScreen(),),);
-                        },
-                        child: Stack(
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 20.0),
+                    child: SizedBox(
+                      height: 247.0,
+                      child: ConditionalBuilder(
+                        condition: AppCubit.get(context).offersModel != null,
+                        builder: (context) => ListView.separated(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => HomeOffersCard(
+                            context: context,
+                            offersModel: AppCubit.get(context).offersModel,
+                            index: index,
+                          ),
+                          separatorBuilder: (context, index) => const SizedBox(
+                            width: 10.0,
+                          ),
+                          itemCount:
+                              AppCubit.get(context).offersModel!.data!.length,
+                          // itemCount: 10,
+                        ),
+                        fallback: (context) =>
+                            const Center(child: CircularProgressIndicator()),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      top: 20.0,
+                      start: 10.0,
+                      end: 20.0,
+                    ),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              FadeRoute(
+                                page: TestLibraryScreen(),
+                              ),
+                            );
+                          },
+                          child: Stack(
+                            alignment: AlignmentDirectional.centerStart,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      spreadRadius: 4,
+                                      blurRadius: 6,
+                                      offset: const Offset(
+                                          0, 5), // changes position of shadow
+                                    ),
+                                  ],
+                                  border: Border.all(color: whiteColor),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    LocaleKeys.homeTxtTestLibrary.tr(),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: fontFamily,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                child: Image.asset(
+                                  'assets/images/homeTestLab.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                        top: 20.0, start: 10.0, end: 20.0),
+                    child: Column(
+                      children: [
+                        Stack(
                           alignment: AlignmentDirectional.centerStart,
                           children: [
                             Container(
@@ -187,7 +258,7 @@ class HomeScreen extends StatelessWidget {
                               height: 50,
                               child: Center(
                                 child: Text(
-                                  LocaleKeys.homeTxtTestLibrary.tr(),
+                                  LocaleKeys.homeTxtNotifications.tr(),
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: fontFamily,
@@ -200,161 +271,131 @@ class HomeScreen extends StatelessWidget {
                               radius: 30,
                               backgroundColor: Colors.transparent,
                               child: Image.asset(
-                                'assets/images/homeTestLab.png',
+                                'assets/images/homeNotification.png',
                                 fit: BoxFit.cover,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                      top: 20.0, start: 10.0, end: 20.0),
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: AlignmentDirectional.centerStart,
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                        top: 20.0, start: 10.0, end: 20.0),
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.push(context, FadeRoute(page: const OffersScreen()));
+                      },
+                      child: Column(
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 4,
-                                  blurRadius: 6,
-                                  offset: const Offset(
-                                      0, 5), // changes position of shadow
+                          Stack(
+                            alignment: AlignmentDirectional.centerStart,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      spreadRadius: 4,
+                                      blurRadius: 6,
+                                      offset: const Offset(
+                                          0, 5), // changes position of shadow
+                                    ),
+                                  ],
+                                  border: Border.all(color: whiteColor),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30),
                                 ),
-                              ],
-                              border: Border.all(color: whiteColor),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            height: 50,
-                            child: Center(
-                              child: Text(
-                                LocaleKeys.homeTxtNotifications.tr(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.bold,
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    LocaleKeys.homeTxtOffers.tr(),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: fontFamily,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.transparent,
-                            child: Image.asset(
-                              'assets/images/homeNotification.png',
-                              fit: BoxFit.cover,
-                            ),
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                child: Image.asset(
+                                  'assets/images/homeDiscount.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                      top: 20.0, start: 10.0, end: 20.0),
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: AlignmentDirectional.centerStart,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 4,
-                                  blurRadius: 6,
-                                  offset: const Offset(
-                                      0, 5), // changes position of shadow
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                        top: 20.0, start: 10.0, end: 20.0),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              FadeRoute(
+                                page: const ContactUsScreen(),
+                              ),
+                            );
+                          },
+                          child: Stack(
+                            alignment: AlignmentDirectional.centerStart,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      spreadRadius: 4,
+                                      blurRadius: 6,
+                                      offset: const Offset(
+                                          0, 5), // changes position of shadow
+                                    ),
+                                  ],
+                                  border: Border.all(color: whiteColor),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30),
                                 ),
-                              ],
-                              border: Border.all(color: whiteColor),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            height: 50,
-                            child: Center(
-                              child: Text(
-                                LocaleKeys.homeTxtOffers.tr(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.bold,
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    LocaleKeys.homeTxtContactUs.tr(),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: fontFamily,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.transparent,
-                            child: Image.asset(
-                              'assets/images/homeDiscount.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                      top: 20.0, start: 10.0, end: 20.0),
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: AlignmentDirectional.centerStart,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 4,
-                                  blurRadius: 6,
-                                  offset: const Offset(
-                                      0, 5), // changes position of shadow
-                                ),
-                              ],
-                              border: Border.all(color: whiteColor),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            height: 50,
-                            child: Center(
-                              child: Text(
-                                LocaleKeys.homeTxtContactUs.tr(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.bold,
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                child: Image.asset(
+                                  'assets/images/homeContactUs.png',
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.transparent,
-                            child: Image.asset(
-                              'assets/images/homeContactUs.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ),
+            fallback: (context) => const Center(
+              child: CircularProgressIndicator(),
             ),
           ),
           floatingActionButton: FloatingActionButton(
@@ -381,7 +422,7 @@ class HomeScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsetsDirectional.only(start: 20.0),
                         child: Text(
-                          'Reservation type',
+                          LocaleKeys.TxtPopUpReservationType.tr(),
                           style: TextStyle(
                             fontSize: 20,
                             fontFamily: fontFamily,
@@ -397,21 +438,27 @@ class HomeScreen extends StatelessWidget {
                         borderWidth: 1,
                         btnRadius: radius - 5,
                         borderColor: blueLight,
-                        title: 'At Home',
+                        title: LocaleKeys.BtnAtHome.tr(),
                         image: 'assets/images/homeIcon.png',
                         width: double.infinity,
                         onPress: () {
-                          Navigator.push(context, FadeRoute(page: const HomeVisitScreen()));
+                          Navigator.push(context,
+                              FadeRoute(page: HomeVisitScreen()));
                         },
                       ),
                       verticalLargeSpace,
                       GeneralUnfilledButton(
                         btnRadius: radius - 5,
                         borderColor: whiteColor,
-                        title: 'At laboratory',
+                        title: LocaleKeys.BtnAtLab.tr(),
                         image: 'assets/images/labIcon.png',
                         width: double.infinity,
-                        onPress: () {},
+                        onPress: () {
+                          Navigator.push(
+                              context,
+                              FadeRoute(
+                                  page: const LabVisitAppointmentScreen()));
+                        },
                       ),
                     ],
                   ),
@@ -419,16 +466,18 @@ class HomeScreen extends StatelessWidget {
               );
             },
           ),
-          drawer: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/drawerBackgoundImage.png'),
+          drawer: Drawer(
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/drawerBackgoundImage.png'),
+                ),
+                color: Colors.transparent,
               ),
-              color: Colors.transparent,
+              child: const DrawerScreen(),
             ),
-            child: const DrawerScreen(),
           ),
-        ) ;
+        );
       },
     );
   }

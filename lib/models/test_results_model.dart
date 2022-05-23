@@ -37,7 +37,7 @@ class Data {
     this.id,
     this.time,
     this.date,
-    this.file,
+    this.image,
     this.seen,
     this.type,
     this.name,
@@ -46,7 +46,7 @@ class Data {
   dynamic id;
   dynamic time;
   dynamic date;
-  dynamic file;
+  dynamic image;
   dynamic seen;
   dynamic type;
   dynamic name;
@@ -55,7 +55,7 @@ class Data {
     id: json["id"],
     time: json["time"],
     date: (json["date"]),
-    file: json["file"],
+    image: json["image"],
     seen: json["seen"],
     type: json["type"],
     name: json["name"],
@@ -65,7 +65,7 @@ class Data {
   //   "id": id,
   //   "time": time,
   //   "date": date,
-  //   "file": file,
+  //   "image": image,
   //   "seen": seen,
   //   "type": type,
   //   "name": name,

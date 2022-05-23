@@ -8,6 +8,8 @@ import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +25,7 @@ class TestLibraryScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          appBar: GeneralAppBar(title: 'Test Library'),
+          appBar: GeneralAppBar(title: LocaleKeys.homeTxtTestLibrary.tr()),
           body: Container(
             padding: const EdgeInsetsDirectional.only(
                 start: 10.0, top: 12.0, bottom: 12.0, end: 10.0),
@@ -65,16 +67,16 @@ class TestLibraryScreen extends StatelessWidget {
                             controller: searchController,
                             keyboardType: TextInputType.text,
                             cursorColor: blueDark,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               errorBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.only(
+                              contentPadding: const EdgeInsets.only(
                                   left: 15, bottom: 11, top: 11, right: 15),
-                              hintText: "Search",
-                              suffixIcon: Icon(
+                              hintText: LocaleKeys.TxtFieldSearch.tr(),
+                              suffixIcon: const Icon(
                                 Icons.search_outlined,
                                 color: blueDark,
                               ),
@@ -101,7 +103,7 @@ class TestLibraryScreen extends StatelessWidget {
                         context: context,
                         index: index,
                         testsModel: AppCubit.get(context).testsModel),
-                    separatorBuilder: (context, index) => const SizedBox(height: 1),
+                    separatorBuilder: (context, index) => verticalMiniSpace,
                     itemCount: AppCubit.get(context).testsModel!.data!.length,
                   ),
                 ),

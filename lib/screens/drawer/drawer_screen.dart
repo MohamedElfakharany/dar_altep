@@ -3,6 +3,7 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/drawer/reservation_screen.dart';
 import 'package:dar_altep/screens/drawer/settings_screen.dart';
+import 'package:dar_altep/screens/drawer/my_results_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
@@ -23,8 +24,10 @@ class DrawerScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var user = AppCubit.get(context).userdata?.data;
-        return SizedBox(
-          width: MediaQuery.of(context).size.width * 0.75,
+        return Container(
+          padding: const EdgeInsetsDirectional.only(start: 0.0,top: 0.0,bottom: 0.0),
+          color: blueDark2,
+          width: width * 0.75,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -95,20 +98,7 @@ class DrawerScreen extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        showPopUp(
-                          context,
-                          Container(
-                            height: height * 0.4,
-                            width: width * 0.8,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10.0),
-                            child: Column(
-                              children: const [
-                                Text('My Results'),
-                              ],
-                            ),
-                          ),
-                        );
+                        Navigator.push(context, FadeRoute(page: const MyResultsScreen()));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -222,11 +212,11 @@ class DrawerScreen extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 verticalMediumSpace,
-                                const Text('Do you want to logout?'),
+                                Text(LocaleKeys.drawerLogOutMain.tr()),
                                 verticalMediumSpace,
                                 GeneralButton(
                                   radius: radius,
-                                  title: 'Logout',
+                                  title: LocaleKeys.drawerLogout.tr(),
                                   onPress: () {
                                     AppCubit.get(context).signOut(context);
                                   },

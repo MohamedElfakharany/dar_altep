@@ -8,11 +8,29 @@ const updateProfileURL = mainURL+'update_profile';
 
 const homeReservationURL = mainURL+'homeReservation';
 
+const labReservationUrl = mainURL+'LabReservation';
+
 const getProfileURL = mainURL+'profile';
+
+const getAllResultsURL = mainURL+'all_results';
+
+const getAppointmentsURL = mainURL+'appointments';
+
+const contactURL = mainURL+'contact';
+
+const getTestNamesURL = mainURL+'get_test';
 
 const verificationURL = mainURL+'code_check';
 
+const cancelReservationURL = mainURL+'CancelReservation';
+
+const deleteReservationURL = mainURL+'DeleteReservation';
+
 const getOffersURL = mainURL+'UserOffers';
+
+const getHomeOfferURL = mainURL+'home_offer';
+
+const getLabOfferURL = mainURL+'lap_offer';
 
 const userReservationUrl = mainURL+'UserReservation';
 

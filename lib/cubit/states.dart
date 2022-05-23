@@ -1,9 +1,11 @@
+import 'package:dar_altep/models/appointments_model.dart';
 import 'package:dar_altep/models/auth/check_code_model.dart';
 import 'package:dar_altep/models/home_reservation_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
 import 'package:dar_altep/models/reservation_model.dart';
-import 'package:dar_altep/models/test_details_model.dart';
+import 'package:dar_altep/models/search_model.dart';
+import 'package:dar_altep/models/test_name_model.dart';
 import 'package:dar_altep/models/test_results_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
 
@@ -27,6 +29,18 @@ class AppLoginSuccessState extends AppStates{
 class AppLoginErrorState extends AppStates{
   final String error;
   AppLoginErrorState(this.error);
+}
+
+class AppGetUserResultsLoadingState extends AppStates{}
+
+class AppGetUserResultsSuccessState extends AppStates{
+  final SearchModel searchModel;
+  AppGetUserResultsSuccessState(this.searchModel);
+}
+
+class AppGetUserResultsErrorState extends AppStates{
+  final String error;
+  AppGetUserResultsErrorState(this.error);
 }
 
 class AppRegisterLoadingState extends AppStates{}
@@ -71,6 +85,28 @@ class AppGetOffersErrorState extends AppStates{
   AppGetOffersErrorState(this.error);
 }
 
+class AppGetHomeOffersLoadingState extends AppStates{}
+class AppGetHomeOffersSuccessState extends AppStates{
+  final OffersModel homeOffersModel;
+  AppGetHomeOffersSuccessState(this.homeOffersModel);
+}
+class AppGetHomeOffersErrorState extends AppStates{
+  final String error;
+  AppGetHomeOffersErrorState(this.error);
+}
+
+class AppGetLabOffersLoadingState extends AppStates{}
+
+class AppGetLabOffersSuccessState extends AppStates{
+  final OffersModel labOffersModel;
+  AppGetLabOffersSuccessState(this.labOffersModel);
+}
+
+class AppGetLabOffersErrorState extends AppStates{
+  final String error;
+  AppGetLabOffersErrorState(this.error);
+}
+
 class AppGetReservationsLoadingState extends AppStates{}
 
 class AppGetReservationsSuccessState extends AppStates{
@@ -93,18 +129,6 @@ class AppGetTestsSuccessState extends AppStates{
 class AppGetTestsErrorState extends AppStates{
   final String error;
   AppGetTestsErrorState(this.error);
-}
-
-class AppGetTestDetailsLoadingState extends AppStates{}
-
-class AppGetTestDetailsSuccessState extends AppStates{
-  final TestDetailsModel testDetailsModel;
-  AppGetTestDetailsSuccessState(this.testDetailsModel);
-}
-
-class AppGetTestDetailsErrorState extends AppStates{
-  final String error;
-  AppGetTestDetailsErrorState(this.error);
 }
 
 class AppGetTestResultLoadingState extends AppStates{}
@@ -143,6 +167,42 @@ class AppHomeReservationsErrorState extends AppStates{
   AppHomeReservationsErrorState(this.error);
 }
 
+class AppSendMessageLoadingState extends AppStates{}
+
+class AppSendMessageSuccessState extends AppStates{}
+
+class AppSendMessageErrorState extends AppStates{
+  final String error;
+  AppSendMessageErrorState(this.error);
+}
+
+class AppLabReservationsLoadingState extends AppStates{}
+
+class AppLabReservationsSuccessState extends AppStates{}
+
+class AppLabReservationsErrorState extends AppStates{
+  final String error;
+  AppLabReservationsErrorState(this.error);
+}
+
+class AppCancelReservationsLoadingState extends AppStates{}
+
+class AppCancelReservationsSuccessState extends AppStates{}
+
+class AppCancelReservationsErrorState extends AppStates{
+  final String error;
+  AppCancelReservationsErrorState(this.error);
+}
+
+class AppDeleteReservationsLoadingState extends AppStates{}
+
+class AppDeleteReservationsSuccessState extends AppStates{}
+
+class AppDeleteReservationsErrorState extends AppStates{
+  final String error;
+  AppDeleteReservationsErrorState(this.error);
+}
+
 class AppGetProfileLoadingState extends AppStates{}
 
 class AppGetProfileSuccessState extends AppStates{}
@@ -150,4 +210,28 @@ class AppGetProfileSuccessState extends AppStates{}
 class AppGetProfileErrorState extends AppStates{
   final String error;
   AppGetProfileErrorState(this.error);
+}
+
+class AppGetAppointmentsLoadingState extends AppStates{}
+
+class AppGetAppointmentsSuccessState extends AppStates{
+  final AppointmentsModel appointmentsModel;
+  AppGetAppointmentsSuccessState(this.appointmentsModel);
+}
+
+class AppGetAppointmentsErrorState extends AppStates{
+  final String error;
+  AppGetAppointmentsErrorState(this.error);
+}
+
+class AppGetTestNameLoadingState extends AppStates{}
+
+class AppGetTestNameSuccessState extends AppStates{
+  final TestNameModel testNameModel;
+  AppGetTestNameSuccessState(this.testNameModel);
+}
+
+class AppGetTestNameErrorState extends AppStates{
+  final String error;
+  AppGetTestNameErrorState(this.error);
 }
