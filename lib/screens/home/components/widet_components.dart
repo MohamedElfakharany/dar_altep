@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/appointments_model.dart';
+import 'package:dar_altep/models/auth/user_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
 import 'package:dar_altep/screens/home/lab_visit_appointment/lab_visit_appointment_screen.dart';
@@ -19,10 +20,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeOffersCard extends StatelessWidget {
-  const HomeOffersCard(
-      {Key? key, this.offersModel, required this.context, required this.index})
-      : super(key: key);
+  const HomeOffersCard({
+    Key? key,
+    this.offersModel,
+    required this.context,
+    required this.index,
+    required this.user,
+    required this.testNames,
+    this.appointments,
+  }) : super(key: key);
+  final UserModel? user;
+  final List<String>? testNames;
   final OffersModel? offersModel;
+  final AppointmentsModel? appointments;
   final BuildContext context;
   final int index;
 
@@ -54,7 +64,7 @@ class HomeOffersCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               width: 160.0,
-              height: 227.0,
+              height: 230.0,
               child: Stack(
                 children: [
                   Positioned.fill(
@@ -157,11 +167,34 @@ class HomeOffersCard extends StatelessWidget {
                               ],
                             ),
                             child: MaterialButton(
-                              onPressed: () {},
-                              child: const Center(
+                              onPressed: () {
+                                if (offersModel?.data?[index].testOffer ==
+                                    'individual') {
+                                  Navigator.push(
+                                      context,
+                                      FadeRoute(
+                                          page: HomeVisitScreen(
+                                        user: user,
+                                        testName:
+                                            offersModel?.data?[index].type,
+                                      )));
+                                }
+                                if (offersModel?.data?[index].testOffer ==
+                                    'laboratory') {
+                                  Navigator.push(
+                                      context,
+                                      FadeRoute(
+                                          page: LabVisitAppointmentScreen(
+                                        appointments: appointments,
+                                        user: user,
+                                        testNames: testNames,
+                                      )));
+                                }
+                              },
+                              child: Center(
                                 child: Text(
-                                  'Get Offers',
-                                  style: TextStyle(
+                                  LocaleKeys.BtnGetOffers.tr(),
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
                                   ),
@@ -189,9 +222,18 @@ class HomeOffersCard extends StatelessWidget {
 
 class TestLibraryCard extends StatelessWidget {
   const TestLibraryCard(
-      {Key? key, this.testsModel, required this.context, required this.index})
+      {Key? key,
+      this.testsModel,
+      required this.context,
+      required this.index,
+      this.user,
+      this.testNames,
+      this.appointments})
       : super(key: key);
+  final UserModel? user;
+  final List<String>? testNames;
   final TestsModel? testsModel;
+  final AppointmentsModel? appointments;
   final BuildContext context;
   final int index;
 
@@ -305,7 +347,7 @@ class TestLibraryCard extends StatelessWidget {
                                   padding: const EdgeInsetsDirectional.only(
                                       start: 20.0),
                                   child: Text(
-                                    'Reservation type',
+                                    LocaleKeys.TxtPopUpReservationType.tr(),
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontFamily: fontFamily,
@@ -321,29 +363,41 @@ class TestLibraryCard extends StatelessWidget {
                                   borderWidth: 1,
                                   btnRadius: radius - 5,
                                   borderColor: blueLight,
-                                  title: 'At Home',
+                                  title: LocaleKeys.BtnAtHome.tr(),
                                   image: 'assets/images/homeIcon.png',
                                   width: double.infinity,
                                   onPress: () {
+                                    Navigator.pop(context);
                                     Navigator.push(
                                         context,
                                         FadeRoute(
-                                            page: HomeVisitScreen(testName: testsModel?.data?[index].name,)));
+                                            page: HomeVisitScreen(
+                                          testName:
+                                              testsModel?.data?[index].name,
+                                          user: user,
+                                          testNames: testNames,
+                                        )));
                                   },
                                 ),
                                 verticalLargeSpace,
                                 GeneralUnfilledButton(
                                   btnRadius: radius - 5,
                                   borderColor: whiteColor,
-                                  title: 'At laboratory',
+                                  title: LocaleKeys.BtnAtLab.tr(),
                                   image: 'assets/images/labIcon.png',
                                   width: double.infinity,
                                   onPress: () {
+                                    Navigator.pop(context);
                                     Navigator.push(
-                                        context,
-                                        FadeRoute(
-                                            page:
-                                                const LabVisitAppointmentScreen()));
+                                      context,
+                                      FadeRoute(
+                                        page: LabVisitAppointmentScreen(
+                                          appointments: appointments,
+                                          user: user,
+                                          testNames: testNames,
+                                        ),
+                                      ),
+                                    );
                                   },
                                 ),
                               ],
@@ -384,8 +438,17 @@ class TestLibraryCard extends StatelessWidget {
 
 class OffersCard extends StatelessWidget {
   const OffersCard(
-      {Key? key, this.offersModel, required this.context, required this.index})
+      {Key? key,
+      this.offersModel,
+      required this.context,
+      required this.index,
+      this.user,
+      this.testNames,
+      this.appointments})
       : super(key: key);
+  final UserModel? user;
+  final AppointmentsModel? appointments;
+  final List<String>? testNames;
   final OffersModel? offersModel;
   final BuildContext context;
   final int index;
@@ -411,17 +474,17 @@ class OffersCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         width: double.infinity,
-        height: 110.0,
+        height: 120.0,
         child: Row(
           children: [
             horizontalMicroSpace,
             CachedNetworkImageNormal(
               imageUrl: offersModel?.data?[index].image,
-              width: 130,
+              width: 120,
               height: 90,
             ),
             Expanded(
-              child: Container(
+              child: Padding(
                 padding: const EdgeInsetsDirectional.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,10 +513,55 @@ class OffersCard extends StatelessWidget {
                     ),
                     Expanded(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        // mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          GeneralUnfilledButton(title: 'More', onPress: () {},width: 70,btnRadius: 8.0,),
-                          GeneralButton(title: 'Get Offer', onPress: (){},height: 30.0,width: 100,radius: 8.0,)
+                          GeneralUnfilledButton(
+                            title: LocaleKeys.BtnMore.tr(),
+                            onPress: () {
+                              Navigator.push(
+                                context,
+                                FadeRoute(
+                                  page: PrecautionsScreen(
+                                    description: offersModel?.data?[index].description,
+                                    title: offersModel?.data?[index].name,
+                                    type: offersModel?.data?[index].type,
+                                  ),
+                                ),
+                              );
+                            },
+                            width: 50,
+                            height: 30,
+                            btnRadius: 8.0,
+                          ),
+                          GeneralButton(
+                            title: LocaleKeys.BtnGetOffers.tr(),
+                            onPress: () {
+                              if (offersModel?.data?[index].testOffer ==
+                                  'individual') {
+                                Navigator.push(
+                                    context,
+                                    FadeRoute(
+                                        page: HomeVisitScreen(
+                                      user: user,
+                                      testName: offersModel?.data?[index].type,
+                                    )));
+                              }
+                              if (offersModel?.data?[index].testOffer ==
+                                  'laboratory') {
+                                Navigator.push(
+                                    context,
+                                    FadeRoute(
+                                        page: LabVisitAppointmentScreen(
+                                      user: user,
+                                      testNames: testNames,
+                                      appointments: appointments,
+                                    )));
+                              }
+                            },
+                            height: 30.0,
+                            width: 90,
+                            radius: 8.0,
+                          )
                         ],
                       ),
                     ),
@@ -469,16 +577,20 @@ class OffersCard extends StatelessWidget {
 }
 
 class AppointmentCard extends StatelessWidget {
-  const AppointmentCard(
-      {Key? key,
-      this.appointmentsModel,
-      required this.context,
-      required this.index})
-      : super(key: key);
+  const AppointmentCard({
+    Key? key,
+    this.appointments,
+    required this.context,
+    required this.index,
+    this.user,
+    this.testNames,
+  }) : super(key: key);
 
-  final AppointmentsModel? appointmentsModel;
+  final AppointmentsModel? appointments;
   final BuildContext context;
   final int index;
+  final UserModel? user;
+  final List<String>? testNames;
 
   @override
   Widget build(BuildContext context) {
@@ -488,9 +600,11 @@ class AppointmentCard extends StatelessWidget {
             context,
             FadeRoute(
                 page: LabVisitSubmitScreen(
+              user: user,
+              testNames: testNames,
               index: index,
-              appointmentsModel: appointmentsModel!,
-              appointmentId: appointmentsModel?.data?[index].id,
+              appointments: appointments!,
+              appointmentId: appointments?.data?[index].id,
             )));
       },
       child: Container(
@@ -500,7 +614,7 @@ class AppointmentCard extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              appointmentsModel?.data?[index].day,
+              appointments?.data?[index].day,
               style: TextStyle(
                   fontFamily: fontFamily,
                   fontWeight: FontWeight.bold,
@@ -508,7 +622,7 @@ class AppointmentCard extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              appointmentsModel?.data?[index].date,
+              appointments?.data?[index].date,
               style: TextStyle(
                   fontFamily: fontFamily,
                   fontWeight: FontWeight.bold,
@@ -516,7 +630,7 @@ class AppointmentCard extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              appointmentsModel?.data?[index].time,
+              appointments?.data?[index].time,
               style: TextStyle(
                   fontFamily: fontFamily,
                   fontWeight: FontWeight.bold,

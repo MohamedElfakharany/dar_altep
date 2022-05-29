@@ -60,6 +60,7 @@ class Checked {
     this.image,
     this.seen,
     this.name,
+    this.visitId,
   });
 
   dynamic id;
@@ -68,6 +69,7 @@ class Checked {
   dynamic image;
   dynamic seen;
   dynamic name;
+  dynamic visitId;
 
   factory Checked.fromJson(Map<dynamic, dynamic> json) => Checked(
     id: json["id"],
@@ -76,6 +78,7 @@ class Checked {
     image: json["image"],
     seen: json["seen"],
     name: json["name"],
+    visitId: json["visit_id"],
   );
 
   // Map<dynamic, dynamic> toJson() => {

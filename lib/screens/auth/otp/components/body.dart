@@ -1,10 +1,9 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
-import 'package:dar_altep/screens/auth/confirmed_screen.dart';
+import 'package:dar_altep/screens/auth/login_screen.dart';
 import 'package:dar_altep/screens/auth/otp/components/otp_form.dart';
 import 'package:dar_altep/screens/auth/otp/otp_screen.dart';
-import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
@@ -28,8 +27,8 @@ class Body extends StatelessWidget {
       child: BlocConsumer<AppCubit,AppStates>(
         listener: (context, state) {
           if (state is AppVerificationSuccessState) {
-            if (state.verificationModel.status != 'error') {
-              Navigator.push(context, FadeRoute(page: HomeScreen()));
+            if (state.verificationModel.status) {
+              Navigator.pushAndRemoveUntil(context, FadeRoute(page: LoginScreen()), (route) => false);
               OtpScreen(mobile: '',verification: '',);
             } else {
               if (kDebugMode) {
@@ -44,7 +43,7 @@ class Body extends StatelessWidget {
                     );
                   });
             }
-          } else if (state is AppRegisterErrorState) {
+          } else if (state is AppVerificationErrorState) {
             showDialog(
                 context: context,
                 builder: (context) {

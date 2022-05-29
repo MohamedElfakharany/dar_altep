@@ -87,7 +87,21 @@ class CodegenLoader extends AssetLoader{
   "TxtdeleteMain": "Are you sure to delete this reservation?",
   "TxtCancelMain": "Are you sure to cancel this reservation?",
   "TxtTestResult": "Test Result",
-  "TxtLabVisit": "Laboratory Visit"
+  "TxtLabVisit": "Laboratory Visit",
+  "MyResultScreenWeHope": "We hope you are good",
+  "MyResultScreenNew": "New",
+  "MyResultScreenChecked": "Checked",
+  "TxtAccurateResults": "Accurate Results",
+  "BtnGetOffers": "Get Offers",
+  "BtnMore": "More",
+  "AppointmentScreenTxtSelect": "Select Appointment",
+  "AppointmentScreenTxtDay": "Day",
+  "AppointmentScreenTxtDate": "Date",
+  "AppointmentScreenTxtTime": "Time",
+  "AppointmentScreenTxtTitle": "Appointments",
+  "OffersScreenTxtTitle": "Offers",
+  "OffersScreenTxtMedecalLaboratory": "Medical Laboratory",
+  "OffersScreenTxtIndividual": "Individual"
 };
 static const Map<String,dynamic> ar = {
   "loginTxtMain": "تسجيل الدخول",
@@ -162,7 +176,21 @@ static const Map<String,dynamic> ar = {
   "TxtdeleteMain": "هل تريد حذف الحجز؟",
   "TxtCancelMain": "هل تريد إلغاء الحجز ؟",
   "TxtTestResult": "نتيجة الاختبار",
-  "TxtLabVisit": "حجز في المعمل"
+  "TxtLabVisit": "حجز في المعمل",
+  "MyResultScreenWeHope": "نأمل أن تكون بخير",
+  "MyResultScreenNew": "جديد",
+  "MyResultScreenChecked": "السابق",
+  "TxtAccurateResults": "النتائج الدقيقة",
+  "BtnGetOffers": "تأكيد العرض",
+  "BtnMore": "المزيد",
+  "AppointmentScreenTxtSelect": "حدد المعاد المناسب",
+  "AppointmentScreenTxtDay": "اليوم",
+  "AppointmentScreenTxtDate": "التاريخ",
+  "AppointmentScreenTxtTime": "الوقت",
+  "AppointmentScreenTxtTitle": "المواعيد",
+  "OffersScreenTxtTitle": "العروض",
+  "OffersScreenTxtMedecalLaboratory": "العروض في المعمل",
+  "OffersScreenTxtIndividual": "العروض في المنزل"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ar": ar};
 }

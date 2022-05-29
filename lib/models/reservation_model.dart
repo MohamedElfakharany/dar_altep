@@ -17,17 +17,17 @@ class ReservationsModel {
 
   dynamic status;
   dynamic message;
-  List<reservationData>? data;
+  List<ReservationData>? data;
 
   factory ReservationsModel.fromJson(Map<dynamic, dynamic> json) => ReservationsModel(
     status: json["status"],
     message: json["message"],
-    data: List<reservationData>.from(json["data"].map((x) => reservationData.fromJson(x))),
+    data: List<ReservationData>.from(json["data"].map((x) => ReservationData.fromJson(x))),
   );
 }
 
-class reservationData {
-  reservationData({
+class ReservationData {
+  ReservationData({
     this.id,
     this.time,
     this.date,
@@ -45,7 +45,7 @@ class reservationData {
   dynamic status;
   dynamic testName;
 
-  factory reservationData.fromJson(Map<dynamic, dynamic> json) => reservationData(
+  factory ReservationData.fromJson(Map<dynamic, dynamic> json) => ReservationData(
     id: json["id"],
     time: json["time"],
     date: json["date"],

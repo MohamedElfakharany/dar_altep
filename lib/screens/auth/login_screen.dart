@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -23,50 +24,52 @@ class LoginScreen extends StatelessWidget {
   final mobileController = TextEditingController();
   final passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
-
+  tokenSaving(String tokenSave)async{
+    (await SharedPreferences.getInstance()).setString('token', tokenSave);
+    token = tokenSave;
+  }
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
-          if (state is AppLoginSuccessState) {
+          if (state is AppLoginSuccessState){
             if (state.userModel.status) {
-
-              CacheHelper.saveData(
-                key: 'token',
-                value: state.userModel.data?.token,
-              ).then((value) {
-                CacheHelper.saveData(key: 'name', value: state.userModel.data?.name);
-                CacheHelper.saveData(key: 'mobile', value: state.userModel.data?.phone);
-                CacheHelper.saveData(key: 'email', value: state.userModel.data?.email);
-                CacheHelper.saveData(key: 'image', value: state.userModel.data?.idImage);
-                CacheHelper.saveData(key: 'nationality', value: state.userModel.data?.nationality);
-                CacheHelper.saveData(key: 'birthrate', value: state.userModel.data?.birthrate);
-                CacheHelper.saveData(key: 'gender', value: state.userModel.data?.gender);
-
-                name = CacheHelper.getData(key: 'name');
-                mobile = CacheHelper.getData(key: 'mobile');
-                email = CacheHelper.getData(key: 'email');
-                image = CacheHelper.getData(key: 'image');
-                birthrate = CacheHelper.getData(key: 'birthrate');
-                nationality = CacheHelper.getData(key: 'nationality');
-                gender = CacheHelper.getData(key: 'gender');
-
-                token = state.userModel.data?.token;
-                name = state.userModel.data?.name;
-                mobile = state.userModel.data?.phone;
-                email = state.userModel.data?.email;
-                image = state.userModel.data?.idImage;
-                birthrate = state.userModel.data?.birthrate;
-                nationality = state.userModel.data?.nationality;
-                gender = state.userModel.data?.gender;
-
-                navigateAndFinish(
-                  context,
-                  const HomeScreen(),
-                );
-              });
+              tokenSaving(state.userModel.data?.token);
+              print('token  login $token');
+              print('state.userModel.data?.token ${state.userModel.data?.token}');
+              navigateAndFinish(context, HomeScreen());
+              // CacheHelper.saveData(
+              //   key: 'token',
+              //   value: state.userModel.data?.token,
+              // ).then((value) {
+              //   navigateAndFinish(
+              //     context,
+              //     const HomeScreen(),
+              //   );
+              // });
+            } else {
+              print(state.userModel.message);
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Error...!'),
+                      content: Text('${state.userModel.message}'),
+                    );
+                  });
+            }
+            if (state is AppLoginErrorState){
+              print('state.userModel.message${state.userModel.message}');
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Error...!'),
+                      content: Text('${state.userModel.message ?? 'hhh'}'),
+                    );
+                  });
             }
           }
         },
@@ -174,19 +177,19 @@ class LoginScreen extends StatelessWidget {
                                         title: 'Forgot your password?',
                                       ),
                                     ),
-                                    CheckboxListTile(
-                                      side: const BorderSide(
-                                        style: BorderStyle.solid,
-                                      ),
-                                      title: const Text('Remember Me'),
-                                      activeColor: blueDark,
-                                      value: cubit.rememberMe,
-                                      onChanged: (value) {
-                                        cubit.onRememberMeChanged();
-                                      },
-                                      controlAffinity:
-                                          ListTileControlAffinity.leading,
-                                    ),
+                                    // CheckboxListTile(
+                                    //   side: const BorderSide(
+                                    //     style: BorderStyle.solid,
+                                    //   ),
+                                    //   title: const Text('Remember Me'),
+                                    //   activeColor: blueDark,
+                                    //   value: cubit.rememberMe,
+                                    //   onChanged: (value) {
+                                    //     cubit.onRememberMeChanged();
+                                    //   },
+                                    //   controlAffinity:
+                                    //       ListTileControlAffinity.leading,
+                                    // ),
                                     verticalMediumSpace,
                                     ConditionalBuilder(
                                       condition: state is! AppLoginLoadingState,

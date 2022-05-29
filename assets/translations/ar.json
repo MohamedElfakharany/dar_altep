@@ -74,5 +74,16 @@
   "TxtLabVisit": "حجز في المعمل",
   "MyResultScreenWeHope": "نأمل أن تكون بخير",
   "MyResultScreenNew": "جديد",
-  "MyResultScreenChecked": "السابق"
+  "MyResultScreenChecked": "السابق",
+  "TxtAccurateResults": "النتائج الدقيقة",
+  "BtnGetOffers": "تأكيد العرض",
+  "BtnMore": "المزيد",
+  "AppointmentScreenTxtSelect": "حدد المعاد المناسب",
+  "AppointmentScreenTxtDay": "اليوم",
+  "AppointmentScreenTxtDate": "التاريخ",
+  "AppointmentScreenTxtTime": "الوقت",
+  "AppointmentScreenTxtTitle": "المواعيد",
+  "OffersScreenTxtTitle": "العروض",
+  "OffersScreenTxtMedecalLaboratory": "العروض في المعمل",
+  "OffersScreenTxtIndividual": "العروض في المنزل"
 }

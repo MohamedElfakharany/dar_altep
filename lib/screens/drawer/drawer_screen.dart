@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/drawer/reservation_screen.dart';
@@ -14,252 +15,277 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DrawerScreen extends StatelessWidget {
-  const DrawerScreen({Key? key}) : super(key: key);
-
+  DrawerScreen({Key? key,required this.testNames}) : super(key: key);
+  List<String> testNames = [];
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-    return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        var user = AppCubit.get(context).userdata?.data;
-        return Container(
-          padding: const EdgeInsetsDirectional.only(start: 0.0,top: 0.0,bottom: 0.0),
-          color: blueDark2,
-          width: width * 0.75,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              verticalLargeSpace,
-              verticalLargeSpace,
-              verticalLargeSpace,
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(50.0),
-                      child: CachedNetworkImage(
-                        imageUrl: user?.idImage,
-                        placeholder: (context, url) => const SizedBox(
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            color: blueLight,
-                          )),
-                          width: 30,
-                          height: 30,
-                        ),
-                        errorWidget: (context, url, error) =>
+    return BlocProvider(
+      create: (BuildContext context) => AppCubit()..getProfileData()..getTestsData(),
+      child: BlocConsumer<AppCubit, AppStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var user = AppCubit.get(context).userModel;
+          var searchModel = AppCubit.get(context).searchModel;
+          var testItems = testNames;
+          return Container(
+            padding: const EdgeInsetsDirectional.only(
+                start: 0.0, top: 0.0, bottom: 0.0),
+            color: blueDark2,
+            width: width * 0.75,
+            child: ConditionalBuilder(
+              condition: state is! AppGetProfileLoadingState && state is! AppGetTestsLoadingState,
+              builder: (context) => Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  verticalLargeSpace,
+                  verticalLargeSpace,
+                  verticalLargeSpace,
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: CachedNetworkImage(
+                            imageUrl: user?.data?.idImage,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const SizedBox(
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: blueLight,
+                                  )),
+                              width: 30,
+                              height: 30,
+                            ),
+                            errorWidget: (context, url, error) =>
                             const Icon(Icons.error),
-                        width: 100,
-                        height: 100,
-                      ),
-                    ),
-                    horizontalSmallSpace,
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              user?.name,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: fontFamily,
-                                fontWeight: FontWeight.bold,
-                                color: whiteColor,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            verticalMiniSpace,
-                            Text(
-                              user?.email,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: fontFamily,
-                                fontWeight: FontWeight.normal,
-                                color: whiteColor,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                            width: 100,
+                            height: 100,
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              verticalLargeSpace,
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 50.0),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context, FadeRoute(page: const MyResultsScreen()));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Image(
-                            image: AssetImage(
-                                'assets/images/drawerIconResult.png'),
-                            width: 30,
-                            height: 40,
-                          ),
-                          horizontalMiniSpace,
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Text(
-                              LocaleKeys.drawerResults.tr(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: fontFamily,
-                                fontWeight: FontWeight.bold,
-                                color: whiteColor,
+                        horizontalSmallSpace,
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(end: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                user?.data?.name,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.bold,
+                                  color: whiteColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    verticalMediumSpace,
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context, FadeRoute(page: ReservationScreen()));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Image(
-                            image: AssetImage(
-                                'assets/images/drawerIconBooking.png'),
-                            width: 30,
-                            height: 40,
-                          ),
-                          horizontalMiniSpace,
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Text(
-                              LocaleKeys.drawerReservations.tr(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: fontFamily,
-                                fontWeight: FontWeight.bold,
-                                color: whiteColor,
+                              verticalMiniSpace,
+                              Text(
+                                user?.data?.email,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: fontFamily,
+                                  fontWeight: FontWeight.normal,
+                                  color: whiteColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                // maxLines: 2,
+                                // textAlign: TextAlign.center,
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    verticalMediumSpace,
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context, FadeRoute(page: SettingsScreen()));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Image(
-                            image: AssetImage(
-                                'assets/images/drawerIconSettings.png'),
-                            width: 30,
-                            height: 40,
-                          ),
-                          horizontalMiniSpace,
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Text(
-                              LocaleKeys.drawerSettings.tr(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: fontFamily,
-                                fontWeight: FontWeight.bold,
-                                color: whiteColor,
+                  ),
+                  verticalLargeSpace,
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(start: 50.0),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                FadeRoute(
+                                    page: MyResultsScreen(
+                                      testNames: testItems,
+                                      searchModel: searchModel,
+                                    )));
+                            print('testNames : $testNames');
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Image(
+                                image: AssetImage(
+                                    'assets/images/drawerIconResult.png'),
+                                width: 30,
+                                height: 40,
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    verticalMediumSpace,
-                    InkWell(
-                      onTap: () {
-                        showPopUp(
-                          context,
-                          Container(
-                            height: 200,
-                            width: width * 0.9,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10.0),
-                            child: Column(
-                              children: [
-                                verticalSmallSpace,
-                                Text(
-                                  AppCubit.get(context).userdata?.data?.name ?? '',
+                              horizontalMiniSpace,
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Text(
+                                  LocaleKeys.drawerResults.tr(),
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: fontFamily,
                                     fontWeight: FontWeight.bold,
+                                    color: whiteColor,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                verticalMediumSpace,
-                                Text(LocaleKeys.drawerLogOutMain.tr()),
-                                verticalMediumSpace,
-                                GeneralButton(
-                                  radius: radius,
-                                  title: LocaleKeys.drawerLogout.tr(),
-                                  onPress: () {
-                                    AppCubit.get(context).signOut(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Image(
-                            image: AssetImage(
-                                'assets/images/drawerIconLogout.png'),
-                            width: 30,
-                            height: 40,
-                          ),
-                          horizontalMiniSpace,
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Text(
-                              LocaleKeys.drawerLogout.tr(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: fontFamily,
-                                fontWeight: FontWeight.bold,
-                                color: whiteColor,
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        verticalMediumSpace,
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context, FadeRoute(page: ReservationScreen()));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Image(
+                                image: AssetImage(
+                                    'assets/images/drawerIconBooking.png'),
+                                width: 30,
+                                height: 40,
+                              ),
+                              horizontalMiniSpace,
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Text(
+                                  LocaleKeys.drawerReservations.tr(),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: fontFamily,
+                                    fontWeight: FontWeight.bold,
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        verticalMediumSpace,
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                FadeRoute(
+                                    page: SettingsScreen(
+                                      // user: user,
+                                    )));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Image(
+                                image: AssetImage(
+                                    'assets/images/drawerIconSettings.png'),
+                                width: 30,
+                                height: 40,
+                              ),
+                              horizontalMiniSpace,
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Text(
+                                  LocaleKeys.drawerSettings.tr(),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: fontFamily,
+                                    fontWeight: FontWeight.bold,
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        verticalMediumSpace,
+                        InkWell(
+                          onTap: () {
+                            showPopUp(
+                              context,
+                              Container(
+                                height: 200,
+                                width: width * 0.9,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10.0),
+                                child: Column(
+                                  children: [
+                                    verticalSmallSpace,
+                                    Text(
+                                      AppCubit.get(context).userModel?.data?.name ??
+                                          '',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: fontFamily,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    verticalMediumSpace,
+                                    Text(LocaleKeys.drawerLogOutMain.tr()),
+                                    verticalMediumSpace,
+                                    GeneralButton(
+                                      radius: radius,
+                                      title: LocaleKeys.drawerLogout.tr(),
+                                      onPress: () {
+                                        AppCubit.get(context).signOut(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Image(
+                                image: AssetImage(
+                                    'assets/images/drawerIconLogout.png'),
+                                width: 30,
+                                height: 40,
+                              ),
+                              horizontalMiniSpace,
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Text(
+                                  LocaleKeys.drawerLogout.tr(),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: fontFamily,
+                                    fontWeight: FontWeight.bold,
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        verticalMediumSpace,
+                      ],
                     ),
-                    verticalMediumSpace,
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      },
+              fallback: (context) => const Center(child: CircularProgressIndicator(),),
+            ),
+          );
+        },
+      ),
     );
   }
 }

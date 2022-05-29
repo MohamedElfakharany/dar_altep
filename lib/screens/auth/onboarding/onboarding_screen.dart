@@ -58,7 +58,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
+            image: const AssetImage(
               "assets/images/onboardingbackground.png",
             ),
             colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
@@ -108,16 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const Spacer(),
                   MaterialButton(
                     onPressed: () {
-                      if (isLast) {
                         submitOnboarding();
-                      } else {
-                        boardController.nextPage(
-                          duration: const Duration(
-                            milliseconds: 750,
-                          ),
-                          curve: Curves.easeInBack,
-                        );
-                      }
                     },
                     child: Image.asset(
                       'assets/images/onboardingSkipImage.png',

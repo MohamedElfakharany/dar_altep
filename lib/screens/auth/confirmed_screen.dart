@@ -52,7 +52,7 @@ class ConfirmedScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50.0),
               child: GeneralButton(title: 'Done', onPress: () {
-                navigateAndFinish(context, const HomeScreen());
+                navigateAndFinish(context, FadeRoute(page: const HomeScreen()));
               }),
             ),
           ],

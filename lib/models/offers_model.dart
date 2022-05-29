@@ -42,6 +42,7 @@ class OffersData {
     this.price,
     this.discount,
     this.image,
+    this.testOffer,
   });
 
   dynamic id;
@@ -52,6 +53,7 @@ class OffersData {
   dynamic price;
   dynamic discount;
   dynamic image;
+  dynamic testOffer;
 
   factory OffersData.fromJson(Map<dynamic, dynamic> json) => OffersData(
     id: json["id"],
@@ -62,6 +64,7 @@ class OffersData {
     price: json["price"],
     discount: json["discount"],
     image: json["image"],
+    testOffer: json["test_offer"],
   );
 
   Map<dynamic, dynamic> toJson() => {
@@ -73,6 +76,7 @@ class OffersData {
     "price": price,
     "discount": discount,
     "image": image,
+    "test_offer": testOffer,
   };
 }
 

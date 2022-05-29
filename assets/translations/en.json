@@ -74,5 +74,16 @@
   "TxtLabVisit": "Laboratory Visit",
   "MyResultScreenWeHope": "We hope you are good",
   "MyResultScreenNew": "New",
-  "MyResultScreenChecked": "Checked"
+  "MyResultScreenChecked": "Checked",
+  "TxtAccurateResults": "Accurate Results",
+  "BtnGetOffers": "Get Offers",
+  "BtnMore": "More",
+  "AppointmentScreenTxtSelect": "Select Appointment",
+  "AppointmentScreenTxtDay": "Day",
+  "AppointmentScreenTxtDate": "Date",
+  "AppointmentScreenTxtTime": "Time",
+  "AppointmentScreenTxtTitle": "Appointments",
+  "OffersScreenTxtTitle": "Offers",
+  "OffersScreenTxtMedecalLaboratory": "Medical Laboratory",
+  "OffersScreenTxtIndividual": "Individual"
 }

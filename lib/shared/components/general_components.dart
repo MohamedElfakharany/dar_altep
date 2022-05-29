@@ -7,11 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-void navigateAndFinish(context, widget) =>
-    Navigator.pushAndRemoveUntil(
+void navigateAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
       context,
       FadeRoute(page: widget),
-          (Route<dynamic> route) => false,
+      (Route<dynamic> route) => false,
     );
 
 void showToast({
@@ -46,8 +45,7 @@ Color chooseToastColor(ToastState state) {
   return color;
 }
 
-Widget myDivider() =>
-    Padding(
+Widget myDivider() => Padding(
       padding: const EdgeInsets.only(left: 20, top: 8, bottom: 8, right: 20),
       child: Container(
         width: double.infinity,
@@ -173,8 +171,7 @@ class GeneralUnfilledButton extends StatelessWidget {
                 height: 30,
                 width: 30,
               ),
-            if (image != null)
-              horizontalSmallSpace,
+            if (image != null) horizontalSmallSpace,
             if (image != null)
               Expanded(
                 child: Text(
@@ -215,15 +212,16 @@ class GeneralAppBar extends StatelessWidget with PreferredSizeWidget {
   double? appbarPreferredSize;
   Color? appbarBackButtonColor;
 
-  GeneralAppBar({Key? key,
-    required this.title,
-    this.leadingWidth,
-    this.centerTitle,
-    this.appBarColor,
-    this.leading,
-    this.actions,
-    this.appbarPreferredSize = 60,
-    this.appbarBackButtonColor = whiteColor})
+  GeneralAppBar(
+      {Key? key,
+      required this.title,
+      this.leadingWidth,
+      this.centerTitle,
+      this.appBarColor,
+      this.leading,
+      this.actions,
+      this.appbarPreferredSize = 60,
+      this.appbarBackButtonColor = whiteColor})
       : super(key: key);
 
   @override
@@ -264,12 +262,13 @@ class DefaultTextButton extends StatelessWidget {
   AlignmentDirectional align;
   FontWeight? weight;
 
-  DefaultTextButton({Key? key,
-    required this.title,
-    this.weight = FontWeight.w400,
-    this.screen,
-    this.isFinish = false,
-    this.align = AlignmentDirectional.centerEnd})
+  DefaultTextButton(
+      {Key? key,
+      required this.title,
+      this.weight = FontWeight.w400,
+      this.screen,
+      this.isFinish = false,
+      this.align = AlignmentDirectional.centerEnd})
       : super(key: key);
 
   @override
@@ -316,8 +315,11 @@ class DefaultFormField extends StatelessWidget {
   String? validatedText;
   String? hintText;
   bool expend;
+  bool isConfirm = false;
+  String? confirm;
 
-  DefaultFormField({Key? key,
+  DefaultFormField({
+    Key? key,
     required this.controller,
     required this.type,
     required this.validatedText,
@@ -339,8 +341,10 @@ class DefaultFormField extends StatelessWidget {
     this.readOnly = false,
     this.contentPadding,
     this.height = 70,
-    this.autoFocus = false})
-      : super(key: key);
+    this.autoFocus = false,
+    this.isConfirm = false,
+    this.confirm,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -365,6 +369,16 @@ class DefaultFormField extends StatelessWidget {
           validator: (value) {
             if (value!.isEmpty) {
               return 'Fill $validatedText';
+            }
+            if (isConfirm == true) {
+              if (value != confirm){
+                return '$confirm not Match';
+              }
+            }
+            if (validatedText == 'Mobile Number' && isConfirm == true){
+              if (value.length != 9 ){
+                return 'Mobile must be 9 Numbers';
+              }
             }
           },
           autofocus: autoFocus,
@@ -393,18 +407,18 @@ class DefaultFormField extends StatelessWidget {
             labelText: label,
             hintText: hintText,
             border: const OutlineInputBorder(
-              // borderSide: BorderSide(
-              //   width: 2,
-              //   color: blueDark,
-              // ),
-            ),
+                // borderSide: BorderSide(
+                //   width: 2,
+                //   color: blueDark,
+                // ),
+                ),
             prefixIcon: prefixIcon != null
                 ? IconButton(
-              icon: prefixIcon!,
-              onPressed: () {
-                prefixPressed;
-              },
-            )
+                    icon: prefixIcon!,
+                    onPressed: () {
+                      prefixPressed;
+                    },
+                  )
                 : null,
             suffixIcon: IconButton(
               onPressed: () {
@@ -415,18 +429,19 @@ class DefaultFormField extends StatelessWidget {
             ),
             hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
             labelStyle: const TextStyle(
-              // color: isClickable ? Colors.grey[400] : blueDark,
+                // color: isClickable ? Colors.grey[400] : blueDark,
                 color: darkColor,
                 fontSize: 14),
             fillColor: Colors.white,
             filled: true,
             errorStyle: const TextStyle(color: Color(0xFF4F4F4F)),
             // floatingLabelBehavior: FloatingLabelBehavior.never,
-            contentPadding:
-            contentPadding ?? const EdgeInsetsDirectional.only(start: 20.0,end: 10.0, bottom: 15.0),
+            contentPadding: contentPadding ??
+                const EdgeInsetsDirectional.only(
+                    start: 20.0, end: 10.0, bottom: 15.0),
           ),
           style:
-          TextStyle(color: blueLight, fontSize: 14, fontFamily: fontFamily),
+              TextStyle(color: blueLight, fontSize: 14, fontFamily: fontFamily),
         ),
       ),
     );
@@ -563,7 +578,6 @@ final otpInputDecoration = InputDecoration(
 //   }
 // }
 
-
 OutlineInputBorder outlineInputBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(15),
@@ -577,31 +591,34 @@ class FadeRoute extends PageRouteBuilder {
   FadeRoute({
     required this.page,
   }) : super(
-    pageBuilder: (BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,) =>
-    page,
-    transitionsBuilder: (BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child,) =>
-        FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
-  );
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
 }
 
 void showPopUp(BuildContext context, Widget widget) {
   showDialog(
     context: context,
-    builder: (context) =>
-        AlertDialog(
-          content: widget,
-          contentPadding: const EdgeInsets.all(0.0),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(radius))),
-        ),
+    builder: (context) => AlertDialog(
+      content: widget,
+      contentPadding: const EdgeInsets.all(0.0),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(radius))),
+    ),
   );
 }
 
@@ -612,4 +629,19 @@ void printWrapped(String text) {
       print(match.group(0));
     }
   });
+}
+
+class ScreenHolder extends StatelessWidget {
+  final String msg;
+
+  const ScreenHolder(this.msg, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'No $msg Yet',
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.headline3?.copyWith(color: blueDark),
+    );
+  }
 }

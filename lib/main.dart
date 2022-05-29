@@ -21,13 +21,6 @@ void main() async {
   DioHelper.init();
 
   token = CacheHelper.getData(key: 'token');
-  // name = CacheHelper.getData(key: 'name');
-  // mobile = CacheHelper.getData(key: 'mobile');
-  // email = CacheHelper.getData(key: 'email');
-  // image = CacheHelper.getData(key: 'image');
-  // birthrate = CacheHelper.getData(key: 'birthrate');
-  // nationality = CacheHelper.getData(key: 'nationality');
-  // gender = CacheHelper.getData(key: 'gender');
 
   Widget widget;
   // token = token;
@@ -35,9 +28,11 @@ void main() async {
     printWrapped('from main the token is $token');
   }
 
-  if (token != null) {
-    widget = const HomeScreen();
-  } else {
+
+
+    if (token != null) {
+      widget = const HomeScreen();
+    } else {
     widget = const OnboardingScreen();
   }
 
