@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dar_altep/screens/auth/login_screen.dart';
+import 'package:dar_altep/screens/auth/splash_language_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       const Duration(milliseconds: 1000),
       () {
-        Navigator.push(context, FadeRoute(page: LoginScreen()));
+        Navigator.push(context, FadeRoute(page: const SplashLanguageScreen()));
       },
     );
   }

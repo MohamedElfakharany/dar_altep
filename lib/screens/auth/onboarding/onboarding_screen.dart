@@ -1,4 +1,5 @@
 import 'package:dar_altep/screens/auth/login_screen.dart';
+import 'package:dar_altep/screens/auth/splash_language_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
@@ -46,7 +47,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       value: true,
     ).then((value) {
       if (value) {
-        navigateAndFinish(context, LoginScreen());
+        navigateAndFinish(context, const SplashLanguageScreen());
       }
     });
   }

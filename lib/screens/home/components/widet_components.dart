@@ -3,6 +3,7 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/appointments_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
+import 'package:dar_altep/models/notification_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
 import 'package:dar_altep/screens/home/lab_visit_appointment/lab_visit_appointment_screen.dart';
@@ -106,7 +107,7 @@ class HomeOffersCard extends StatelessWidget {
                           ),
                           verticalMicroSpace,
                           Text(
-                            offersModel?.data?[index].duration,
+                            '${offersModel?.data?[index].duration} ${LocaleKeys.txthomeOfferCardDays.tr()}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -258,7 +259,7 @@ class TestLibraryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         width: double.infinity,
-        height: 110.0,
+        height: 115.0,
         child: Row(
           children: [
             CachedNetworkImageNormal(
@@ -266,168 +267,180 @@ class TestLibraryCard extends StatelessWidget {
               width: 130,
               height: double.infinity,
             ),
+            horizontalSmallSpace,
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: whiteColor,
                 ),
-                padding: const EdgeInsetsDirectional.all(10.0),
-                // height: 100,
+                // padding: const EdgeInsetsDirectional.all(10.0),
+                // height: 115,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '${testsModel?.data?[index].name}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: fontFamily,
-                        fontWeight: FontWeight.bold,
-                        color: blueDark,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        Text(
+                          '${testsModel?.data?[index].name}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: fontFamily,
+                            fontWeight: FontWeight.bold,
+                            color: blueDark,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                              top: 10.0, end: 20.0),
+                          child: CircleAvatar(
+                            radius: 12,
+                            backgroundColor: blueDark,
+                            child: FloatingActionButton(
+                              elevation: 10,
+                              backgroundColor: blueDark,
+                              child: const Icon(
+                                Icons.add_rounded,
+                                color: whiteColor,
+                                size: 25,
+                              ),
+                              onPressed: () {
+                                showPopUp(
+                                  context,
+                                  Container(
+                                    height: 280,
+                                    width: width * 0.9,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        verticalMediumSpace,
+                                        Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  start: 20.0),
+                                          child: Text(
+                                            LocaleKeys.TxtPopUpReservationType
+                                                .tr(),
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: fontFamily,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        verticalMicroSpace,
+                                        myDivider(),
+                                        verticalLargeSpace,
+                                        GeneralUnfilledButton(
+                                          borderWidth: 1,
+                                          btnRadius: radius - 5,
+                                          borderColor: blueLight,
+                                          title: LocaleKeys.BtnAtHome.tr(),
+                                          image: 'assets/images/homeIcon.png',
+                                          width: double.infinity,
+                                          onPress: () {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                                context,
+                                                FadeRoute(
+                                                    page: HomeVisitScreen(
+                                                  testName: testsModel
+                                                      ?.data?[index].name,
+                                                  user: user,
+                                                  testNames: testNames,
+                                                )));
+                                          },
+                                        ),
+                                        verticalLargeSpace,
+                                        GeneralUnfilledButton(
+                                          btnRadius: radius - 5,
+                                          borderColor: whiteColor,
+                                          title: LocaleKeys.BtnAtLab.tr(),
+                                          image: 'assets/images/labIcon.png',
+                                          width: double.infinity,
+                                          onPress: () {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              FadeRoute(
+                                                page: LabVisitAppointmentScreen(
+                                                  appointments: appointments,
+                                                  user: user,
+                                                  testNames: testNames,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    verticalMicroSpace,
-                    Text(
-                      'Duration : ${testsModel?.data?[index].duration} days',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: fontFamily,
-                        color: Colors.grey,
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(end: 30),
+                      child: Text(
+                        '${LocaleKeys.txtDuration.tr()} : ${testsModel?.data?[index].duration} ${LocaleKeys.txthomeOfferCardDays.tr()}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: fontFamily,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
-                    verticalMicroSpace,
-                    Text(
-                      'Price : ${testsModel?.data?[index].price} \$',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontFamily: fontFamily,
-                      ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        Text(
+                          '${testsModel?.data?[index].price} \$',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: fontFamily,
+                          ),
+                        ),
+                        const Spacer(),
+                        GeneralUnfilledButton(
+                          title: LocaleKeys.BtnPrecautions.tr(),
+                          titleSize: 12,
+                          height: 30,
+                          width: 80,
+                          btnRadius: 8,
+                          borderColor: blueLight,
+                          onPress: () {
+                            Navigator.push(
+                                context,
+                                FadeRoute(
+                                    page: PrecautionsScreen(
+                                        title: testsModel?.data?[index].name ??
+                                            'Test Precautions',
+                                        description: testsModel
+                                            ?.data?[index].description,
+                                        type: testsModel?.data?[index].type)));
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsetsDirectional.only(top: 10.0, end: 20.0),
-                  child: CircleAvatar(
-                    radius: 15,
-                    backgroundColor: blueDark,
-                    child: FloatingActionButton(
-                      elevation: 10,
-                      backgroundColor: blueDark,
-                      child: const Icon(
-                        Icons.add_rounded,
-                        color: whiteColor,
-                        size: 25,
-                      ),
-                      onPressed: () {
-                        showPopUp(
-                          context,
-                          Container(
-                            height: 280,
-                            width: width * 0.9,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                verticalMediumSpace,
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      start: 20.0),
-                                  child: Text(
-                                    LocaleKeys.TxtPopUpReservationType.tr(),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: fontFamily,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                verticalMicroSpace,
-                                myDivider(),
-                                verticalLargeSpace,
-                                GeneralUnfilledButton(
-                                  borderWidth: 1,
-                                  btnRadius: radius - 5,
-                                  borderColor: blueLight,
-                                  title: LocaleKeys.BtnAtHome.tr(),
-                                  image: 'assets/images/homeIcon.png',
-                                  width: double.infinity,
-                                  onPress: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                        context,
-                                        FadeRoute(
-                                            page: HomeVisitScreen(
-                                          testName:
-                                              testsModel?.data?[index].name,
-                                          user: user,
-                                          testNames: testNames,
-                                        )));
-                                  },
-                                ),
-                                verticalLargeSpace,
-                                GeneralUnfilledButton(
-                                  btnRadius: radius - 5,
-                                  borderColor: whiteColor,
-                                  title: LocaleKeys.BtnAtLab.tr(),
-                                  image: 'assets/images/labIcon.png',
-                                  width: double.infinity,
-                                  onPress: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                        page: LabVisitAppointmentScreen(
-                                          appointments: appointments,
-                                          user: user,
-                                          testNames: testNames,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                GeneralUnfilledButton(
-                  title: LocaleKeys.BtnPrecautions.tr(),
-                  height: 35,
-                  width: 90,
-                  btnRadius: 8,
-                  borderColor: blueLight,
-                  onPress: () {
-                    Navigator.push(
-                        context,
-                        FadeRoute(
-                            page: PrecautionsScreen(
-                                title: testsModel?.data?[index].name ??
-                                    'Test Precautions',
-                                description:
-                                    testsModel?.data?[index].description,
-                                type: testsModel?.data?[index].type)));
-                  },
-                ),
-              ],
             ),
           ],
         ),
@@ -522,7 +535,8 @@ class OffersCard extends StatelessWidget {
                                 context,
                                 FadeRoute(
                                   page: PrecautionsScreen(
-                                    description: offersModel?.data?[index].description,
+                                    description:
+                                        offersModel?.data?[index].description,
                                     title: offersModel?.data?[index].name,
                                     type: offersModel?.data?[index].type,
                                   ),
@@ -641,4 +655,11 @@ class AppointmentCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget BuildMessage(MessageModel messageModel) {
+  return ListTile(
+    title: Text(messageModel.title),
+    subtitle: Text(messageModel.body),
+  );
 }

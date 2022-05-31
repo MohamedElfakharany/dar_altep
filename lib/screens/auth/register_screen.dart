@@ -9,6 +9,8 @@ import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,9 +60,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (state is AppRegisterSuccessState) {
           if (state.userModel.status) {
             tokenSaving(state.userModel.data?.token);
-            // if (kDebugMode) {
-            //   print('token  login $token');
-            // }
             Navigator.push(
               context,
               FadeRoute(
@@ -70,21 +69,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
             );
-            // CacheHelper.saveData(
-            //   key: 'token',
-            //   value: state.userModel.data?.token,
-            // ).then((value) {
-            //   print('token : $token');
-            //   Navigator.push(
-            //     context,
-            //     FadeRoute(
-            //       page: OtpScreen(
-            //         mobile: state.userModel.data?.phone,
-            //         verification: state.userModel.data?.verificationCode,
-            //       ),
-            //     ),
-            //   );
-            // });
           } else {
             showDialog(
                 context: context,
@@ -95,11 +79,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   );
                 });
           }
-        } if (state is AppRegisterErrorState){
-          showDialog(context: context, builder: (context) {
-            return AlertDialog(title: const Text('Error...!'),
-              content: Text(state.error),);
-          });
+        }
+        if (state is AppRegisterErrorState) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return const AlertDialog(
+                  title: Text('Error...!'),
+                  content: Text(
+                    'Please contact with lab',
+                  ),
+                );
+              });
         }
       },
       builder: (context, state) {
@@ -141,15 +132,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 200,
                   )),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 20.0, horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
                 child: SingleChildScrollView(
                   physics: const NeverScrollableScrollPhysics(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Sign Up',
+                        LocaleKeys.registerTxtMain.tr(),
                         style: TextStyle(
                           color: whiteColor,
                           fontWeight: FontWeight.bold,
@@ -159,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       verticalSmallSpace,
                       Text(
-                        'Create an account',
+                        LocaleKeys.registerTxtSecondary.tr(),
                         style: TextStyle(
                           color: whiteColor,
                           fontWeight: FontWeight.normal,
@@ -190,48 +181,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   DefaultFormField(
                                     controller: nameController,
                                     type: TextInputType.name,
-                                    label: 'Full Name',
-                                    validatedText: 'Full Name',
+                                    label: LocaleKeys.txtFieldName.tr(),
+                                    validatedText: LocaleKeys.txtFieldName.tr(),
                                     suffixPressed: () {},
-                                    onTap: (){},
+                                    onTap: () {},
                                   ),
                                   verticalSmallSpace,
                                   DefaultFormField(
                                     controller: emailController,
                                     type: TextInputType.emailAddress,
-                                    validatedText: 'Email',
-                                    label: 'Email',
-                                    onTap: (){},
+                                    validatedText: LocaleKeys.txtFieldEmail.tr(),
+                                    label: LocaleKeys.txtFieldEmail.tr(),
+                                    onTap: () {},
                                   ),
                                   verticalSmallSpace,
                                   DefaultFormField(
                                     controller: mobileController,
                                     type: TextInputType.phone,
-                                    validatedText: 'Mobile Number',
-                                    label: 'Mobile Number',
-                                    onTap: (){},
+                                    validatedText: LocaleKeys.txtFieldMobile.tr(),
+                                    label: LocaleKeys.txtFieldMobile.tr(),
+                                    onTap: () {},
                                   ),
                                   verticalSmallSpace,
                                   DefaultFormField(
                                     controller: passwordController,
                                     type: TextInputType.text,
-                                    validatedText: 'Password',
-                                    label: 'Password',
+                                    validatedText: LocaleKeys.txtFieldPassword.tr(),
+                                    label: LocaleKeys.txtFieldPassword.tr(),
                                     obscureText: cubit.isPassword,
                                     suffixIcon: cubit.sufIcon,
                                     suffixPressed: () {
                                       cubit.changePasswordVisibility();
                                     },
-                                    onTap: (){},
+                                    onTap: () {},
                                   ),
                                   verticalSmallSpace,
                                   DefaultFormField(
                                     controller: confirmationPasswordController,
                                     type: TextInputType.text,
-                                    validatedText: 'Confirmation Password',
+                                    validatedText: LocaleKeys.TxtFieldConfirmPassword.tr(),
                                     isConfirm: true,
                                     confirm: passwordController.text,
-                                    label: 'Confirmation Password',
+                                    label: LocaleKeys.TxtFieldConfirmPassword.tr(),
                                     obscureText: cubit.isPassword,
                                     suffixIcon: cubit.sufIcon,
                                     suffixPressed: () {
@@ -258,21 +249,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButtonFormField<String>(
                                         validator: (String? value) {
-                                          if (value != null &&
-                                              value.isEmpty) {
-                                            return 'Choose Nationality';
+                                          if (value != null && value.isEmpty) {
+                                            return LocaleKeys.txtFieldNationality.tr();
                                           }
                                         },
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           contentPadding:
-                                              EdgeInsetsDirectional.only(
+                                              const EdgeInsetsDirectional.only(
                                                   start: 20.0, end: 10.0),
                                           fillColor: Colors.white,
                                           filled: true,
-                                          errorStyle: TextStyle(
+                                          errorStyle: const TextStyle(
                                               color: Color(0xFF4F4F4F)),
-                                          label: Text('Nationality'),
-                                          border: OutlineInputBorder(
+                                          label: Text(LocaleKeys.txtFieldNationality.tr()),
+                                          border: const OutlineInputBorder(
                                             borderSide: BorderSide(
                                               width: 2,
                                               color: blueDark,
@@ -287,7 +277,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             .toList(),
                                         onChanged: (value) => setState(
                                             () => nationalValue = value),
-                                        onSaved: (v){
+                                        onSaved: (v) {
                                           FocusScope.of(context).unfocus();
                                         },
                                       ),
@@ -296,9 +286,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   verticalSmallSpace,
                                   DefaultFormField(
                                     controller: dateOfBirthController,
-                                    type: TextInputType.datetime,
-                                    validatedText: 'Date Of Birth',
-                                    label: 'Date Of Birth',
+                                    type: TextInputType.none,
+                                    validatedText: LocaleKeys.txtFieldDateOfBirth.tr(),
+                                    label: LocaleKeys.txtFieldDateOfBirth.tr(),
                                     onTap: () {
                                       showDatePicker(
                                         context: context,
@@ -339,19 +329,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       child: DropdownButtonFormField<String>(
                                         validator: (value) {
                                           if (value!.isEmpty) {
-                                            return 'Choose Gender';
+                                            return LocaleKeys.txtFieldGender.tr();
                                           }
                                         },
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           contentPadding:
-                                              EdgeInsetsDirectional.only(
+                                              const EdgeInsetsDirectional.only(
                                                   start: 20.0, end: 10.0),
                                           fillColor: Colors.white,
                                           filled: true,
-                                          errorStyle: TextStyle(
+                                          errorStyle: const TextStyle(
                                               color: Color(0xFF4F4F4F)),
-                                          label: Text('Gender'),
-                                          border: OutlineInputBorder(
+                                          label: Text(LocaleKeys.txtFieldGender.tr()),
+                                          border: const OutlineInputBorder(
                                             borderSide: BorderSide(
                                               width: 2,
                                               color: blueDark,
@@ -364,9 +354,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         items: genderItems
                                             .map(buildMenuItem)
                                             .toList(),
-                                        onChanged: (value) => setState(
-                                            () => genderValue = value),
-                                        onSaved: (v){
+                                        onChanged: (value) =>
+                                            setState(() => genderValue = value),
+                                        onSaved: (v) {
                                           FocusScope.of(context).unfocus();
                                         },
                                       ),
@@ -377,10 +367,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     condition:
                                         state is! AppRegisterLoadingState,
                                     builder: (context) => GeneralButton(
-                                      title: 'Sign In',
+                                      title: LocaleKeys.BtnSignUp.tr(),
                                       onPress: () {
-                                        if (formKey.currentState!
-                                            .validate()) {
+                                        if (formKey.currentState!.validate()) {
                                           if (kDebugMode) {
                                             print(
                                                 'from ConditionalBuilder btn pressed');
@@ -412,9 +401,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        const Text(
-                                          'Have an account?',
-                                          style: TextStyle(
+                                        Text(
+                                          LocaleKeys.loginTxtDontHaveAccount.tr(),
+                                          style: const TextStyle(
                                             fontSize: 16,
                                           ),
                                         ),
@@ -426,7 +415,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             );
                                           },
                                           child: DefaultTextButton(
-                                            title: 'Sign In',
+                                            title: LocaleKeys.BtnSignUp.tr(),
                                             weight: FontWeight.bold,
                                           ),
                                         ),

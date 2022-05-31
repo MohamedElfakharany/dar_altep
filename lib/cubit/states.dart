@@ -1,6 +1,10 @@
 import 'package:dar_altep/models/appointments_model.dart';
 import 'package:dar_altep/models/auth/check_code_model.dart';
+import 'package:dar_altep/models/cancel_reservation_model.dart';
+import 'package:dar_altep/models/delete_reservation_model.dart';
+import 'package:dar_altep/models/change_password_model.dart';
 import 'package:dar_altep/models/home_reservation_model.dart';
+import 'package:dar_altep/models/lab_reservation_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
 import 'package:dar_altep/models/reservation_model.dart';
@@ -30,6 +34,16 @@ class AppLoginErrorState extends AppStates{
   final String error;
   AppLoginErrorState(this.error);
 }
+
+class AppChangePasswordLoadingState extends AppStates{}
+
+class AppChangePasswordSuccessState extends AppStates{
+  final ChangePasswordModel changePasswordModel;
+  AppChangePasswordSuccessState(this.changePasswordModel);
+}
+
+class AppChangePasswordErrorState extends AppStates{}
+
 
 class AppGetUserResultsLoadingState extends AppStates{}
 
@@ -72,6 +86,15 @@ class AppLogoutSuccessState extends AppStates{}
 class AppProfileImagePickedSuccessState extends AppStates{}
 
 class AppProfileImagePickedErrorState extends AppStates{}
+
+class AppHomeVisitImagePickedSuccessState extends AppStates{}
+
+class AppHomeVisitImagePickedErrorState extends AppStates{}
+
+class AppLabVisitImagePickedSuccessState extends AppStates{}
+
+class AppLabVisitImagePickedErrorState extends AppStates{}
+
 
 class AppGetOffersLoadingState extends AppStates{}
 
@@ -178,7 +201,10 @@ class AppSendMessageErrorState extends AppStates{
 
 class AppLabReservationsLoadingState extends AppStates{}
 
-class AppLabReservationsSuccessState extends AppStates{}
+class AppLabReservationsSuccessState extends AppStates{
+  final LabReservationModel labReservationModel;
+  AppLabReservationsSuccessState(this.labReservationModel);
+}
 
 class AppLabReservationsErrorState extends AppStates{
   final String error;
@@ -187,16 +213,46 @@ class AppLabReservationsErrorState extends AppStates{
 
 class AppCancelReservationsLoadingState extends AppStates{}
 
-class AppCancelReservationsSuccessState extends AppStates{}
+class AppCancelReservationsSuccessState extends AppStates{
+  final CancelReservationModel cancelReservationModel;
+  AppCancelReservationsSuccessState(this.cancelReservationModel);
+}
 
 class AppCancelReservationsErrorState extends AppStates{
   final String error;
   AppCancelReservationsErrorState(this.error);
 }
 
+class AppSendEmailLoadingState extends AppStates{}
+
+class AppSendEmailSuccessState extends AppStates{
+  final SendEmailModel sendEmailModel;
+  AppSendEmailSuccessState(this.sendEmailModel);
+}
+
+class AppSendEmailErrorState extends AppStates{
+  final String error;
+  AppSendEmailErrorState(this.error);
+}
+
+class AppResetPasswordLoadingState extends AppStates{}
+
+class AppResetPasswordSuccessState extends AppStates{
+  final ResetPasswordModel resetPasswordModel;
+  AppResetPasswordSuccessState(this.resetPasswordModel);
+}
+
+class AppResetPasswordErrorState extends AppStates{
+  final String error;
+  AppResetPasswordErrorState(this.error);
+}
+
 class AppDeleteReservationsLoadingState extends AppStates{}
 
-class AppDeleteReservationsSuccessState extends AppStates{}
+class AppDeleteReservationsSuccessState extends AppStates{
+  final DeleteReservationModel deleteReservationModel;
+  AppDeleteReservationsSuccessState(this.deleteReservationModel);
+}
 
 class AppDeleteReservationsErrorState extends AppStates{
   final String error;

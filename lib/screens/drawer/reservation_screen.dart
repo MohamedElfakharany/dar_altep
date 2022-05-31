@@ -7,6 +7,8 @@ import 'package:dar_altep/screens/drawer/components/drawer_wid_comp.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,7 +38,7 @@ class ReservationScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            appBar: GeneralAppBar(title: 'Reservations'),
+            appBar: GeneralAppBar(title: LocaleKeys.TxtReservationScreenTitle.tr()),
             body: Container(
               padding: const EdgeInsetsDirectional.only(
                   start: 10.0, top: 12.0, bottom: 12.0, end: 10.0),

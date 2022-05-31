@@ -85,5 +85,20 @@
   "AppointmentScreenTxtTitle": "المواعيد",
   "OffersScreenTxtTitle": "العروض",
   "OffersScreenTxtMedecalLaboratory": "العروض في المعمل",
-  "OffersScreenTxtIndividual": "العروض في المنزل"
+  "OffersScreenTxtIndividual": "العروض في المنزل",
+  "BtnUploadImage": "تحميل صورة",
+  "TxtFieldServiceType": "سبب التواصل",
+  "TxtSearchScreenNew": "الاحدث",
+  "TxtSearchScreenchecked": "التحاليل السابقة",
+  "TxtReservationScreenTitle": "قائمة الحجز",
+  "BtnDownload": "تحميل",
+  "BtnContinue": "اكمل",
+  "TxtFieldConfirmPassword": "تأكيد كلمه المرور",
+  "TxtFieldOldPassword": "كلمة المرور القديمة",
+  "txthomeOfferCardDays": "ايام",
+  "txtDuration": "المدة",
+  "txtPickImage": "اختر الصورة",
+  "BtnOpenCamera": "الكاميرا",
+  "BtnGallery": "معرض الصور",
+  "languageA": "English"
 }

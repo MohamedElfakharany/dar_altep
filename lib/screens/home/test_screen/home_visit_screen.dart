@@ -217,7 +217,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                             verticalSmallSpace,
                             DefaultFormField(
                               controller: dateOfVisitController,
-                              type: TextInputType.datetime,
+                              type: TextInputType.none,
                               validatedText:
                                   LocaleKeys.TxtFieldDateOfVisit.tr(),
                               label: LocaleKeys.TxtFieldDateOfVisit.tr(),
@@ -226,10 +226,11 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                   context: context,
                                   initialDate: DateTime?.now(),
                                   firstDate: DateTime?.now(),
-                                  lastDate: DateTime?.parse('2022-05-30'),
+                                  lastDate: DateTime?.now().add(const Duration(days: 6)),
                                 ).then((value) {
                                   dateOfVisitController.text =
                                       DateFormat.yMd().format(value!);
+                                  FocusScope.of(context).unfocus();
                                 }).catchError((error) {
                                   if (kDebugMode) {
                                     print('error in fetching date');
@@ -238,11 +239,12 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                 });
                               },
                               suffixIcon: Icons.calendar_month,
+
                             ),
                             verticalSmallSpace,
                             DefaultFormField(
                               controller: timeController,
-                              type: TextInputType.datetime,
+                              type: TextInputType.none,
                               suffixIcon: Icons.watch_later_outlined,
                               label: LocaleKeys.TxtFieldTimeOfVisit.tr(),
                               validatedText:
@@ -254,6 +256,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                       initialTime: TimeOfDay.now());
                                   timeController.text =
                                       time!.format(context).toString();
+                                  FocusScope.of(context).unfocus();
                                   if (kDebugMode) {
                                     print(timeController.text);
                                   }
@@ -262,6 +265,10 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                     print(error);
                                   }
                                 }
+                              },
+
+                              onSubmit: (){
+                                FocusScope.of(context).unfocus();
                               },
                             ),
                             verticalSmallSpace,
@@ -339,7 +346,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                 validatedText: LocaleKeys.txtTestName.tr(),
                               ),
                             verticalLargeSpace,
-                            GeneralButton(title: 'Upload Image', onPress: (){
+                            GeneralButton(title: LocaleKeys.BtnUploadImage.tr(), onPress: (){
                               showPopUp(
                                 context,
                                 Container(
@@ -356,7 +363,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                         padding:
                                         const EdgeInsetsDirectional.only(start: 20.0),
                                         child: Text(
-                                          'Pick Image',
+                                          LocaleKeys.txtPickImage.tr(),
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontFamily: fontFamily,
@@ -372,7 +379,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                         borderWidth: 1,
                                         btnRadius: radius - 5,
                                         borderColor: blueLight,
-                                        title: 'Open Camera',
+                                        title: LocaleKeys.BtnOpenCamera.tr(),
                                         // image: 'assets/images/homeIcon.png',
                                         width: double.infinity,
                                         onPress: () {
@@ -384,7 +391,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                       GeneralUnfilledButton(
                                         btnRadius: radius - 5,
                                         borderColor: whiteColor,
-                                        title: 'Open Gallery',
+                                        title: LocaleKeys.BtnGallery.tr(),
                                         // image: 'assets/images/labIcon.png',
                                         width: double.infinity,
                                         onPress: () {

@@ -1,21 +1,26 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
+import 'package:dar_altep/screens/auth/login_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ResetPassword extends StatelessWidget {
-  ResetPassword({Key? key}) : super(key: key);
+class ResetPasswordScreen extends StatelessWidget {
+  ResetPasswordScreen({required this.email,Key? key}) : super(key: key);
 
-  final oldPasswordController = TextEditingController();
+  String email;
   final passwordController = TextEditingController();
-  final reEnterPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final reEnterNewPasswordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -23,7 +28,23 @@ class ResetPassword extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is AppResetPasswordSuccessState) {
+            if (state.resetPasswordModel.status) {
+              navigateAndFinish(context, LoginScreen());
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Error...!'),
+                    content: Text('${state.resetPasswordModel.message}'),
+                  );
+                },
+              );
+            }
+          }
+        },
         builder: (context, state) {
           var cubit = AppCubit.get(context);
           SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -39,7 +60,7 @@ class ResetPassword extends StatelessWidget {
                   Icons.arrow_back_ios,
                   color: whiteColor,
                 ),
-                onPressed: (){
+                onPressed: () {
                   Navigator.pop(context);
                 },
               ),
@@ -72,7 +93,7 @@ class ResetPassword extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Reset Password',
+                          LocaleKeys.resetTxtMain.tr(),
                           style: TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.bold,
@@ -82,7 +103,7 @@ class ResetPassword extends StatelessWidget {
                         ),
                         verticalSmallSpace,
                         Text(
-                          'Get new password',
+                          LocaleKeys.resetTxtSecondary.tr(),
                           style: TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.normal,
@@ -102,60 +123,92 @@ class ResetPassword extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20)),
                             child: Form(
                               key: formKey,
-                              child: SingleChildScrollView(
-                                physics: const NeverScrollableScrollPhysics(),
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/logo.png',
-                                      height: 100,
-                                      width: 100,
-                                    ),
-                                    verticalLargeSpace,
-                                    const Text("Before you reset your password, you have to enter the password sent to your Mobile"),
-                                    verticalLargeSpace,
-                                    DefaultFormField(
-                                      controller: oldPasswordController,
-                                      type: TextInputType.text,
-                                      label: 'Old Password',
-                                      validatedText: 'Old Password',
-                                      obscureText: cubit.isPassword,
-                                      suffixIcon: cubit.sufIcon,
-                                      suffixPressed: () {
-                                        cubit.changePasswordVisibility();
+                              child: ListView(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/logo.png',
+                                    height: 100,
+                                    width: 100,
+                                  ),
+                                  verticalLargeSpace,
+                                  Text(LocaleKeys.resetTxtThird.tr()),
+                                  verticalLargeSpace,
+                                  DefaultFormField(
+                                    controller: passwordController,
+                                    type: TextInputType.text,
+                                    label: LocaleKeys.txtFieldPassword.tr(),
+                                    validatedText:
+                                        LocaleKeys.txtFieldPassword.tr(),
+                                    obscureText: cubit.isPassword,
+                                    suffixIcon: cubit.sufIcon,
+                                    suffixPressed: () {
+                                      cubit.changePasswordVisibility();
+                                    },
+                                    onTap: (){},
+                                  ),
+                                  verticalSmallSpace,
+                                  DefaultFormField(
+                                    controller: newPasswordController,
+                                    type: TextInputType.text,
+                                    validatedText:
+                                        LocaleKeys.TxtFieldNewPassword.tr(),
+                                    label:
+                                        LocaleKeys.TxtFieldNewPassword.tr(),
+                                    obscureText: cubit.isPassword,
+                                    suffixIcon: cubit.sufIcon,
+                                    suffixPressed: () {
+                                      cubit.changePasswordVisibility();
+                                    },
+                                    onTap: (){},
+                                  ),
+                                  verticalSmallSpace,
+                                  DefaultFormField(
+                                    controller: reEnterNewPasswordController,
+                                    type: TextInputType.text,
+                                    validatedText: LocaleKeys
+                                        .TxtFieldReEnterPassword.tr(),
+                                    label: LocaleKeys.TxtFieldReEnterPassword
+                                        .tr(),
+                                    obscureText: cubit.isPassword,
+                                    suffixIcon: cubit.sufIcon,
+                                    isConfirm: true,
+                                    confirm: newPasswordController.text,
+                                    suffixPressed: () {
+                                      cubit.changePasswordVisibility();
+                                    },
+                                    onTap: () {},
+                                  ),
+                                  verticalMediumSpace,
+                                  ConditionalBuilder(
+                                    condition:
+                                        state is! AppResetPasswordLoadingState,
+                                    builder: (context) => ConditionalBuilder(
+                                      condition:
+                                          state is! AppLoginLoadingState,
+                                      builder: (context) {
+                                        return GeneralButton(
+                                          title: LocaleKeys.BtnReset.tr(),
+                                          onPress: () {
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              AppCubit.get(context)
+                                                  .resetPassword(
+                                                code: passwordController.text,
+                                                email: email,
+                                                newPassword: newPasswordController.text,
+                                              );
+                                            }
+                                          },
+                                        );
                                       },
+                                      fallback: (context) => const Center(
+                                          child: CircularProgressIndicator()),
                                     ),
-                                    verticalSmallSpace,
-                                    DefaultFormField(
-                                      controller: passwordController,
-                                      type: TextInputType.text,
-                                      validatedText: 'New Password',
-                                      label: 'New Password',
-                                      obscureText: cubit.isPassword,
-                                      suffixIcon: cubit.sufIcon,
-                                      suffixPressed: () {
-                                        cubit.changePasswordVisibility();
-                                      },
-                                    ),
-                                    verticalSmallSpace,
-                                    DefaultFormField(
-                                      controller: reEnterPasswordController,
-                                      type: TextInputType.text,
-                                      validatedText: 'Re-enter Password',
-                                      label: 'Re-enter Password',
-                                      obscureText: cubit.isPassword,
-                                      suffixIcon: cubit.sufIcon,
-                                      suffixPressed: () {
-                                        cubit.changePasswordVisibility();
-                                      },
-                                    ),
-                                    verticalMediumSpace,
-                                    GeneralButton(
-                                      title: 'Reset',
-                                      onPress: () {},
-                                    ),
-                                  ],
-                                ),
+                                    fallback: (context) => const Center(
+                                        child:
+                                            CircularProgressIndicator()),
+                                  ),
+                                ],
                               ),
                             ),
                           ),

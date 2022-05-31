@@ -125,6 +125,7 @@ class GeneralUnfilledButton extends StatelessWidget {
   final double height;
   final double btnRadius;
   final double borderWidth;
+  final double titleSize;
 
   const GeneralUnfilledButton({
     Key? key,
@@ -137,6 +138,7 @@ class GeneralUnfilledButton extends StatelessWidget {
     this.btnRadius = 15,
     this.borderWidth = 2,
     this.image,
+    this.titleSize = 14,
   }) : super(key: key);
 
   @override
@@ -178,7 +180,7 @@ class GeneralUnfilledButton extends StatelessWidget {
                   title,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: titleSize,
                     color: color,
                   ),
                 ),
@@ -189,7 +191,7 @@ class GeneralUnfilledButton extends StatelessWidget {
                   title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: titleSize,
                     color: color,
                   ),
                 ),
@@ -372,7 +374,7 @@ class DefaultFormField extends StatelessWidget {
             }
             if (isConfirm == true) {
               if (value != confirm){
-                return '$confirm not Match';
+                return 'Passwords not Match';
               }
             }
             if (validatedText == 'Mobile Number' && isConfirm == true){

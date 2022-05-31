@@ -101,7 +101,22 @@ class CodegenLoader extends AssetLoader{
   "AppointmentScreenTxtTitle": "Appointments",
   "OffersScreenTxtTitle": "Offers",
   "OffersScreenTxtMedecalLaboratory": "Medical Laboratory",
-  "OffersScreenTxtIndividual": "Individual"
+  "OffersScreenTxtIndividual": "Individual",
+  "BtnUploadImage": "Upload Image",
+  "TxtFieldServiceType": "Service Type",
+  "TxtSearchScreenNew": "New",
+  "TxtSearchScreenchecked": "Checked",
+  "TxtReservationScreenTitle": "Reservation",
+  "BtnDownload": "Download",
+  "BtnContinue": "Continue",
+  "TxtFieldConfirmPassword": "Confirm Password",
+  "TxtFieldOldPassword": "Old Password",
+  "txthomeOfferCardDays": "Days",
+  "txtDuration": "Duration",
+  "txtPickImage": "Pick Image",
+  "BtnOpenCamera": "Camera",
+  "BtnGallery": "Gallery",
+  "languageA": "English"
 };
 static const Map<String,dynamic> ar = {
   "loginTxtMain": "تسجيل الدخول",
@@ -190,7 +205,22 @@ static const Map<String,dynamic> ar = {
   "AppointmentScreenTxtTitle": "المواعيد",
   "OffersScreenTxtTitle": "العروض",
   "OffersScreenTxtMedecalLaboratory": "العروض في المعمل",
-  "OffersScreenTxtIndividual": "العروض في المنزل"
+  "OffersScreenTxtIndividual": "العروض في المنزل",
+  "BtnUploadImage": "تحميل صورة",
+  "TxtFieldServiceType": "سبب التواصل",
+  "TxtSearchScreenNew": "الاحدث",
+  "TxtSearchScreenchecked": "التحاليل السابقة",
+  "TxtReservationScreenTitle": "قائمة الحجز",
+  "BtnDownload": "تحميل",
+  "BtnContinue": "اكمل",
+  "TxtFieldConfirmPassword": "تأكيد كلمه المرور",
+  "TxtFieldOldPassword": "كلمة المرور القديمة",
+  "txthomeOfferCardDays": "ايام",
+  "txtDuration": "المدة",
+  "txtPickImage": "اختر الصورة",
+  "BtnOpenCamera": "الكاميرا",
+  "BtnGallery": "معرض الصور",
+  "languageA": "عربي"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ar": ar};
 }

@@ -7,6 +7,7 @@ import 'package:dar_altep/models/appointments_model.dart';
 import 'package:dar_altep/models/auth/check_code_model.dart';
 import 'package:dar_altep/models/cancel_reservation_model.dart';
 import 'package:dar_altep/models/delete_reservation_model.dart';
+import 'package:dar_altep/models/change_password_model.dart';
 import 'package:dar_altep/models/home_reservation_model.dart';
 import 'package:dar_altep/models/lab_reservation_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
@@ -17,6 +18,7 @@ import 'package:dar_altep/models/test_name_model.dart';
 import 'package:dar_altep/models/test_results_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
 import 'package:dar_altep/screens/auth/login_screen.dart';
+import 'package:dar_altep/screens/auth/splash_language_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/network/local/cache_helper.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
@@ -46,13 +48,17 @@ class AppCubit extends Cubit<AppStates> {
   SearchModel? searchModel;
   DeleteReservationModel? deleteReservationModel;
   CancelReservationModel? cancelReservationModel;
+  AppointmentsModel? appointmentsModel;
+  LabReservationModel? labReservationModel;
+  ChangePasswordModel? changePasswordModel;
+  SendEmailModel? sendEmailModel;
+  ResetPasswordModel? resetPasswordModel;
+
   List<TestModelData>? testNames = [];
   List<String> testName = [];
   Map<String, String>? reservations;
   Map tests = {};
 
-  AppointmentsModel? appointmentsModel;
-  LabReservationModel? labReservationModel;
 
   int offersCount = 1;
 
@@ -85,18 +91,50 @@ class AppCubit extends Cubit<AppStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      // if (kDebugMode) {
-      //   print('formData $formData');
-      //   print('responseJson $responseJson');
-      // }
       userModel = UserModel.fromJson(responseJson);
-
-      // if (kDebugMode) {
-      //   print('userModel $userModel');
-      // }
       emit(AppLoginSuccessState(userModel!));
     } catch (e) {
       emit(AppLoginErrorState(e.toString()));
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': local,
+      'Authorization': 'Bearer $token',
+    };
+    var formData = json.encode({
+      'oldPassword': oldPassword,
+      'newPassword': newPassword,
+    });
+
+    try {
+      emit(AppChangePasswordLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        changePasswordURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      changePasswordModel = ChangePasswordModel.fromJson(responseJson);
+      emit(AppChangePasswordSuccessState(changePasswordModel!));
+    } catch (e) {
+      emit(AppChangePasswordErrorState());
       if (kDebugMode) {
         print(e.toString());
       }
@@ -310,6 +348,87 @@ class AppCubit extends Cubit<AppStates> {
       );
       getReservationsData();
       emit(AppDeleteReservationsErrorState(e.toString()));
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future sendEmail({
+    required String? email,
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': local,
+      // 'Authorization': 'Bearer $token',
+    };
+    var formData = json.encode({
+      'email': email,
+    });
+
+    try {
+      emit(AppSendEmailLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        sendEmailURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      sendEmailModel = SendEmailModel.fromJson(responseJson);
+      emit(AppSendEmailSuccessState(sendEmailModel!));
+    } catch (e) {
+      getReservationsData();
+      emit(AppSendEmailErrorState(e.toString()));
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future resetPassword({
+    required String code,
+    required String email,
+    required String newPassword,
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': local,
+      // 'Authorization': 'Bearer $token',
+    };
+    var formData = FormData.fromMap({
+      'code': code,
+      'email': email,
+      'new_password': newPassword,
+    });
+
+    try {
+      emit(AppResetPasswordLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        resetPasswordURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      resetPasswordModel = ResetPasswordModel.fromJson(responseJson);
+      emit(AppResetPasswordSuccessState(resetPasswordModel!));
+    } catch (e) {
+      emit(AppResetPasswordErrorState(e.toString()));
       if (kDebugMode) {
         print(e.toString());
       }
@@ -633,10 +752,10 @@ class AppCubit extends Cubit<AppStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
-      // if (kDebugMode) {
-      //   print('formData $formData');
-      //   print('responseJson $responseJson');
-      // }
+      if (kDebugMode) {
+        print('formData $formData');
+        print('responseJson $responseJson');
+      }
       searchModel = SearchModel.fromJson(responseJson);
       emit(AppGetUserResultsSuccessState(searchModel!));
     } catch (e) {
@@ -1030,7 +1149,7 @@ class AppCubit extends Cubit<AppStates> {
       if (value) {
         navigateAndFinish(
           context,
-          LoginScreen(),
+          const SplashLanguageScreen(),
         );
       }
       emit(AppLogoutSuccessState());

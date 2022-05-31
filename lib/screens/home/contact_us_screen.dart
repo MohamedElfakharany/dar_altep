@@ -193,14 +193,14 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                                     return 'Choose Test Name';
                                   }
                                 },
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   fillColor: Colors.white,
                                   filled: true,
-                                  contentPadding: const EdgeInsetsDirectional.only(
+                                  contentPadding: EdgeInsetsDirectional.only(
                                       start: 20.0, end: 10.0),
-                                  errorStyle: const TextStyle(color: Color(0xFF4F4F4F)),
-                                  label: Text(LocaleKeys.txtTestName.tr()),
-                                  border: const OutlineInputBorder(
+                                  errorStyle: TextStyle(color: Color(0xFF4F4F4F)),
+                                  label: Text('Service Type'),
+                                  border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       width: 2,
                                       color: blueDark,

@@ -6,6 +6,12 @@ const registerURL = mainURL+'register';
 
 const updateProfileURL = mainURL+'update_profile';
 
+const changePasswordURL = mainURL+'changePassword';
+
+const sendEmailURL = mainURL+'code_check_email';
+
+const resetPasswordURL = mainURL+'Reset_password';
+
 const homeReservationURL = mainURL+'homeReservation';
 
 const labReservationUrl = mainURL+'LabReservation';

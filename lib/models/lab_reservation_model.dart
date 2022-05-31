@@ -6,8 +6,6 @@ import 'dart:convert';
 
 LabReservationModel labReservationModelFromJson(dynamic str) => LabReservationModel.fromJson(json.decode(str));
 
-// dynamic labReservationModelToJson(LabReservationModel data) => json.encode(data.toJson());
-
 class LabReservationModel {
   LabReservationModel({
     this.status,
@@ -24,12 +22,6 @@ class LabReservationModel {
     message: json["message"],
     data: Data.fromJson(json["data"]),
   );
-
-  // Map<dynamic, dynamic> toJson() => {
-  //   "status": status,
-  //   "message": message,
-  //   "data": data.toJson(),
-  // };
 }
 
 class Data {
@@ -41,6 +33,7 @@ class Data {
     this.phone,
     this.type,
     this.testName,
+    this.image,
   });
 
   dynamic userId;
@@ -50,6 +43,7 @@ class Data {
   dynamic phone;
   dynamic type;
   dynamic testName;
+  dynamic image;
 
   factory Data.fromJson(Map<dynamic, dynamic> json) => Data(
     userId: json["user_id"],
@@ -59,15 +53,6 @@ class Data {
     phone: json["phone"],
     type: json["type"],
     testName: json["test_name"],
+    image: json["image"],
   );
-
-  // Map<dynamic, dynamic> toJson() => {
-  //   "user_id": userId,
-  //   "date": date,
-  //   "time": time,
-  //   "name": name,
-  //   "phone": phone,
-  //   "type": type,
-  //   "test_name": testName,
-  // };
 }

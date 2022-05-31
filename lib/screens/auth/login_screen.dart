@@ -4,12 +4,11 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/auth/register_screen.dart';
-import 'package:dar_altep/screens/auth/reset_password.dart';
+import 'package:dar_altep/screens/auth/send_email_reser_password_screen.dart';
 import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
-import 'package:dar_altep/shared/network/local/cache_helper.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
@@ -24,53 +23,44 @@ class LoginScreen extends StatelessWidget {
   final mobileController = TextEditingController();
   final passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
-  tokenSaving(String tokenSave)async{
+
+  tokenSaving(String tokenSave) async {
     (await SharedPreferences.getInstance()).setString('token', tokenSave);
     token = tokenSave;
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
-          if (state is AppLoginSuccessState){
+          if (state is AppLoginSuccessState) {
             if (state.userModel.status) {
               tokenSaving(state.userModel.data?.token);
-              print('token  login $token');
-              print('state.userModel.data?.token ${state.userModel.data?.token}');
-              navigateAndFinish(context, HomeScreen());
-              // CacheHelper.saveData(
-              //   key: 'token',
-              //   value: state.userModel.data?.token,
-              // ).then((value) {
-              //   navigateAndFinish(
-              //     context,
-              //     const HomeScreen(),
-              //   );
-              // });
+              navigateAndFinish(context, const HomeScreen());
             } else {
-              print(state.userModel.message);
+              print('state.userModel.message ${state.userModel.message}');
               showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Error...!'),
-                      content: Text('${state.userModel.message}'),
-                    );
-                  });
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Error...!'),
+                    content: Text('${state.userModel.message}'),
+                  );
+                },
+              );
             }
-            if (state is AppLoginErrorState){
-              print('state.userModel.message${state.userModel.message}');
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Error...!'),
-                      content: Text('${state.userModel.message ?? 'hhh'}'),
-                    );
-                  });
-            }
+          } else if (state is AppLoginErrorState) {
+            print('state.userModel.message ${state.error}}');
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return const AlertDialog(
+                    title: Text('Login Error...!'),
+                    content: Text('please contact with lab'),
+                  );
+                });
           }
         },
         builder: (context, state) {
@@ -153,15 +143,15 @@ class LoginScreen extends StatelessWidget {
                                       controller: mobileController,
                                       type: TextInputType.number,
                                       label: LocaleKeys.txtFieldMobile.tr(),
-                                      validatedText: 'Mobile Number',
+                                      validatedText: LocaleKeys.txtFieldMobile.tr(),
                                       suffixPressed: () {},
                                     ),
                                     verticalSmallSpace,
                                     DefaultFormField(
                                       controller: passwordController,
                                       type: TextInputType.text,
-                                      validatedText: 'Password',
-                                      label: 'Password',
+                                      validatedText: LocaleKeys.txtFieldPassword.tr(),
+                                      label: LocaleKeys.txtFieldPassword.tr(),
                                       obscureText: cubit.isPassword,
                                       suffixIcon: cubit.sufIcon,
                                       suffixPressed: () {
@@ -171,10 +161,10 @@ class LoginScreen extends StatelessWidget {
                                     InkWell(
                                       onTap: () {
                                         Navigator.push(context,
-                                            FadeRoute(page: ResetPassword()));
+                                            FadeRoute(page: SendEmailScreen()));
                                       },
                                       child: DefaultTextButton(
-                                        title: 'Forgot your password?',
+                                        title: LocaleKeys.BtnForgetPassword.tr(),
                                       ),
                                     ),
                                     // CheckboxListTile(
@@ -195,7 +185,7 @@ class LoginScreen extends StatelessWidget {
                                       condition: state is! AppLoginLoadingState,
                                       builder: (context) {
                                         return GeneralButton(
-                                          title: 'Sign In',
+                                          title: LocaleKeys.BtnSignIn.tr(),
                                           onPress: () {
                                             if (formKey.currentState!
                                                 .validate()) {
@@ -218,9 +208,9 @@ class LoginScreen extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const Text(
-                                            'Don\'t have an account?',
-                                            style: TextStyle(
+                                          Text(
+                                            LocaleKeys.loginTxtDontHaveAccount.tr(),
+                                            style: const TextStyle(
                                               fontSize: 16,
                                             ),
                                           ),
@@ -233,7 +223,7 @@ class LoginScreen extends StatelessWidget {
                                                           const RegisterScreen()));
                                             },
                                             child: DefaultTextButton(
-                                              title: 'Register',
+                                              title: LocaleKeys.registerTxtMain.tr(),
                                               weight: FontWeight.bold,
                                             ),
                                           ),

@@ -6,6 +6,7 @@ import 'package:dar_altep/screens/drawer/my_results_screen.dart';
 import 'package:dar_altep/screens/home/components/widet_components.dart';
 import 'package:dar_altep/screens/home/contact_us_screen.dart';
 import 'package:dar_altep/screens/home/lab_visit_appointment/lab_visit_appointment_screen.dart';
+import 'package:dar_altep/screens/home/messaging_screen.dart';
 import 'package:dar_altep/screens/home/offers/offers_screen.dart';
 import 'package:dar_altep/screens/home/test_screen/home_visit_screen.dart';
 import 'package:dar_altep/screens/home/test_screen/test_library_screen.dart';
@@ -24,6 +25,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var searchModel = AppCubit.get(context).searchModel;
+    var testItems = AppCubit.get(context).testName;
     return BlocProvider(
       create: (BuildContext context) => AppCubit()
         ..getOffersData()
@@ -33,10 +36,24 @@ class HomeScreen extends StatelessWidget {
         ..getTestNameData()
         ..getAppointmentsData()
         ..getHomeOffersData()
-        ..getLabOffersData()
-        ..getUserResults(),
+        ..getLabOffersData(),
       child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is AppGetUserResultsSuccessState) {
+            searchModel = AppCubit.get(context).searchModel;
+            Navigator.push(
+                context,
+                FadeRoute(
+                    page: MyResultsScreen(
+                  testNames: testItems,
+                  searchModel: searchModel,
+                )));
+          }else if (state is AppGetUserResultsErrorState){
+            showDialog(context: context, builder: (context){
+              return AlertDialog(title: Center(child: Text('no results for this user')),);
+            });
+          }
+        },
         builder: (context, state) {
           var offers = AppCubit.get(context).offersModel;
           var labOffers = AppCubit.get(context).labOffersModel;
@@ -268,28 +285,77 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    ConditionalBuilder(
+                      condition: state is! AppGetUserResultsLoadingState,
+                      builder: (context) => Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 20.0,
+                          start: 10.0,
+                          end: 20.0,
+                        ),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                AppCubit.get(context).getUserResults();
+                              },
+                              child: Stack(
+                                alignment: AlignmentDirectional.centerStart,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          spreadRadius: 4,
+                                          blurRadius: 6,
+                                          offset: const Offset(0,
+                                              5), // changes position of shadow
+                                        ),
+                                      ],
+                                      border: Border.all(color: whiteColor),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        LocaleKeys.drawerResults.tr(),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: fontFamily,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.transparent,
+                                    child: Image.asset(
+                                      'assets/images/homeTestResults.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      fallback: (context) =>
+                          const Center(child: CircularProgressIndicator()),
+                    ),
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
-                        top: 20.0,
-                        start: 10.0,
-                        end: 20.0,
-                      ),
-                      child: Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                FadeRoute(
-                                  page: MyResultsScreen(
-                                    testNames: testNames,
-                                    searchModel:
-                                        AppCubit.get(context).searchModel,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Stack(
+                          top: 20.0, start: 10.0, end: 20.0),
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.push(context, FadeRoute(page: const MessagingScreen()));
+                        },
+                        child: Column(
+                          children: [
+                            Stack(
                               alignment: AlignmentDirectional.centerStart,
                               children: [
                                 Container(
@@ -310,7 +376,7 @@ class HomeScreen extends StatelessWidget {
                                   height: 50,
                                   child: Center(
                                     child: Text(
-                                      LocaleKeys.drawerResults.tr(),
+                                      LocaleKeys.homeTxtNotifications.tr(),
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontFamily: fontFamily,
@@ -323,62 +389,14 @@ class HomeScreen extends StatelessWidget {
                                   radius: 30,
                                   backgroundColor: Colors.transparent,
                                   child: Image.asset(
-                                    'assets/images/homeTestResults.png',
+                                    'assets/images/homeNotification.png',
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ), //
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                          top: 20.0, start: 10.0, end: 20.0),
-                      child: Column(
-                        children: [
-                          Stack(
-                            alignment: AlignmentDirectional.centerStart,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.2),
-                                      spreadRadius: 4,
-                                      blurRadius: 6,
-                                      offset: const Offset(
-                                          0, 5), // changes position of shadow
-                                    ),
-                                  ],
-                                  border: Border.all(color: whiteColor),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                height: 50,
-                                child: Center(
-                                  child: Text(
-                                    LocaleKeys.homeTxtNotifications.tr(),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: fontFamily,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.transparent,
-                                child: Image.asset(
-                                  'assets/images/homeNotification.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     Padding(

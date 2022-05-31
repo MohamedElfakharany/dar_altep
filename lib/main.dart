@@ -16,7 +16,6 @@ import 'package:easy_localization/easy_localization.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-
   await CacheHelper.init();
   DioHelper.init();
 
@@ -84,8 +83,7 @@ class MyApp extends StatelessWidget {
         ..getTestNameData()
         ..getAppointmentsData()
         ..getHomeOffersData()
-        ..getLabOffersData()
-        ..getUserResults(),
+        ..getLabOffersData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

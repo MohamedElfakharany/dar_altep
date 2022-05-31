@@ -32,188 +32,210 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getUserResults(),
-      child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          final testItems = widget.testNames;
-          String? testValue;
-          var newTest = AppCubit.get(context).searchModel?.data?.dataNew;
-          var checkedTest = AppCubit.get(context).searchModel?.data?.checked;
-          return Scaffold(
-            appBar: GeneralAppBar(title: LocaleKeys.drawerResults.tr()),
-            body: Container(
-              padding: const EdgeInsetsDirectional.only(
-                  start: 10.0, top: 12.0, bottom: 12.0, end: 10.0),
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: const AssetImage(
-                      "assets/images/onboardingbackground.png"),
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.15), BlendMode.dstATop),
-                  fit: BoxFit.cover,
+    var newTest = widget.searchModel?.data?.dataNew;
+    var checkedTest = widget.searchModel?.data?.checked;
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {
+        if (state is AppGetTestResultSuccessState) {
+          if (state.testResultModel.status == true) {
+            Navigator.push(
+              context,
+              FadeRoute(
+                page: TestResultScreen(
+                  testName: newTest?.first.name,
+                  testImage: newTest?.first.image,
                 ),
               ),
-              child: ConditionalBuilder(
-                condition: newTest != null && checkedTest != null,
-                builder: (context) => ListView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    verticalSmallSpace,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Accurate Results,',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: fontFamily,
-                              color: blueDark,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          verticalMiniSpace,
-                          Text(
-                            'We hope you are good',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: fontFamily,
-                              color: darkColor,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
+            );
+          } else {
+            showToast(
+                msg: state.testResultModel.message, state: ToastState.error);
+          }
+        }
+        if (state is AppGetUserResultsSuccessState) {
+          if (state.searchModel.status) {
+            showToast(
+                msg: state.searchModel.message, state: ToastState.success);
+          } else {
+            showToast(msg: state.searchModel.message, state: ToastState.error);
+          }
+        }
+        if (state is AppGetUserResultsErrorState) {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: const Text(
+                      'Error..!',
                     ),
-                    verticalSmallSpace,
-                    Container(
-                      // width: MediaQuery.of(context).size.width * 0.5,
-                      // height: 60.0,
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButtonFormField<String>(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return LocaleKeys.txtTestName.tr();
-                            }
-                          },
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            contentPadding: const EdgeInsetsDirectional.only(
-                                start: 20.0, end: 10.0),
-                            errorStyle: const TextStyle(color: Color(0xFF4F4F4F)),
-                            label: Text(LocaleKeys.txtTestName.tr()),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: blueDark,
-                              ),
-                            ),
-                          ),
-                          value: testValue,
-                          // isExpanded: true,
-                          iconSize: 35,
-                          items: testItems.map(buildMenuItem).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              testValue = value;
-                              AppCubit.get(context)
-                                  .getUserResults(name: testValue);
-                              if (kDebugMode) {
-                                print('testValue : $testValue');
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      child: DefaultFormField(
-                        height: 70.0,
-                        controller: dateOfVisitController,
-                        type: TextInputType.datetime,
-                        validatedText: LocaleKeys.TxtFieldDateOfVisit.tr(),
-                        label: LocaleKeys.TxtFieldDateOfVisit.tr(),
-                        onTap: () {
-                          showDatePicker(
-                            context: context,
-                            initialDate: DateTime?.now(),
-                            firstDate: DateTime?.parse('2020-01-01'),
-                            lastDate: DateTime?.now(),
-                          ).then((value) {
-                            dateOfVisitController.text =
-                                DateFormat.yMd().format(value!);
-                          }).catchError((error) {
-                            if (kDebugMode) {
-                              print('error in fetching date');
-                              print(error.toString());
-                            }
-                          });
-                        },
-                        onSubmit: () {},
-                        suffixIcon: Icons.calendar_month,
-                      ),
-                    ),
-                    verticalLargeSpace,
-                    if (newTest?.first != null)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Text(
-                          'New,',
+                    content: Text(state.error),
+                  ));
+        }
+      },
+      builder: (context, state) {
+        final testItems = widget.testNames;
+        String? testValue;
+        return Scaffold(
+          appBar: GeneralAppBar(title: LocaleKeys.drawerResults.tr()),
+          body: Container(
+            padding: const EdgeInsetsDirectional.only(
+                start: 10.0, top: 12.0, bottom: 12.0, end: 10.0),
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image:
+                    const AssetImage("assets/images/onboardingbackground.png"),
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.15), BlendMode.dstATop),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: ConditionalBuilder(
+              condition: widget.searchModel != null,
+              builder: (context) => ListView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  verticalSmallSpace,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          LocaleKeys.TxtAccurateResults.tr(),
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
+                            fontFamily: fontFamily,
+                            color: blueDark,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        verticalMiniSpace,
+                        Text(
+                          LocaleKeys.MyResultScreenWeHope.tr(),
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.normal,
                             fontFamily: fontFamily,
                             color: darkColor,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
+                      ],
+                    ),
+                  ),
+                  verticalSmallSpace,
+                  Container(
+                    // width: MediaQuery.of(context).size.width * 0.5,
+                    // height: 60.0,
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField<String>(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return LocaleKeys.txtTestName.tr();
+                          }
+                        },
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          contentPadding: const EdgeInsetsDirectional.only(
+                              start: 20.0, end: 10.0),
+                          errorStyle: const TextStyle(color: Color(0xFF4F4F4F)),
+                          label: Text(LocaleKeys.txtTestName.tr()),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: blueDark,
+                            ),
+                          ),
+                        ),
+                        value: testValue,
+                        // isExpanded: true,
+                        iconSize: 35,
+                        items: testItems.map(buildMenuItem).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            testValue = value;
+                            AppCubit.get(context)
+                                .getUserResults(name: testValue);
+                            if (kDebugMode) {
+                              print('testValue : $testValue');
+                            }
+                          });
+                        },
                       ),
-                    if (newTest?.first != null) verticalSmallSpace,
-                    if (newTest?.first != null)
-                      Padding(
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    child: DefaultFormField(
+                      height: 70.0,
+                      controller: dateOfVisitController,
+                      type: TextInputType.datetime,
+                      validatedText: LocaleKeys.TxtFieldDateOfVisit.tr(),
+                      label: LocaleKeys.TxtFieldDateOfVisit.tr(),
+                      onTap: () {
+                        showDatePicker(
+                          context: context,
+                          initialDate: DateTime?.now(),
+                          firstDate: DateTime?.parse('2020-01-01'),
+                          lastDate: DateTime?.now(),
+                        ).then((value) {
+                          dateOfVisitController.text =
+                              DateFormat.yMd().format(value!);
+                        }).catchError((error) {
+                          if (kDebugMode) {
+                            print('error in fetching date');
+                            print(error.toString());
+                          }
+                        });
+                      },
+                      onSubmit: () {},
+                      suffixIcon: Icons.calendar_month,
+                    ),
+                  ),
+                  verticalLargeSpace,
+                  if (newTest?.first != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        LocaleKeys.TxtSearchScreenNew.tr(),
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: fontFamily,
+                          color: darkColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  if (newTest?.first != null) verticalSmallSpace,
+                  if (newTest?.first != null)
+                    ConditionalBuilder(
+                      condition: state is! AppGetUserResultsLoadingState,
+                      builder: (context) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: InkWell(
                           onTap: () {
                             if (kDebugMode) {
                               print('result ${newTest?.first.visitId}');
                             }
-
-                            AppCubit.get(context).getTestResultData(
-                                reservationId:
-                                newTest?.first.visitId).then((value) {
-                              if (state is AppGetTestResultSuccessState) {
-                                Navigator.push(
-                                  context,
-                                  FadeRoute(
-                                    page: TestResultScreen(
-                                      testName: newTest?.first.name,
-                                      testImage: newTest?.first.image,
-                                      // testImage: 'https://avatars.githubusercontent.com/u/34916493?s=400&u=e7300b829193270fbcd03a813551a3702299cbb1&v=4',
-                                    ),
-                                  ),
-                                );
-                              }
-                            });
+                            AppCubit.get(context)
+                                .getTestResultData(
+                                reservationId: newTest?.first.visitId)
+                                .then((value) {});
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -271,11 +293,16 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
                           ),
                         ),
                       ),
-                    if (newTest?.first != null) verticalLargeSpace,
+                      fallback: (context) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  if (newTest?.first != null) verticalLargeSpace,
+                  if (checkedTest?.length != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(
-                        'Checked,',
+                        LocaleKeys.TxtSearchScreenchecked.tr(),
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -285,9 +312,10 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    verticalMiniSpace,
-                    myDivider(),
-                    verticalMiniSpace,
+                  if (checkedTest?.length != null) verticalMiniSpace,
+                  if (checkedTest?.length != null) myDivider(),
+                  if (checkedTest?.length != null) verticalMiniSpace,
+                  if (checkedTest?.length != null)
                     ConditionalBuilder(
                       condition: state is! AppGetUserResultsLoadingState,
                       builder: (context) => Container(
@@ -302,8 +330,11 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
                                 if (kDebugMode) {
                                   print('result');
                                 }
-                                AppCubit.get(context).getTestResultData(
-                                    reservationId: checkedTest?[index].visitId).then((value) {
+                                AppCubit.get(context)
+                                    .getTestResultData(
+                                        reservationId:
+                                            checkedTest?[index].visitId)
+                                    .then((value) {
                                   if (state is AppGetTestResultSuccessState) {
                                     Navigator.push(
                                       context,
@@ -317,7 +348,6 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
                                     );
                                   }
                                 });
-
                               },
                               child: MyResultsCard(
                                   context: context,
@@ -325,23 +355,24 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
                                   checkedData: checkedTest?[index]),
                             ),
                             separatorBuilder: (context, index) =>
-                            const SizedBox(),
+                                const SizedBox(),
                             itemCount: checkedTest!.length,
                           ),
                           fallback: (context) =>
-                          const Center(child: CircularProgressIndicator()),
+                              const Center(child: CircularProgressIndicator()),
                         ),
                       ),
-                      fallback: (context) => const ScreenHolder('Results'),
+                      fallback: (context) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
-                  ],
-                ),
-                fallback: (context) => const ScreenHolder('results'),
+                ],
               ),
+              fallback: (context) => const ScreenHolder('results'),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

@@ -15,26 +15,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DrawerScreen extends StatelessWidget {
-  DrawerScreen({Key? key,required this.testNames}) : super(key: key);
+  DrawerScreen({Key? key, required this.testNames}) : super(key: key);
   List<String> testNames = [];
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    var searchModel = AppCubit.get(context).searchModel;
+    var testItems = testNames;
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getProfileData()..getTestsData(),
+      create: (BuildContext context) => AppCubit()
+        ..getProfileData()
+        ..getTestsData(),
       child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is AppGetUserResultsSuccessState) {
+            Navigator.push(
+                context,
+                FadeRoute(
+                    page: MyResultsScreen(
+                  testNames: testItems,
+                  searchModel: searchModel,
+                )));
+          }else if (state is AppGetUserResultsErrorState){
+            showDialog(context: context, builder: (context){
+              return AlertDialog(title: Center(child: Text('no results for this user')),);
+            });
+          }
+        },
         builder: (context, state) {
           var user = AppCubit.get(context).userModel;
-          var searchModel = AppCubit.get(context).searchModel;
-          var testItems = testNames;
           return Container(
             padding: const EdgeInsetsDirectional.only(
                 start: 0.0, top: 0.0, bottom: 0.0),
             color: blueDark2,
             width: width * 0.75,
             child: ConditionalBuilder(
-              condition: state is! AppGetProfileLoadingState && state is! AppGetTestsLoadingState,
+              condition: state is! AppGetProfileLoadingState &&
+                  state is! AppGetTestsLoadingState,
               builder: (context) => Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -48,18 +66,18 @@ class DrawerScreen extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(50.0),
                           child: CachedNetworkImage(
-                            imageUrl: user?.data?.idImage,
+                            imageUrl: user?.data?.idImage ?? '',
                             fit: BoxFit.cover,
                             placeholder: (context, url) => const SizedBox(
                               child: Center(
                                   child: CircularProgressIndicator(
-                                    color: blueLight,
-                                  )),
+                                color: blueLight,
+                              )),
                               width: 30,
                               height: 30,
                             ),
                             errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                                const Icon(Icons.error),
                             width: 100,
                             height: 100,
                           ),
@@ -71,7 +89,7 @@ class DrawerScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                user?.data?.name,
+                                user?.data?.name ?? '',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontFamily: fontFamily,
@@ -83,7 +101,7 @@ class DrawerScreen extends StatelessWidget {
                               ),
                               verticalMiniSpace,
                               Text(
-                                user?.data?.email,
+                                user?.data?.email ?? '',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontFamily: fontFamily,
@@ -105,42 +123,39 @@ class DrawerScreen extends StatelessWidget {
                     padding: const EdgeInsetsDirectional.only(start: 50.0),
                     child: Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                FadeRoute(
-                                    page: MyResultsScreen(
-                                      testNames: testItems,
-                                      searchModel: searchModel,
-                                    )));
-                            print('testNames : $testNames');
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Image(
-                                image: AssetImage(
-                                    'assets/images/drawerIconResult.png'),
-                                width: 30,
-                                height: 40,
-                              ),
-                              horizontalMiniSpace,
-                              Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                                child: Text(
-                                  LocaleKeys.drawerResults.tr(),
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: fontFamily,
-                                    fontWeight: FontWeight.bold,
-                                    color: whiteColor,
+                        ConditionalBuilder(
+                          condition: state is! AppGetUserResultsLoadingState,
+                          builder: (context) => InkWell(
+                            onTap: () {
+                              AppCubit.get(context).getUserResults();
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Image(
+                                  image: AssetImage(
+                                      'assets/images/drawerIconResult.png'),
+                                  width: 30,
+                                  height: 40,
+                                ),
+                                horizontalMiniSpace,
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: Text(
+                                    LocaleKeys.drawerResults.tr(),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: fontFamily,
+                                      fontWeight: FontWeight.bold,
+                                      color: whiteColor,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          fallback: (context) => const Center(child: CircularProgressIndicator()),
                         ),
                         verticalMediumSpace,
                         InkWell(
@@ -159,8 +174,8 @@ class DrawerScreen extends StatelessWidget {
                               ),
                               horizontalMiniSpace,
                               Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
                                 child: Text(
                                   LocaleKeys.drawerReservations.tr(),
                                   style: TextStyle(
@@ -181,9 +196,9 @@ class DrawerScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 FadeRoute(
-                                    page: SettingsScreen(
-                                      // user: user,
-                                    )));
+                                    page: const SettingsScreen(
+                                        // user: user,
+                                        )));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -196,8 +211,8 @@ class DrawerScreen extends StatelessWidget {
                               ),
                               horizontalMiniSpace,
                               Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
                                 child: Text(
                                   LocaleKeys.drawerSettings.tr(),
                                   style: TextStyle(
@@ -225,7 +240,10 @@ class DrawerScreen extends StatelessWidget {
                                   children: [
                                     verticalSmallSpace,
                                     Text(
-                                      AppCubit.get(context).userModel?.data?.name ??
+                                      AppCubit.get(context)
+                                              .userModel
+                                              ?.data
+                                              ?.name ??
                                           '',
                                       style: TextStyle(
                                         fontSize: 20,
@@ -260,8 +278,8 @@ class DrawerScreen extends StatelessWidget {
                               ),
                               horizontalMiniSpace,
                               Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0),
                                 child: Text(
                                   LocaleKeys.drawerLogout.tr(),
                                   style: TextStyle(
@@ -281,7 +299,9 @@ class DrawerScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              fallback: (context) => const Center(child: CircularProgressIndicator(),),
+              fallback: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
           );
         },

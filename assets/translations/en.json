@@ -85,5 +85,20 @@
   "AppointmentScreenTxtTitle": "Appointments",
   "OffersScreenTxtTitle": "Offers",
   "OffersScreenTxtMedecalLaboratory": "Medical Laboratory",
-  "OffersScreenTxtIndividual": "Individual"
+  "OffersScreenTxtIndividual": "Individual",
+  "BtnUploadImage": "Upload Image",
+  "TxtFieldServiceType": "Service Type",
+  "TxtSearchScreenNew": "New",
+  "TxtSearchScreenchecked": "Checked",
+  "TxtReservationScreenTitle": "Reservation",
+  "BtnDownload": "Download",
+  "BtnContinue": "Continue",
+  "TxtFieldConfirmPassword": "Confirm Password",
+  "TxtFieldOldPassword": "Old Password",
+  "txthomeOfferCardDays": "Days",
+  "txtDuration": "Duration",
+  "txtPickImage": "Pick Image",
+  "BtnOpenCamera": "Camera",
+  "BtnGallery": "Gallery",
+  "languageA": "عربي"
 }

@@ -42,6 +42,7 @@ class Data {
     this.address,
     this.testName,
     this.type,
+    this.image,
   });
 
   dynamic userId;
@@ -52,6 +53,7 @@ class Data {
   dynamic address;
   dynamic testName;
   dynamic type;
+  dynamic image;
 
   factory Data.fromJson(Map<dynamic, dynamic> json) => Data(
     userId: json["user_id"],
@@ -62,6 +64,7 @@ class Data {
     address: json["Address"],
     testName: json["test_name"],
     type: json["type"],
+    image: json["image"],
   );
 
   Map<dynamic, dynamic> toJson() => {
@@ -73,5 +76,6 @@ class Data {
     "Address": address,
     "test_name": testName,
     "type": type,
+    "image": image,
   };
 }

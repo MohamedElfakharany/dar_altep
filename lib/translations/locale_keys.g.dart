@@ -88,5 +88,20 @@ abstract class  LocaleKeys {
   static const OffersScreenTxtTitle = 'OffersScreenTxtTitle';
   static const OffersScreenTxtMedecalLaboratory = 'OffersScreenTxtMedecalLaboratory';
   static const OffersScreenTxtIndividual = 'OffersScreenTxtIndividual';
+  static const BtnUploadImage = 'BtnUploadImage';
+  static const TxtFieldServiceType = 'TxtFieldServiceType';
+  static const TxtSearchScreenNew = 'TxtSearchScreenNew';
+  static const TxtSearchScreenchecked = 'TxtSearchScreenchecked';
+  static const TxtReservationScreenTitle = 'TxtReservationScreenTitle';
+  static const BtnDownload = 'BtnDownload';
+  static const BtnContinue = 'BtnContinue';
+  static const TxtFieldConfirmPassword = 'TxtFieldConfirmPassword';
+  static const TxtFieldOldPassword = 'TxtFieldOldPassword';
+  static const txthomeOfferCardDays = 'txthomeOfferCardDays';
+  static const txtDuration = 'txtDuration';
+  static const txtPickImage = 'txtPickImage';
+  static const BtnOpenCamera = 'BtnOpenCamera';
+  static const BtnGallery = 'BtnGallery';
+  static const languageA = 'languageA';
 
 }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "450437050994",
+    "firebase_url": "https://dar-eltep-default-rtdb.firebaseio.com",
+    "project_id": "dar-eltep",
+    "storage_bucket": "dar-eltep.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450437050994:android:820d2d889dd618958e48eb",
+        "android_client_info": {
+          "package_name": "com.example.dar_altep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450437050994-mgg7ges7mrjs8cvb1ut5671rtr2bggpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi5MwspZupU4N0X7T8fBA-7g60IZZdN0w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450437050994-mgg7ges7mrjs8cvb1ut5671rtr2bggpp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,30 +1,24 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
-import 'package:dar_altep/screens/auth/confirmed_screen.dart';
-import 'package:dar_altep/screens/auth/otp/components/body.dart';
+import 'package:dar_altep/screens/auth/reset_password.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
-import 'package:dar_altep/shared/network/local/cache_helper.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
-import 'package:flutter/foundation.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-class OtpScreen extends StatelessWidget {
+class SendEmailScreen extends StatelessWidget {
+  SendEmailScreen({Key? key}) : super(key: key);
+
+  final emailController = TextEditingController();
   var formKey = GlobalKey<FormState>();
-
-  final String verification;
-  final String? mobile;
-
-  OtpScreen({
-    Key? key,
-    required this.verification,
-    this.mobile,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,32 +26,17 @@ class OtpScreen extends StatelessWidget {
       create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
-          if (state is AppVerificationSuccessState) {
-            if (state.verificationModel.status) {
-              CacheHelper.saveData(
-                key: 'token',
-                value: state.verificationModel.data?.token,
-              ).then((value) {
-                token = state.verificationModel.data?.token;
-                navigateAndFinish(
-                  context,
-                  const ConfirmedScreen(),
-                );
-              });
+          if (state is AppSendEmailSuccessState) {
+            if (state.sendEmailModel.status) {
+              print(state.sendEmailModel.data?.code);
+              Navigator.push(context, FadeRoute(page: ResetPasswordScreen(email: emailController.text,)));
             } else {
-              if (kDebugMode) {
-                print(state.verificationModel.message);
-              }
-              // showToast(
-              //   msg: state.loginModel.message,
-              //   state: ToastState.ERROR,
-              // );
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
                     title: const Text('Error...!'),
-                    content: Text('${state.verificationModel.message}'),
+                    content: Text('${state.sendEmailModel.message}'),
                   );
                 },
               );
@@ -65,12 +44,15 @@ class OtpScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          // var cubit = AppCubit.get(context);
           SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
           ));
           return Scaffold(
             extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+            ),
             body: Stack(
               alignment: Alignment.center,
               children: [
@@ -98,7 +80,7 @@ class OtpScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Verification',
+                          '${LocaleKeys.BtnReset.tr()} ${LocaleKeys.txtFieldPassword.tr()}',
                           style: TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.bold,
@@ -108,7 +90,7 @@ class OtpScreen extends StatelessWidget {
                         ),
                         verticalSmallSpace,
                         Text(
-                          'Verify your register',
+                          '${LocaleKeys.BtnSend.tr()} ${LocaleKeys.txtFieldEmail.tr()}',
                           style: TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.normal,
@@ -136,11 +118,36 @@ class OtpScreen extends StatelessWidget {
                                       height: 100,
                                       width: 100,
                                     ),
-                                    verticalLargeSpace,
-                                    Text(
-                                        "Your verification code is               $verification     "),
-                                    verticalLargeSpace,
-                                    Body(mobile: mobile,verification: verification,),
+                                    DefaultFormField(
+                                      controller: emailController,
+                                      type: TextInputType.emailAddress,
+                                      validatedText:
+                                          LocaleKeys.txtFieldEmail.tr(),
+                                      label: LocaleKeys.txtFieldEmail.tr(),
+                                      onTap: () {},
+                                    ),
+                                    verticalMediumSpace,
+                                    ConditionalBuilder(
+                                      condition: state is! AppSendEmailLoadingState,
+                                      builder: (context) => ConditionalBuilder(
+                                        condition: state is! AppLoginLoadingState,
+                                        builder: (context) {
+                                          return GeneralButton(
+                                            title: LocaleKeys.BtnSend.tr(),
+                                            onPress: () {
+                                              if (formKey.currentState!
+                                                  .validate()) {
+                                                AppCubit.get(context).sendEmail(email: emailController.text);
+                                              }
+                                            },
+                                          );
+                                        },
+                                        fallback: (context) => const Center(
+                                            child: CircularProgressIndicator()),
+                                      ),
+                                      fallback: (context) => const Center(child: const CircularProgressIndicator()),
+                                    ),
+                                    verticalMediumSpace,
                                   ],
                                 ),
                               ),
