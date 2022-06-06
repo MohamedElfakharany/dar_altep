@@ -5,6 +5,7 @@ import 'package:dar_altep/models/delete_reservation_model.dart';
 import 'package:dar_altep/models/change_password_model.dart';
 import 'package:dar_altep/models/home_reservation_model.dart';
 import 'package:dar_altep/models/lab_reservation_model.dart';
+import 'package:dar_altep/models/notification_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
 import 'package:dar_altep/models/reservation_model.dart';
@@ -266,6 +267,30 @@ class AppGetProfileSuccessState extends AppStates{}
 class AppGetProfileErrorState extends AppStates{
   final String error;
   AppGetProfileErrorState(this.error);
+}
+
+class AppGetNotificationsLoadingState extends AppStates{}
+
+class AppGetNotificationsSuccessState extends AppStates{
+  final NotificationsModel notificationsModel;
+  AppGetNotificationsSuccessState(this.notificationsModel);
+}
+
+class AppGetNotificationsErrorState extends AppStates{
+  final String error;
+  AppGetNotificationsErrorState(this.error);
+}
+
+class AppDeleteNotificationsLoadingState extends AppStates{}
+
+class AppDeleteNotificationsSuccessState extends AppStates{
+  final DeleteNotificationsModel deleteNotificationsModel;
+  AppDeleteNotificationsSuccessState(this.deleteNotificationsModel);
+}
+
+class AppDeleteNotificationsErrorState extends AppStates{
+  final String error;
+  AppDeleteNotificationsErrorState(this.error);
 }
 
 class AppGetAppointmentsLoadingState extends AppStates{}

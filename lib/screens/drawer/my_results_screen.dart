@@ -34,6 +34,8 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
   Widget build(BuildContext context) {
     var newTest = widget.searchModel?.data?.dataNew;
     var checkedTest = widget.searchModel?.data?.checked;
+    // var newTest = AppCubit.get(context).searchModel?.data?.dataNew;
+    // var checkedTest = AppCubit.get(context).searchModel?.data?.checked;
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is AppGetTestResultSuccessState) {
@@ -63,11 +65,11 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
         if (state is AppGetUserResultsErrorState) {
           showDialog(
               context: context,
-              builder: (context) => AlertDialog(
-                    title: const Text(
+              builder: (context) => const AlertDialog(
+                    title: Text(
                       'Error..!',
                     ),
-                    content: Text(state.error),
+                    content: Text('There are no results for this user'),
                   ));
         }
       },
@@ -168,10 +170,15 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
                         onChanged: (value) {
                           setState(() {
                             testValue = value;
-                            AppCubit.get(context)
-                                .getUserResults(name: testValue);
-                            if (kDebugMode) {
-                              print('testValue : $testValue');
+                            if (dateOfVisitController.text == null){
+                              AppCubit.get(context)
+                                  .getUserResults(name: testValue);
+                              if (kDebugMode) {
+                                print('testValue : $testValue');
+                              }
+                            }else{
+                              AppCubit.get(context)
+                                  .getUserResults(date: dateOfVisitController.text,name: testValue);
                             }
                           });
                         },
@@ -183,7 +190,7 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
                     child: DefaultFormField(
                       height: 70.0,
                       controller: dateOfVisitController,
-                      type: TextInputType.datetime,
+                      type: TextInputType.none,
                       validatedText: LocaleKeys.TxtFieldDateOfVisit.tr(),
                       label: LocaleKeys.TxtFieldDateOfVisit.tr(),
                       onTap: () {
@@ -195,6 +202,13 @@ class _MyResultsScreenState extends State<MyResultsScreen> {
                         ).then((value) {
                           dateOfVisitController.text =
                               DateFormat.yMd().format(value!);
+                          if (testValue == null){
+                            AppCubit.get(context)
+                                .getUserResults(date: dateOfVisitController.text);
+                          }else {
+                            AppCubit.get(context)
+                                .getUserResults(date: dateOfVisitController.text,name: testValue);
+                          }
                         }).catchError((error) {
                           if (kDebugMode) {
                             print('error in fetching date');

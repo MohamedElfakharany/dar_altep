@@ -100,5 +100,15 @@
   "txtPickImage": "Pick Image",
   "BtnOpenCamera": "Camera",
   "BtnGallery": "Gallery",
-  "languageA": "عربي"
+  "languageA": "عربي",
+  "txtError": "Error...!",
+  "txtComplaint": "Complaint",
+  "txtExplanation": "Explanation",
+  "txtThank": "Thank you",
+  "txtThankSecond": "Thank you,Your message was sent and we will reply to you soon",
+  "txtFieldCodeReset": "Recieved Code",
+  "txtNewOldPasswordsNotMatch": "New password can't match old password",
+  "txtPasswordsNotMatch": "Passwords Not Match",
+  "txtMobileLessNine": "Mobile must be 9 Numbers or more",
+  "txtPasswordValidate": "Password must be 8 digits at least"
 }

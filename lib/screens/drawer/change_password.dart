@@ -3,7 +3,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
-import 'package:dar_altep/screens/drawer/settings_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
@@ -90,7 +89,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       vertical: 20.0, horizontal: 20),
                   child: SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
+                    // physics: const NeverScrollableScrollPhysics(),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -157,6 +156,8 @@ class ChangePasswordScreen extends StatelessWidget {
                                       label: LocaleKeys.TxtFieldNewPassword.tr(),
                                       obscureText: cubit.isPassword,
                                       suffixIcon: cubit.sufIcon,
+                                      isConfirm: true,
+                                      confirm: oldPasswordController.text,
                                       suffixPressed: () {
                                         cubit.changePasswordVisibility();
                                       },

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
@@ -105,7 +107,7 @@ class HomeOffersCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          verticalMicroSpace,
+                          // verticalMicroSpace,
                           Text(
                             '${offersModel?.data?[index].duration} ${LocaleKeys.txthomeOfferCardDays.tr()}',
                             maxLines: 1,
@@ -116,7 +118,7 @@ class HomeOffersCard extends StatelessWidget {
                               color: Colors.black54,
                             ),
                           ),
-                          verticalMicroSpace,
+                          // verticalMicroSpace,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -657,9 +659,66 @@ class AppointmentCard extends StatelessWidget {
   }
 }
 
-Widget BuildMessage(MessageModel messageModel) {
-  return ListTile(
-    title: Text(messageModel.title),
-    subtitle: Text(messageModel.body),
-  );
+class NotificationCard extends StatefulWidget {
+  NotificationCard(
+      {required this.index, required this.notificationsModel, Key? key})
+      : super(key: key);
+  NotificationsModel? notificationsModel;
+  int index;
+
+  @override
+  State<NotificationCard> createState() => _NotificationCardState();
+}
+
+class _NotificationCardState extends State<NotificationCard> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AppCubit,AppStates>(
+      listener: (context,state) {},
+      builder: (context,state){
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0,),
+          child: Container(
+            constraints: const BoxConstraints(
+              maxHeight: double.infinity,
+            ),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 4,
+                  blurRadius: 6,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ],
+              border: Border.all(color: whiteColor),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Flexible(
+                  flex: 4,
+                  child: Container(
+                    child: Text(
+                      widget.notificationsModel?.data?[widget.index].message,
+                      maxLines: 3,
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Spacer(),
+                Spacer(),
+                Text(widget.notificationsModel?.data?[widget.index].time),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

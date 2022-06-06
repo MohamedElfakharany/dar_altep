@@ -1,9 +1,15 @@
-import 'dart:io';
-import 'package:dar_altep/models/notification_model.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:dar_altep/cubit/cubit.dart';
+import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/home/components/widet_components.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:dar_altep/shared/constants/colors.dart';
+import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessagingScreen extends StatefulWidget {
   const MessagingScreen({Key? key}) : super(key: key);
@@ -13,43 +19,105 @@ class MessagingScreen extends StatefulWidget {
 }
 
 class _MessagingScreenState extends State<MessagingScreen> {
-  // final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-  // final List<MessageModel> message = [];
-  // @override
-  // void initState() async {
-  //
-  //   // TODO: implement initState
-  //   super.initState();
-  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //     RemoteNotification? notification = message.notification;
-  //     print('onMessage.listen: $notification');
-  //   });
-  //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-  //     print("onMessageOpenedApp: $message");
-  //   });
-  //
-  //   if (Platform.isIOS) {
-  //     firebaseMessaging.requestPermission(
-  //       alert: true,
-  //       announcement: false,
-  //       badge: true,
-  //       carPlay: false,
-  //       criticalAlert: false,
-  //       provisional: false,
-  //       sound: true,
-  //     );
-  //   }
-  //
-  //   firebaseMessaging.requestPermission();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: GeneralAppBar(title: 'Notifications'),
-      // body: ListView(
-      //   children: message.map(BuildMessage).toList(),
-      // ),
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {
+        if (state is AppDeleteNotificationsSuccessState){
+          if (state.deleteNotificationsModel.status){
+            showToast(msg: state.deleteNotificationsModel.message, state: ToastState.success);
+          }
+        }
+      },
+      builder: (context, state) {
+        var notificationsModel = AppCubit.get(context).notificationsModel;
+        return Scaffold(
+          appBar: GeneralAppBar(title: 'Notifications', centerTitle: true),
+          body: Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 10),
+                  child: Row(
+                    children: [
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {
+                          showPopUp(
+                            context,
+                            Container(
+                              height: 200,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 10.0),
+                              child: Column(
+                                children: [
+                                  verticalSmallSpace,
+                                  Text(
+                                    'Are you sure to delete Notifications?',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: fontFamily,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  verticalMediumSpace,
+                                  ConditionalBuilder(
+                                    condition: state
+                                    is! AppDeleteNotificationsLoadingState,
+                                    builder: (context) =>
+                                        GeneralUnfilledButton(
+                                          title: LocaleKeys.BtnDelete.tr(),
+                                          height: 35,
+                                          width: double.infinity,
+                                          btnRadius: 8,
+                                          color: redTxtColor,
+                                          borderColor: redTxtColor,
+                                          onPress: () {
+                                            AppCubit.get(context)
+                                                .deleteNotifications()
+                                                .then((value) {
+                                              Navigator.pop(context);
+                                            }).catchError((error) {});
+                                          },
+                                        ),
+                                    fallback: (context) => const Center(
+                                        child: CircularProgressIndicator()),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        child: DefaultTextButton(
+                          title: LocaleKeys.BtnDelete.tr(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => NotificationCard(
+                      notificationsModel: notificationsModel,
+                      index: index,
+                    ),
+                    separatorBuilder: (context, index) => verticalMiniSpace,
+                    itemCount: AppCubit.get(context).notificationsModel!.data!.length,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -24,12 +24,6 @@ class SearchModel {
     message: json["message"],
     data: Data.fromJson(json["data"]),
   );
-
-  // Map<dynamic, dynamic> toJson() => {
-  //   "status": status,
-  //   "message": message,
-  //   "data": data.toJson(),
-  // };
 }
 
 class Data {
@@ -45,11 +39,6 @@ class Data {
     checked: List<Checked>.from(json["checked"].map((x) => Checked.fromJson(x))),
     dataNew: List<Checked>.from(json["new"].map((x) => Checked.fromJson(x))),
   );
-  //
-  // Map<dynamic, dynamic> toJson() => {
-  //   "checked": List<dynamic>.from(checked.map((x) => x.toJson())),
-  //   "new": List<dynamic>.from(dataNew.map((x) => x.toJson())),
-  // };
 }
 
 class Checked {
@@ -80,13 +69,4 @@ class Checked {
     name: json["name"],
     visitId: json["visit_id"],
   );
-
-  // Map<dynamic, dynamic> toJson() => {
-  //   "id": id,
-  //   "time": time,
-  //   "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
-  //   "image": image,
-  //   "seen": seen,
-  //   "name": name,
-  // };
 }

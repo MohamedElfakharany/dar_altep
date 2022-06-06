@@ -31,7 +31,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
 
   var formKey = GlobalKey<FormState>();
 
-  final serviceItems = ['complaint', 'Query'];
+  final serviceItems = [LocaleKeys.txtExplanation.tr(), LocaleKeys.txtComplaint.tr()];
 
   String? serviceValue;
 
@@ -48,7 +48,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Error...!'),
+                    title: Text(LocaleKeys.txtError.tr()),
                     content: Text(state.error),
                   );
                 });
@@ -81,7 +81,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                           ),
                           verticalMediumSpace,
                           Text(
-                            'Thank You',
+                            LocaleKeys.txtThank.tr(),
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: fontFamily,
@@ -92,7 +92,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                           ),
                           verticalMediumSpace,
                           Text(
-                            ' Thank you,Your message was sent and we will reply to you soon',
+                            LocaleKeys.txtThankSecond.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20,

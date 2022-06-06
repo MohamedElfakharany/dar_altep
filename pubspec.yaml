@@ -52,7 +52,11 @@ dependencies:
   open_file: ^3.2.1
   image_downloader: ^0.31.0
   permission_handler: ^9.2.0
-#  firebase_messaging: ^11.4.1
+
+  #firebase
+  firebase_messaging: ^11.4.1
+  cloud_firestore: ^3.1.17
+  firebase_core: ^1.17.1
 
 dev_dependencies:
   flutter_test:

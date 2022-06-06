@@ -145,7 +145,7 @@ class SendEmailScreen extends StatelessWidget {
                                         fallback: (context) => const Center(
                                             child: CircularProgressIndicator()),
                                       ),
-                                      fallback: (context) => const Center(child: const CircularProgressIndicator()),
+                                      fallback: (context) => const Center(child: CircularProgressIndicator()),
                                     ),
                                     verticalMediumSpace,
                                   ],

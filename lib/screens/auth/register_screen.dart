@@ -74,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Error...!'),
+                    title: Text(LocaleKeys.txtError.tr()),
                     content: Text('${state.userModel.message}'),
                   );
                 });
@@ -84,9 +84,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           showDialog(
               context: context,
               builder: (context) {
-                return const AlertDialog(
-                  title: Text('Error...!'),
-                  content: Text(
+                return AlertDialog(
+                  title:  Text(LocaleKeys.txtError.tr()),
+                  content: const Text(
                     'Please contact with lab',
                   ),
                 );
@@ -190,7 +190,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   DefaultFormField(
                                     controller: emailController,
                                     type: TextInputType.emailAddress,
-                                    validatedText: LocaleKeys.txtFieldEmail.tr(),
+                                    validatedText:
+                                        LocaleKeys.txtFieldEmail.tr(),
                                     label: LocaleKeys.txtFieldEmail.tr(),
                                     onTap: () {},
                                   ),
@@ -198,7 +199,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   DefaultFormField(
                                     controller: mobileController,
                                     type: TextInputType.phone,
-                                    validatedText: LocaleKeys.txtFieldMobile.tr(),
+                                    validatedText:
+                                        LocaleKeys.txtFieldMobile.tr(),
                                     label: LocaleKeys.txtFieldMobile.tr(),
                                     onTap: () {},
                                   ),
@@ -206,7 +208,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   DefaultFormField(
                                     controller: passwordController,
                                     type: TextInputType.text,
-                                    validatedText: LocaleKeys.txtFieldPassword.tr(),
+                                    validatedText:
+                                        LocaleKeys.txtFieldPassword.tr(),
                                     label: LocaleKeys.txtFieldPassword.tr(),
                                     obscureText: cubit.isPassword,
                                     suffixIcon: cubit.sufIcon,
@@ -219,10 +222,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   DefaultFormField(
                                     controller: confirmationPasswordController,
                                     type: TextInputType.text,
-                                    validatedText: LocaleKeys.TxtFieldConfirmPassword.tr(),
+                                    validatedText:
+                                        LocaleKeys.TxtFieldConfirmPassword.tr(),
                                     isConfirm: true,
                                     confirm: passwordController.text,
-                                    label: LocaleKeys.TxtFieldConfirmPassword.tr(),
+                                    label:
+                                        LocaleKeys.TxtFieldConfirmPassword.tr(),
                                     obscureText: cubit.isPassword,
                                     suffixIcon: cubit.sufIcon,
                                     suffixPressed: () {
@@ -250,7 +255,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       child: DropdownButtonFormField<String>(
                                         validator: (String? value) {
                                           if (value != null && value.isEmpty) {
-                                            return LocaleKeys.txtFieldNationality.tr();
+                                            return LocaleKeys
+                                                .txtFieldNationality
+                                                .tr();
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -261,7 +268,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           filled: true,
                                           errorStyle: const TextStyle(
                                               color: Color(0xFF4F4F4F)),
-                                          label: Text(LocaleKeys.txtFieldNationality.tr()),
+                                          label: Text(LocaleKeys
+                                              .txtFieldNationality
+                                              .tr()),
                                           border: const OutlineInputBorder(
                                             borderSide: BorderSide(
                                               width: 2,
@@ -287,7 +296,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   DefaultFormField(
                                     controller: dateOfBirthController,
                                     type: TextInputType.none,
-                                    validatedText: LocaleKeys.txtFieldDateOfBirth.tr(),
+                                    validatedText:
+                                        LocaleKeys.txtFieldDateOfBirth.tr(),
                                     label: LocaleKeys.txtFieldDateOfBirth.tr(),
                                     onTap: () {
                                       showDatePicker(
@@ -329,7 +339,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       child: DropdownButtonFormField<String>(
                                         validator: (value) {
                                           if (value!.isEmpty) {
-                                            return LocaleKeys.txtFieldGender.tr();
+                                            return LocaleKeys.txtFieldGender
+                                                .tr();
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -340,7 +351,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           filled: true,
                                           errorStyle: const TextStyle(
                                               color: Color(0xFF4F4F4F)),
-                                          label: Text(LocaleKeys.txtFieldGender.tr()),
+                                          label: Text(
+                                              LocaleKeys.txtFieldGender.tr()),
                                           border: const OutlineInputBorder(
                                             borderSide: BorderSide(
                                               width: 2,
@@ -383,6 +395,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 dateOfBirthController.text,
                                             nationality: nationalValue ?? '',
                                             gender: genderValue ?? '',
+                                            deviceTokenLogin: deviceToken!,
                                           );
                                         } else {
                                           if (kDebugMode) {
@@ -402,7 +415,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          LocaleKeys.loginTxtDontHaveAccount.tr(),
+                                          LocaleKeys.registerTxtHaveAccount
+                                              .tr(),
                                           style: const TextStyle(
                                             fontSize: 16,
                                           ),
@@ -415,7 +429,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             );
                                           },
                                           child: DefaultTextButton(
-                                            title: LocaleKeys.BtnSignUp.tr(),
+                                            title: LocaleKeys.BtnSignIn.tr(),
                                             weight: FontWeight.bold,
                                           ),
                                         ),

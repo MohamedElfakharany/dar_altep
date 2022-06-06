@@ -7,15 +7,51 @@ import 'package:dar_altep/shared/network/local/cache_helper.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/shared/network/remote/dio_helper.dart';
 import 'package:dar_altep/translations/codegen_loader.g.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (kDebugMode) {
+    print('on background message');
+    print(message.data.toString());
+  }
+  await Firebase.initializeApp();
+
+  showToast(msg: 'on background message', state: ToastState.success);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await Firebase.initializeApp();
+
+  deviceToken = await FirebaseMessaging.instance.getToken();
+
+  if (kDebugMode) {
+    print('deviceToken : $deviceToken ');
+  }
+  FirebaseMessaging.onMessage.listen((event) {
+    if (kDebugMode) {
+      print('onMessage event.data.toString() ${event.data.toString()}');
+    }
+    showToast(msg: 'on Message', state: ToastState.success);
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    if (kDebugMode) {
+      print(
+          'onMessageOpenedApp event.data.toString() ${event.data.toString()}');
+    }
+    showToast(msg: 'on Message Opened App', state: ToastState.success);
+  });
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   await CacheHelper.init();
   DioHelper.init();
 
@@ -27,11 +63,9 @@ void main() async {
     printWrapped('from main the token is $token');
   }
 
-
-
-    if (token != null) {
-      widget = const HomeScreen();
-    } else {
+  if (token != null) {
+    widget = const HomeScreen();
+  } else {
     widget = const OnboardingScreen();
   }
 
@@ -83,7 +117,8 @@ class MyApp extends StatelessWidget {
         ..getTestNameData()
         ..getAppointmentsData()
         ..getHomeOffersData()
-        ..getLabOffersData(),
+        ..getLabOffersData()
+        ..getNotifications(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

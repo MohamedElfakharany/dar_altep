@@ -1,5 +1,4 @@
 // ignore_for_file: unused_local_variable
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:dar_altep/cubit/states.dart';
@@ -10,6 +9,7 @@ import 'package:dar_altep/models/delete_reservation_model.dart';
 import 'package:dar_altep/models/change_password_model.dart';
 import 'package:dar_altep/models/home_reservation_model.dart';
 import 'package:dar_altep/models/lab_reservation_model.dart';
+import 'package:dar_altep/models/notification_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
 import 'package:dar_altep/models/reservation_model.dart';
@@ -17,7 +17,6 @@ import 'package:dar_altep/models/search_model.dart';
 import 'package:dar_altep/models/test_name_model.dart';
 import 'package:dar_altep/models/test_results_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
-import 'package:dar_altep/screens/auth/login_screen.dart';
 import 'package:dar_altep/screens/auth/splash_language_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/network/local/cache_helper.dart';
@@ -53,6 +52,8 @@ class AppCubit extends Cubit<AppStates> {
   ChangePasswordModel? changePasswordModel;
   SendEmailModel? sendEmailModel;
   ResetPasswordModel? resetPasswordModel;
+  NotificationsModel? notificationsModel;
+  DeleteNotificationsModel? deleteNotificationsModel;
 
   List<TestModelData>? testNames = [];
   List<String> testName = [];
@@ -63,16 +64,18 @@ class AppCubit extends Cubit<AppStates> {
   int offersCount = 1;
 
   Future login({
-    required String phone,
+    required String email,
     required String password,
+    required String deviceTokenLogin,
   }) async {
     var headers = {
       'Accept': 'application/json',
       'lang': local,
     };
     var formData = json.encode({
-      'phone': phone,
+      'email': email,
       'password': password,
+      'device_token': deviceTokenLogin,
     });
 
     try {
@@ -149,6 +152,7 @@ class AppCubit extends Cubit<AppStates> {
     required String birthdate,
     required String nationality,
     required String gender,
+    required String deviceTokenLogin,
   }) async {
     var headers = {
       'Accept': 'application/json',
@@ -162,6 +166,7 @@ class AppCubit extends Cubit<AppStates> {
       'birthrate': birthdate,
       'gender': gender,
       'nationality': nationality,
+      'device_token': deviceTokenLogin,
     });
 
     try {
@@ -184,7 +189,9 @@ class AppCubit extends Cubit<AppStates> {
       //   print('responseJson $responseJson');
       // }
       userModel = UserModel.fromJson(responseJson);
-      print('userModel?.message : ${response.data}');
+      if (kDebugMode) {
+        print('userModel?.message : ${response.data}');
+      }
       emit(AppRegisterSuccessState(userModel!));
     } catch (e) {
       emit(AppRegisterErrorState(e.toString()));
@@ -382,6 +389,10 @@ class AppCubit extends Cubit<AppStates> {
       var responseJsonB = response.data;
       var convertedResponse = utf8.decode(responseJsonB);
       var responseJson = json.decode(convertedResponse);
+      if (kDebugMode) {
+        print('responseJson: $responseJson');
+        print('formData: $formData');
+      }
       sendEmailModel = SendEmailModel.fromJson(responseJson);
       emit(AppSendEmailSuccessState(sendEmailModel!));
     } catch (e) {
@@ -757,6 +768,7 @@ class AppCubit extends Cubit<AppStates> {
         print('responseJson $responseJson');
       }
       searchModel = SearchModel.fromJson(responseJson);
+
       emit(AppGetUserResultsSuccessState(searchModel!));
     } catch (e) {
       emit(AppGetUserResultsErrorState(e.toString()));
@@ -794,6 +806,81 @@ class AppCubit extends Cubit<AppStates> {
         print('error ${error.toString()}');
       }
       emit(AppGetProfileErrorState(error.toString()));
+    }
+  }
+
+  Future getNotifications() async {
+    emit(AppGetNotificationsLoadingState());
+    var headers = {
+      'Accept': 'application/json',
+      'lang': local,
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      Dio dio = Dio();
+      var response = await dio.get(
+        userNotificationsURL,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      if (kDebugMode) {
+        print('responseJson : $responseJson');
+      }
+      notificationsModel = NotificationsModel.fromJson(responseJson);
+      if (kDebugMode) {
+        print('notificationsModel : ${notificationsModel?.data?.first.message}');
+      }
+      emit(AppGetNotificationsSuccessState(notificationsModel!));
+    } catch (error) {
+      if (kDebugMode) {
+        print('error ${error.toString()}');
+      }
+      emit(AppGetNotificationsErrorState(error.toString()));
+    }
+  }
+
+  Future deleteNotifications() async {
+    emit(AppDeleteNotificationsLoadingState());
+    var headers = {
+      'Accept': 'application/json',
+      'lang': local,
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      Dio dio = Dio();
+      var response = await dio.post(
+        deleteNotificationURL,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      if (kDebugMode) {
+        print('responseJson: $responseJson');
+      }
+      deleteNotificationsModel = DeleteNotificationsModel.fromJson(responseJson);
+      if (kDebugMode) {
+        print('deleteNotificationsModel: $deleteNotificationsModel');
+      }
+      emit(AppDeleteNotificationsSuccessState(deleteNotificationsModel!));
+      getNotifications();
+    } catch (error) {
+      if (kDebugMode) {
+        print('error ${error.toString()}');
+      }
+      emit(AppDeleteNotificationsErrorState(error.toString()));
     }
   }
 
@@ -1093,11 +1180,11 @@ class AppCubit extends Cubit<AppStates> {
       //   print('responseJson TestResultModel : $responseJson');
       // }
       testResultModel = TestResultModel.fromJson(responseJson);
-      searchModel?.data?.checked?.forEach((element) {
-        // if (kDebugMode) {
-        //   print(element.id);
-        // }
-      });
+      // searchModel?.data?.checked?.forEach((element) {
+      //   // if (kDebugMode) {
+      //   //   print(element.id);
+      //   // }
+      // });
       emit(AppGetTestResultSuccessState(testResultModel!));
     } catch (e) {
       emit(AppGetTestResultErrorState(e.toString()));

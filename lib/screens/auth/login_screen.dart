@@ -11,6 +11,7 @@ import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
-  final mobileController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
@@ -40,25 +41,29 @@ class LoginScreen extends StatelessWidget {
               tokenSaving(state.userModel.data?.token);
               navigateAndFinish(context, const HomeScreen());
             } else {
-              print('state.userModel.message ${state.userModel.message}');
+              if (kDebugMode) {
+                print('state.userModel.message ${state.userModel.message}');
+              }
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Error...!'),
+                    title: Text(LocaleKeys.txtError.tr()),
                     content: Text('${state.userModel.message}'),
                   );
                 },
               );
             }
           } else if (state is AppLoginErrorState) {
-            print('state.userModel.message ${state.error}}');
+            if (kDebugMode) {
+              print('state.userModel.message ${state.error}}');
+            }
             showDialog(
                 context: context,
                 builder: (context) {
-                  return const AlertDialog(
-                    title: Text('Login Error...!'),
-                    content: Text('please contact with lab'),
+                  return AlertDialog(
+                    title:  Text(LocaleKeys.txtError.tr()),
+                    content: const Text('please contact with lab'),
                   );
                 });
           }
@@ -96,7 +101,7 @@ class LoginScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       vertical: 20.0, horizontal: 20),
                   child: SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
+                    // physics: const NeverScrollableScrollPhysics(),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -140,17 +145,19 @@ class LoginScreen extends StatelessWidget {
                                       width: 100,
                                     ),
                                     DefaultFormField(
-                                      controller: mobileController,
-                                      type: TextInputType.number,
-                                      label: LocaleKeys.txtFieldMobile.tr(),
-                                      validatedText: LocaleKeys.txtFieldMobile.tr(),
+                                      controller: emailController,
+                                      type: TextInputType.emailAddress,
+                                      label: LocaleKeys.txtFieldEmail.tr(),
+                                      validatedText:
+                                          LocaleKeys.txtFieldEmail.tr(),
                                       suffixPressed: () {},
                                     ),
                                     verticalSmallSpace,
                                     DefaultFormField(
                                       controller: passwordController,
                                       type: TextInputType.text,
-                                      validatedText: LocaleKeys.txtFieldPassword.tr(),
+                                      validatedText:
+                                          LocaleKeys.txtFieldPassword.tr(),
                                       label: LocaleKeys.txtFieldPassword.tr(),
                                       obscureText: cubit.isPassword,
                                       suffixIcon: cubit.sufIcon,
@@ -164,22 +171,10 @@ class LoginScreen extends StatelessWidget {
                                             FadeRoute(page: SendEmailScreen()));
                                       },
                                       child: DefaultTextButton(
-                                        title: LocaleKeys.BtnForgetPassword.tr(),
+                                        title:
+                                            LocaleKeys.BtnForgetPassword.tr(),
                                       ),
                                     ),
-                                    // CheckboxListTile(
-                                    //   side: const BorderSide(
-                                    //     style: BorderStyle.solid,
-                                    //   ),
-                                    //   title: const Text('Remember Me'),
-                                    //   activeColor: blueDark,
-                                    //   value: cubit.rememberMe,
-                                    //   onChanged: (value) {
-                                    //     cubit.onRememberMeChanged();
-                                    //   },
-                                    //   controlAffinity:
-                                    //       ListTileControlAffinity.leading,
-                                    // ),
                                     verticalMediumSpace,
                                     ConditionalBuilder(
                                       condition: state is! AppLoginLoadingState,
@@ -190,9 +185,10 @@ class LoginScreen extends StatelessWidget {
                                             if (formKey.currentState!
                                                 .validate()) {
                                               AppCubit.get(context).login(
-                                                phone: mobileController.text,
+                                                email: emailController.text,
                                                 password:
                                                     passwordController.text,
+                                                deviceTokenLogin: deviceToken!,
                                               );
                                             }
                                           },
@@ -209,7 +205,8 @@ class LoginScreen extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            LocaleKeys.loginTxtDontHaveAccount.tr(),
+                                            LocaleKeys.loginTxtDontHaveAccount
+                                                .tr(),
                                             style: const TextStyle(
                                               fontSize: 16,
                                             ),
@@ -223,7 +220,8 @@ class LoginScreen extends StatelessWidget {
                                                           const RegisterScreen()));
                                             },
                                             child: DefaultTextButton(
-                                              title: LocaleKeys.registerTxtMain.tr(),
+                                              title: LocaleKeys.registerTxtMain
+                                                  .tr(),
                                               weight: FontWeight.bold,
                                             ),
                                           ),

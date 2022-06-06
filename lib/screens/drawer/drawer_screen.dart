@@ -37,10 +37,14 @@ class DrawerScreen extends StatelessWidget {
                   testNames: testItems,
                   searchModel: searchModel,
                 )));
-          }else if (state is AppGetUserResultsErrorState){
-            showDialog(context: context, builder: (context){
-              return AlertDialog(title: Center(child: Text('no results for this user')),);
-            });
+          } else if (state is AppGetUserResultsErrorState) {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Center(child: Text('no results for this user')),
+                  );
+                });
           }
         },
         builder: (context, state) {
@@ -76,8 +80,17 @@ class DrawerScreen extends StatelessWidget {
                               width: 30,
                               height: 30,
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                            errorWidget: (context, url, error) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                color: whiteColor
+                              ),
+                              child: const Icon(
+                                Icons.perm_identity,
+                                size: 100,
+                                color: blueDark,
+                              ),
+                            ),
                             width: 100,
                             height: 100,
                           ),
@@ -140,8 +153,8 @@ class DrawerScreen extends StatelessWidget {
                                 ),
                                 horizontalMiniSpace,
                                 Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
                                   child: Text(
                                     LocaleKeys.drawerResults.tr(),
                                     style: TextStyle(
@@ -155,7 +168,8 @@ class DrawerScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          fallback: (context) => const Center(child: CircularProgressIndicator()),
+                          fallback: (context) =>
+                              const Center(child: CircularProgressIndicator()),
                         ),
                         verticalMediumSpace,
                         InkWell(

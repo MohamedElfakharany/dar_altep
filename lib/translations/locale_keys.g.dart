@@ -103,5 +103,15 @@ abstract class  LocaleKeys {
   static const BtnOpenCamera = 'BtnOpenCamera';
   static const BtnGallery = 'BtnGallery';
   static const languageA = 'languageA';
+  static const txtError = 'txtError';
+  static const txtComplaint = 'txtComplaint';
+  static const txtExplanation = 'txtExplanation';
+  static const txtThank = 'txtThank';
+  static const txtThankSecond = 'txtThankSecond';
+  static const txtFieldCodeReset = 'txtFieldCodeReset';
+  static const txtNewOldPasswordsNotMatch = 'txtNewOldPasswordsNotMatch';
+  static const txtPasswordsNotMatch = 'txtPasswordsNotMatch';
+  static const txtMobileLessNine = 'txtMobileLessNine';
+  static const txtPasswordValidate = 'txtPasswordValidate';
 
 }

@@ -116,7 +116,17 @@ class CodegenLoader extends AssetLoader{
   "txtPickImage": "Pick Image",
   "BtnOpenCamera": "Camera",
   "BtnGallery": "Gallery",
-  "languageA": "English"
+  "languageA": "عربي",
+  "txtError": "Error...!",
+  "txtComplaint": "Complaint",
+  "txtExplanation": "Explanation",
+  "txtThank": "Thank you",
+  "txtThankSecond": "Thank you,Your message was sent and we will reply to you soon",
+  "txtFieldCodeReset": "Recieved Code",
+  "txtNewOldPasswordsNotMatch": "New password can't match old password",
+  "txtPasswordsNotMatch": "Passwords Not Match",
+  "txtMobileLessNine": "Mobile must be 9 Numbers or more",
+  "txtPasswordValidate": "Password must be 8 digits at least"
 };
 static const Map<String,dynamic> ar = {
   "loginTxtMain": "تسجيل الدخول",
@@ -220,7 +230,17 @@ static const Map<String,dynamic> ar = {
   "txtPickImage": "اختر الصورة",
   "BtnOpenCamera": "الكاميرا",
   "BtnGallery": "معرض الصور",
-  "languageA": "عربي"
+  "languageA": "English",
+  "txtError": "حدث خطأ ما ...!",
+  "txtComplaint": "شكوى",
+  "txtExplanation": "استفسار",
+  "txtThank": "شكرا لك",
+  "txtThankSecond": "شكرا لك تم ارسال رسالتك وسنقوم بالرد عليك قريبا",
+  "txtFieldCodeReset": "الكود المرسل",
+  "txtNewOldPasswordsNotMatch": "لا يمكن استخدام كلمة المرور القديمة",
+  "txtPasswordsNotMatch": "كلمة المرور غير متطابقه",
+  "txtMobileLessNine": "رقم الجوال يجب ان يكون اكثر من ٨ ارقام",
+  "txtPasswordValidate": "كلمة المرور يجب ان تكون ع الاقل ٨ خانات"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ar": ar};
 }

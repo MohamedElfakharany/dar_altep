@@ -137,8 +137,8 @@ class OtpScreen extends StatelessWidget {
                                       width: 100,
                                     ),
                                     verticalLargeSpace,
-                                    Text(
-                                        "Your verification code is               $verification     "),
+                                    const Text(
+                                        "Your verification code send to your E-mail"),
                                     verticalLargeSpace,
                                     Body(mobile: mobile,verification: verification,),
                                   ],

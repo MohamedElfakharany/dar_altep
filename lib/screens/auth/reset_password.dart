@@ -15,10 +15,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  ResetPasswordScreen({required this.email,Key? key}) : super(key: key);
+  ResetPasswordScreen({required this.email, Key? key}) : super(key: key);
 
   String email;
-  final passwordController = TextEditingController();
+  final codeController = TextEditingController();
   final newPasswordController = TextEditingController();
   final reEnterNewPasswordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -37,12 +37,23 @@ class ResetPasswordScreen extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Error...!'),
+                    title: Text(LocaleKeys.txtError.tr()),
                     content: Text('${state.resetPasswordModel.message}'),
                   );
                 },
               );
             }
+          }
+          if (state is AppResetPasswordErrorState){
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(LocaleKeys.txtError.tr()),
+                  content: Text('${state.error.toString()}'),
+                );
+              },
+            );
           }
         },
         builder: (context, state) {
@@ -88,7 +99,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       vertical: 20.0, horizontal: 20),
                   child: SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
+                    // physics: const NeverScrollableScrollPhysics(),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -123,92 +134,90 @@ class ResetPasswordScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20)),
                             child: Form(
                               key: formKey,
-                              child: ListView(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/logo.png',
-                                    height: 100,
-                                    width: 100,
-                                  ),
-                                  verticalLargeSpace,
-                                  Text(LocaleKeys.resetTxtThird.tr()),
-                                  verticalLargeSpace,
-                                  DefaultFormField(
-                                    controller: passwordController,
-                                    type: TextInputType.text,
-                                    label: LocaleKeys.txtFieldPassword.tr(),
-                                    validatedText:
-                                        LocaleKeys.txtFieldPassword.tr(),
-                                    obscureText: cubit.isPassword,
-                                    suffixIcon: cubit.sufIcon,
-                                    suffixPressed: () {
-                                      cubit.changePasswordVisibility();
-                                    },
-                                    onTap: (){},
-                                  ),
-                                  verticalSmallSpace,
-                                  DefaultFormField(
-                                    controller: newPasswordController,
-                                    type: TextInputType.text,
-                                    validatedText:
-                                        LocaleKeys.TxtFieldNewPassword.tr(),
-                                    label:
-                                        LocaleKeys.TxtFieldNewPassword.tr(),
-                                    obscureText: cubit.isPassword,
-                                    suffixIcon: cubit.sufIcon,
-                                    suffixPressed: () {
-                                      cubit.changePasswordVisibility();
-                                    },
-                                    onTap: (){},
-                                  ),
-                                  verticalSmallSpace,
-                                  DefaultFormField(
-                                    controller: reEnterNewPasswordController,
-                                    type: TextInputType.text,
-                                    validatedText: LocaleKeys
-                                        .TxtFieldReEnterPassword.tr(),
-                                    label: LocaleKeys.TxtFieldReEnterPassword
-                                        .tr(),
-                                    obscureText: cubit.isPassword,
-                                    suffixIcon: cubit.sufIcon,
-                                    isConfirm: true,
-                                    confirm: newPasswordController.text,
-                                    suffixPressed: () {
-                                      cubit.changePasswordVisibility();
-                                    },
-                                    onTap: () {},
-                                  ),
-                                  verticalMediumSpace,
-                                  ConditionalBuilder(
-                                    condition:
-                                        state is! AppResetPasswordLoadingState,
-                                    builder: (context) => ConditionalBuilder(
-                                      condition:
-                                          state is! AppLoginLoadingState,
-                                      builder: (context) {
-                                        return GeneralButton(
-                                          title: LocaleKeys.BtnReset.tr(),
-                                          onPress: () {
-                                            if (formKey.currentState!
-                                                .validate()) {
-                                              AppCubit.get(context)
-                                                  .resetPassword(
-                                                code: passwordController.text,
-                                                email: email,
-                                                newPassword: newPasswordController.text,
-                                              );
-                                            }
-                                          },
-                                        );
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/logo.png',
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                                    verticalLargeSpace,
+                                    Text(LocaleKeys.resetTxtThird.tr()),
+                                    verticalLargeSpace,
+                                    DefaultFormField(
+                                      controller: codeController,
+                                      type: TextInputType.text,
+                                      label: LocaleKeys.txtFieldCodeReset.tr(),
+                                      validatedText:
+                                          LocaleKeys.txtFieldCodeReset.tr(),
+                                      onTap: () {},
+                                    ),
+                                    verticalSmallSpace,
+                                    DefaultFormField(
+                                      controller: newPasswordController,
+                                      type: TextInputType.text,
+                                      validatedText:
+                                          LocaleKeys.TxtFieldNewPassword.tr(),
+                                      label:
+                                          LocaleKeys.TxtFieldNewPassword.tr(),
+                                      obscureText: cubit.isPassword,
+                                      suffixIcon: cubit.sufIcon,
+                                      suffixPressed: () {
+                                        cubit.changePasswordVisibility();
                                       },
+                                      onTap: () {},
+                                    ),
+                                    verticalSmallSpace,
+                                    DefaultFormField(
+                                      controller: reEnterNewPasswordController,
+                                      type: TextInputType.text,
+                                      validatedText: LocaleKeys
+                                          .TxtFieldReEnterPassword.tr(),
+                                      label: LocaleKeys.TxtFieldReEnterPassword
+                                          .tr(),
+                                      obscureText: cubit.isPassword,
+                                      suffixIcon: cubit.sufIcon,
+                                      isConfirm: true,
+                                      confirm: newPasswordController.text,
+                                      suffixPressed: () {
+                                        cubit.changePasswordVisibility();
+                                      },
+                                      onTap: () {},
+                                    ),
+                                    verticalMediumSpace,
+                                    ConditionalBuilder(
+                                      condition: state
+                                          is! AppResetPasswordLoadingState,
+                                      builder: (context) => ConditionalBuilder(
+                                        condition:
+                                            state is! AppLoginLoadingState,
+                                        builder: (context) {
+                                          return GeneralButton(
+                                            title: LocaleKeys.BtnReset.tr(),
+                                            onPress: () {
+                                              if (formKey.currentState!
+                                                  .validate()) {
+                                                AppCubit.get(context)
+                                                    .resetPassword(
+                                                  code: codeController.text,
+                                                  email: email,
+                                                  newPassword:
+                                                      newPasswordController
+                                                          .text,
+                                                );
+                                              }
+                                            },
+                                          );
+                                        },
+                                        fallback: (context) => const Center(
+                                            child: CircularProgressIndicator()),
+                                      ),
                                       fallback: (context) => const Center(
                                           child: CircularProgressIndicator()),
                                     ),
-                                    fallback: (context) => const Center(
-                                        child:
-                                            CircularProgressIndicator()),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),

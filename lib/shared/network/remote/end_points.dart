@@ -45,3 +45,7 @@ const getTestsURL = mainURL+'test';
 const getTestResultURL = mainURL+'ReservationResult';
 
 const getOffersDetailsURL = mainURL+'OfferDetails';
+
+const userNotificationsURL = mainURL+'UserNotifications';
+
+const deleteNotificationURL = mainURL+'DeleteNotification';

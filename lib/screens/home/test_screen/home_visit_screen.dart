@@ -56,7 +56,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text('Error...!'),
+                      title: Text(LocaleKeys.txtError.tr(),),
                       content:
                           Text(state.homeReservationsModel.message.toString()),
                     );
@@ -90,7 +90,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                           ),
                           verticalMediumSpace,
                           Text(
-                            'Thank You',
+                            LocaleKeys.txtThank.tr(),
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: fontFamily,
@@ -101,7 +101,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                           ),
                           verticalMediumSpace,
                           Text(
-                            'your data saved successfully and we will contact you',
+                            LocaleKeys.txtThankSecond.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20,
@@ -112,7 +112,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                           ),
                           verticalLargeSpace,
                           GeneralButton(
-                            title: 'Done',
+                            title: LocaleKeys.BtnDone.tr(),
                             onPress: () {
                               if (kDebugMode) {
                                 print('done pressed');
@@ -213,6 +213,7 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                               type: TextInputType.text,
                               validatedText: LocaleKeys.txtFieldName.tr(),
                               label: LocaleKeys.txtFieldAddress.tr(),
+                              onTap: (){},
                             ),
                             verticalSmallSpace,
                             DefaultFormField(
@@ -239,7 +240,6 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                 });
                               },
                               suffixIcon: Icons.calendar_month,
-
                             ),
                             verticalSmallSpace,
                             DefaultFormField(
@@ -266,7 +266,6 @@ class _HomeVisitScreenState extends State<HomeVisitScreen> {
                                   }
                                 }
                               },
-
                               onSubmit: (){
                                 FocusScope.of(context).unfocus();
                               },

@@ -3,6 +3,8 @@
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -373,13 +375,24 @@ class DefaultFormField extends StatelessWidget {
               return 'Fill $validatedText';
             }
             if (isConfirm == true) {
-              if (value != confirm){
-                return 'Passwords not Match';
+              if (value != confirm && validatedText == LocaleKeys.TxtFieldReEnterPassword.tr()){
+                return LocaleKeys.txtPasswordsNotMatch.tr();
+              }else if (value == confirm && validatedText == LocaleKeys.TxtFieldNewPassword.tr()){
+                return LocaleKeys.txtNewOldPasswordsNotMatch.tr();
               }
             }
-            if (validatedText == 'Mobile Number' && isConfirm == true){
-              if (value.length != 9 ){
-                return 'Mobile must be 9 Numbers';
+            if (validatedText == LocaleKeys.txtFieldMobile.tr()){
+              if (value.length < 9 ){
+                return LocaleKeys.txtMobileLessNine.tr();
+              }
+            }
+            if (validatedText == LocaleKeys.txtFieldPassword.tr() ||
+                validatedText == LocaleKeys.TxtFieldNewPassword.tr() ||
+                validatedText == LocaleKeys.TxtFieldReEnterPassword.tr() ||
+                validatedText == LocaleKeys.TxtFieldOldPassword.tr()
+            ){
+              if (value.length < 8) {
+                return LocaleKeys.txtPasswordValidate.tr();
               }
             }
           },

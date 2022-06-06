@@ -51,6 +51,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
       create: (BuildContext context) => AppCubit()..getProfileData(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
+          if (state is AppEditProfileSuccessState){
+            if (state.userModel.status){
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(LocaleKeys.BtnDone.tr()),
+                      content: Text(state.userModel.message),
+                    );
+                  });
+            }else {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(LocaleKeys.BtnDone.tr()),
+                      content: Text(state.userModel.message),
+                    );
+                  });
+            }
+          }
           if (state is AppEditProfileErrorState) {
             showDialog(
                 context: context,
@@ -220,9 +241,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButtonFormField<String>(
                                     validator: (String? value) {
-                                      if (value != null &&
-                                          value.isEmpty) {
-                                        return 'Choose Nationality';
+                                      if (value == null) {
+                                        return 'Select Nationality';
                                       }
                                     },
                                     decoration: InputDecoration(
@@ -299,8 +319,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButtonFormField<String>(
                                     validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Choose Gender';
+                                      if (value == null) {
+                                        return 'Select Gender';
                                       }
                                     },
                                     decoration: InputDecoration(

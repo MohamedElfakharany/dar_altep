@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
             image: const AssetImage("assets/images/splashBackGround.png"),
             colorFilter: ColorFilter.mode(
                 Colors.black.withOpacity(0.25), BlendMode.dstATop),
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
         ),
         child: const Center(

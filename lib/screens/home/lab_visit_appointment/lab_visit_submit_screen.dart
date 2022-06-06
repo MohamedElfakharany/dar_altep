@@ -59,7 +59,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Error...!'),
+                    title: Text(LocaleKeys.txtError.tr()),
                     content: Text(state.error),
                   );
                 });
@@ -92,7 +92,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                           ),
                           verticalMediumSpace,
                           Text(
-                            'Thank You',
+                            LocaleKeys.txtThank.tr(),
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: fontFamily,
@@ -103,7 +103,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                           ),
                           verticalMediumSpace,
                           Text(
-                            'your data saved successfully and we will contact you',
+                            LocaleKeys.txtThankSecond.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20,
@@ -114,7 +114,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                           ),
                           verticalLargeSpace,
                           GeneralButton(
-                            title: 'Done',
+                            title: LocaleKeys.BtnDone.tr(),
                             onPress: () {
                               if (kDebugMode) {
                                 print('done pressed');

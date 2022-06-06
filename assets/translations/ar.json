@@ -100,5 +100,15 @@
   "txtPickImage": "اختر الصورة",
   "BtnOpenCamera": "الكاميرا",
   "BtnGallery": "معرض الصور",
-  "languageA": "English"
+  "languageA": "English",
+  "txtError": "حدث خطأ ما ...!",
+  "txtComplaint": "شكوى",
+  "txtExplanation": "استفسار",
+  "txtThank": "شكرا لك",
+  "txtThankSecond": "شكرا لك تم ارسال رسالتك وسنقوم بالرد عليك قريبا",
+  "txtFieldCodeReset": "الكود المرسل",
+  "txtNewOldPasswordsNotMatch": "لا يمكن استخدام كلمة المرور القديمة",
+  "txtPasswordsNotMatch": "كلمة المرور غير متطابقه",
+  "txtMobileLessNine": "رقم الجوال يجب ان يكون اكثر من ٨ ارقام",
+  "txtPasswordValidate": "كلمة المرور يجب ان تكون ع الاقل ٨ خانات"
 }
