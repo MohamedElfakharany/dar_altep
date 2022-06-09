@@ -31,7 +31,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
 
   var formKey = GlobalKey<FormState>();
 
-  final serviceItems = [LocaleKeys.txtExplanation.tr(), LocaleKeys.txtComplaint.tr()];
+  final serviceItems = [LocaleKeys.txtExplanation.tr(), LocaleKeys.txtComplaint.tr(), LocaleKeys.txtChangeMobile.tr()];
 
   String? serviceValue;
 

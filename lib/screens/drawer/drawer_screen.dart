@@ -73,12 +73,12 @@ class DrawerScreen extends StatelessWidget {
                             imageUrl: user?.data?.idImage ?? '',
                             fit: BoxFit.cover,
                             placeholder: (context, url) => const SizedBox(
+                              width: 30,
+                              height: 30,
                               child: Center(
                                   child: CircularProgressIndicator(
                                 color: blueLight,
                               )),
-                              width: 30,
-                              height: 30,
                             ),
                             errorWidget: (context, url, error) => Container(
                               decoration: BoxDecoration(

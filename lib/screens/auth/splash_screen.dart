@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
-import 'package:dar_altep/screens/auth/login_screen.dart';
 import 'package:dar_altep/screens/auth/splash_language_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,11 +15,23 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
-  void initState() {
+  void initState() async{
     // TODO: implement initState
     super.initState();
+    // Firebase.initializeApp();
+    // if (Platform.isIOS){
+    //   FirebaseMessaging.instance.requestPermission(
+    //     alert: true,
+    //     badge: true,
+    //     sound: true,
+    //     announcement: false,
+    //     carPlay: false,
+    //     criticalAlert: false,
+    //     provisional: false,
+    //   );
+    // }
+
     // just for testing get countries request
     // Provider.of<UserDataController>(context,listen: false).fetchCountries();
     Timer(

@@ -5,6 +5,7 @@ import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/appointments_model.dart';
 import 'package:dar_altep/models/auth/check_code_model.dart';
 import 'package:dar_altep/models/cancel_reservation_model.dart';
+import 'package:dar_altep/models/change_email_model.dart';
 import 'package:dar_altep/models/delete_reservation_model.dart';
 import 'package:dar_altep/models/change_password_model.dart';
 import 'package:dar_altep/models/home_reservation_model.dart';
@@ -17,7 +18,7 @@ import 'package:dar_altep/models/search_model.dart';
 import 'package:dar_altep/models/test_name_model.dart';
 import 'package:dar_altep/models/test_results_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
-import 'package:dar_altep/screens/auth/splash_language_screen.dart';
+import 'package:dar_altep/screens/auth/login_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/network/local/cache_helper.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
@@ -54,6 +55,9 @@ class AppCubit extends Cubit<AppStates> {
   ResetPasswordModel? resetPasswordModel;
   NotificationsModel? notificationsModel;
   DeleteNotificationsModel? deleteNotificationsModel;
+  ConfirmPasswordModel? confirmPasswordModel;
+  ResetEmailModel? resetEmailModel;
+  SendNewEmailModel? sendNewEmailModel;
 
   List<TestModelData>? testNames = [];
   List<String> testName = [];
@@ -440,6 +444,133 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppResetPasswordSuccessState(resetPasswordModel!));
     } catch (e) {
       emit(AppResetPasswordErrorState(e.toString()));
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future confirmPassword({
+    required String password,
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': local,
+      'Authorization': 'Bearer $token',
+    };
+    var formData = json.encode({
+      'password': password,
+    });
+
+    try {
+      emit(AppConfirmPasswordLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        confirmPasswordURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      confirmPasswordModel = ConfirmPasswordModel.fromJson(responseJson);
+      emit(AppConfirmPasswordSuccessState(confirmPasswordModel!));
+    } catch (e) {
+      emit(AppConfirmPasswordErrorState());
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future sendNewEmail({
+    required String? newEmail,
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': local,
+      'Authorization': 'Bearer $token',
+    };
+    var formData = json.encode({
+      'new_email': newEmail,
+    });
+
+    try {
+      emit(AppSendNewEmailLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        sendNewEmailURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      if (kDebugMode) {
+        print('responseJson sendNewEmailModel : $responseJson');
+      }
+      if (kDebugMode) {
+        print(formData);
+        print('response : $response');
+      }
+      sendNewEmailModel = SendNewEmailModel.fromJson(responseJson);
+      if (kDebugMode) {
+        print('sendNewEmailModel : $sendNewEmailModel');
+      }
+      emit(AppSendNewEmailSuccessState(sendNewEmailModel!));
+    } catch (e) {
+      getReservationsData();
+      emit(AppSendNewEmailErrorState(e.toString()));
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future resetEmail({
+    required String code,
+    required String email,
+  }) async {
+    var headers = {
+      'Accept': 'application/json',
+      'lang': local,
+      'Authorization': 'Bearer $token',
+    };
+    var formData = FormData.fromMap({
+      'code': code,
+      'email': email,
+    });
+
+    try {
+      emit(AppResetEmailLoadingState());
+      Dio dio = Dio();
+      var response = await dio.post(
+        resetEmailURL,
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          responseType: ResponseType.bytes,
+          validateStatus: (status) => true,
+          headers: headers,
+        ),
+      );
+      var responseJsonB = response.data;
+      var convertedResponse = utf8.decode(responseJsonB);
+      var responseJson = json.decode(convertedResponse);
+      resetEmailModel = ResetEmailModel.fromJson(responseJson);
+      emit(AppResetEmailSuccessState(resetEmailModel!));
+    } catch (e) {
+      emit(AppResetEmailErrorState(e.toString()));
       if (kDebugMode) {
         print(e.toString());
       }
@@ -1236,7 +1367,7 @@ class AppCubit extends Cubit<AppStates> {
       if (value) {
         navigateAndFinish(
           context,
-          const SplashLanguageScreen(),
+            LoginScreen(),
         );
       }
       emit(AppLogoutSuccessState());

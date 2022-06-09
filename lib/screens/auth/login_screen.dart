@@ -4,7 +4,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/auth/register_screen.dart';
-import 'package:dar_altep/screens/auth/send_email_reser_password_screen.dart';
+import 'package:dar_altep/screens/auth/send_email_reset_password_screen.dart';
 import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';

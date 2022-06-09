@@ -34,12 +34,12 @@ class CodegenLoader extends AssetLoader{
   "BtnSignUp": "Sign Up",
   "verifyTxtMain": "Verification",
   "verifyTxtSecondary": "Verify your register",
-  "verifyTxtReceive": "You will receive a verification code sent \u000b              you at *******",
+  "verifyTxtReceive": "You will receive a verification code sent you at *******",
   "BtnVerify": "Verify",
   "BtnResend": "Resend Code",
   "resetTxtMain": "Reset Password",
   "resetTxtSecondary": "Get new password",
-  "resetTxtThird": "Before you reset your password, you have\u000b to enter the password sent to your Mobile",
+  "resetTxtThird": "Before you reset your password, you have to enter the password sent to your Mobile",
   "TxtFieldNewPassword": "New Password",
   "TxtFieldReEnterPassword": "Re-enter Password",
   "BtnReset": "Reset",
@@ -126,7 +126,12 @@ class CodegenLoader extends AssetLoader{
   "txtNewOldPasswordsNotMatch": "New password can't match old password",
   "txtPasswordsNotMatch": "Passwords Not Match",
   "txtMobileLessNine": "Mobile must be 9 Numbers or more",
-  "txtPasswordValidate": "Password must be 8 digits at least"
+  "txtPasswordValidate": "Password must be 8 digits at least",
+  "txtChangeMobile": "Request to change mobile",
+  "txtChangeEmail": "Change E-mail",
+  "txtChangeEmailSecond": "Change to new Email",
+  "txtChangeEmailThird": "Enter your password to varify your self",
+  "txtCheckCode": "Before you reset your E-mail, you have to enter the code sent to your E-mail"
 };
 static const Map<String,dynamic> ar = {
   "loginTxtMain": "تسجيل الدخول",
@@ -148,7 +153,7 @@ static const Map<String,dynamic> ar = {
   "BtnSignUp": "إنشاء الحساب",
   "verifyTxtMain": "رمز التأكيد",
   "verifyTxtSecondary": "برجاء التأكيد لإنشاء الحساب",
-  "verifyTxtReceive": "سوف يصلك رمز التأكيد على رقم \u000b              *******",
+  "verifyTxtReceive": "سوف يصلك رمز التأكيد على البريد الالكتروني الخاص بك",
   "BtnVerify": "تأكيد",
   "BtnResend": "إعادة ارسال",
   "resetTxtMain": "إعادة تعيين كلمة المرور",
@@ -240,7 +245,12 @@ static const Map<String,dynamic> ar = {
   "txtNewOldPasswordsNotMatch": "لا يمكن استخدام كلمة المرور القديمة",
   "txtPasswordsNotMatch": "كلمة المرور غير متطابقه",
   "txtMobileLessNine": "رقم الجوال يجب ان يكون اكثر من ٨ ارقام",
-  "txtPasswordValidate": "كلمة المرور يجب ان تكون ع الاقل ٨ خانات"
+  "txtPasswordValidate": "كلمة المرور يجب ان تكون ع الاقل ٨ خانات",
+  "txtChangeMobile": "طلب تغيير رقم الجوال",
+  "txtChangeEmail": "تغيير البريد الالكتروني",
+  "txtChangeEmailSecond": "قم الآن بتغيير البريد الالكتروني",
+  "txtChangeEmailThird": "قم بادخال كلمة المرور للتعرف عليك",
+  "txtCheckCode": "قبل التأكيد يجب ان تقوم بإدخال الكود الذي تم ارساله الى البريد الالكتروني الخاص بك"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ar": ar};
 }

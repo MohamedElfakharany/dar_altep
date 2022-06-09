@@ -110,5 +110,10 @@
   "txtNewOldPasswordsNotMatch": "لا يمكن استخدام كلمة المرور القديمة",
   "txtPasswordsNotMatch": "كلمة المرور غير متطابقه",
   "txtMobileLessNine": "رقم الجوال يجب ان يكون اكثر من ٨ ارقام",
-  "txtPasswordValidate": "كلمة المرور يجب ان تكون ع الاقل ٨ خانات"
+  "txtPasswordValidate": "كلمة المرور يجب ان تكون ع الاقل ٨ خانات",
+  "txtChangeMobile": "طلب تغيير رقم الجوال",
+  "txtChangeEmail": "تغيير البريد الالكتروني",
+  "txtChangeEmailSecond": "قم الآن بتغيير البريد الالكتروني",
+  "txtChangeEmailThird": "قم بادخال كلمة المرور للتعرف عليك",
+  "txtCheckCode": "قبل التأكيد يجب ان تقوم بإدخال الكود الذي تم ارساله الى البريد الالكتروني الخاص بك"
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/screens/auth/onboarding/onboarding_screen.dart';
 import 'package:dar_altep/screens/home/home_screen.dart';
@@ -14,40 +16,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (kDebugMode) {
-    print('on background message');
-    print(message.data.toString());
-  }
-  await Firebase.initializeApp();
-
-  showToast(msg: 'on background message', state: ToastState.success);
-}
+// import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
+  await EasyLocalization.ensureInitialized();
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
   deviceToken = await FirebaseMessaging.instance.getToken();
 
   if (kDebugMode) {
     print('deviceToken : $deviceToken ');
   }
-  FirebaseMessaging.onMessage.listen((event) {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     if (kDebugMode) {
-      print('onMessage event.data.toString() ${event.data.toString()}');
+      print('onMessage message.data.toString() ${message.data.toString()}');
     }
-    showToast(msg: 'on Message', state: ToastState.success);
+    // showToast(msg: 'on Message', state: ToastState.success);
+    // RemoteNotification? _notification = message.notification;
+    // AndroidNotification? _android = message.notification?.android;
   });
+
+  void permission() async {
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized ||
+        settings.authorizationStatus == AuthorizationStatus.provisional) {
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true, // headsup notification in IOS
+        badge: true,
+        sound: true,
+      );
+    } else {
+      //close the app
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    }
+  }
 
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (kDebugMode) {
       print(
           'onMessageOpenedApp event.data.toString() ${event.data.toString()}');
     }
-    showToast(msg: 'on Message Opened App', state: ToastState.success);
+    // showToast(msg: 'on Message Opened App', state: ToastState.success);
   });
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -58,7 +80,6 @@ void main() async {
   token = CacheHelper.getData(key: 'token');
 
   Widget widget;
-  // token = token;
   if (kDebugMode) {
     printWrapped('from main the token is $token');
   }
@@ -71,6 +92,10 @@ void main() async {
 
   BlocOverrides.runZoned(
     () {
+      if (Platform.isIOS) {
+        //IOS check permission
+        permission();
+      }
       runApp(
         EasyLocalization(
           path: 'assets/translations',
@@ -88,6 +113,15 @@ void main() async {
     },
     blocObserver: MyBlocObserver(),
   );
+}
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  if (kDebugMode) {
+    print('on background message');
+    print(message.data.toString());
+  }
+  showToast(msg: 'on background message', state: ToastState.success);
 }
 
 class MyApp extends StatelessWidget {

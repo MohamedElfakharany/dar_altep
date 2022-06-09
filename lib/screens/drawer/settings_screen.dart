@@ -3,7 +3,9 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
+import 'package:dar_altep/screens/drawer/change_email/change_email_screen.dart';
 import 'package:dar_altep/screens/drawer/change_password.dart';
+import 'package:dar_altep/screens/home/contact_us_screen.dart';
 import 'package:dar_altep/shared/components/cached_network_image.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
@@ -51,8 +53,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       create: (BuildContext context) => AppCubit()..getProfileData(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
-          if (state is AppEditProfileSuccessState){
-            if (state.userModel.status){
+          if (state is AppEditProfileSuccessState) {
+            if (state.userModel.status) {
               showDialog(
                   context: context,
                   builder: (context) {
@@ -61,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       content: Text(state.userModel.message),
                     );
                   });
-            }else {
+            } else {
               showDialog(
                   context: context,
                   builder: (context) {
@@ -97,8 +99,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 emailController.text = user?.data?.email ?? '';
                 dateOfBirthController.text = user?.data?.birthrate ?? '';
                 mobileController.text = user?.data?.phone ?? '';
-                print('user?.data?.nationality : ${user?.data?.nationality}');
-                print('user?.data?.nationality : ${user?.data?.gender}');
+                if (kDebugMode) {
+                  print('user?.data?.nationality : ${user?.data?.nationality}');
+                  print('user?.data?.nationality : ${user?.data?.gender}');
+                }
                 // nationalValue = user?.data?.nationality;
                 // genderValue = user?.data?.gender;
                 return Container(
@@ -204,23 +208,59 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 suffixPressed: () {},
                                 onTap: () {},
                               ),
+                              // verticalSmallSpace,
+                              // DefaultFormField(
+                              //   controller: emailController,
+                              //   type: TextInputType.emailAddress,
+                              //   validatedText: LocaleKeys.txtFieldEmail.tr(),
+                              //   label: LocaleKeys.txtFieldEmail.tr(),
+                              //   hintText: LocaleKeys.txtFieldEmail.tr(),
+                              //   onTap: () {},
+                              // ),
                               verticalSmallSpace,
                               DefaultFormField(
-                                controller: emailController,
-                                type: TextInputType.emailAddress,
-                                validatedText: LocaleKeys.txtFieldEmail.tr(),
-                                label: LocaleKeys.txtFieldEmail.tr(),
-                                hintText: LocaleKeys.txtFieldEmail.tr(),
-                                onTap: () {},
-                              ),
-                              verticalSmallSpace,
-                              DefaultFormField(
+                                readOnly: true,
                                 controller: mobileController,
                                 type: TextInputType.phone,
                                 validatedText: LocaleKeys.txtFieldMobile.tr(),
                                 label: LocaleKeys.txtFieldMobile.tr(),
                                 hintText: LocaleKeys.txtFieldMobile.tr(),
-                                onTap: () {},
+                                onTap: () {
+                                  showPopUp(
+                                    context,
+                                    Container(
+                                      height: 200,
+                                      width: MediaQuery.of(context).size.width * 0.9,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 10.0),
+                                      child: Column(
+                                        children: [
+                                          verticalSmallSpace,
+                                          Text(
+                                            'Hint....',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: fontFamily,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          verticalMediumSpace,
+                                          const Text('If you want, Please contact Us'),
+                                          verticalMediumSpace,
+                                          GeneralButton(
+                                            radius: radius,
+                                            title: 'Change Phone',
+                                            onPress: () {
+                                              Navigator.pop(context);
+                                              Navigator.push(context, FadeRoute(page: ContactUsScreen(user: user)));
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                  },
                               ),
                               verticalSmallSpace,
                               Container(
@@ -233,8 +273,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       color: Colors.grey.withOpacity(0.2),
                                       spreadRadius: 3,
                                       blurRadius: 10,
-                                      offset: const Offset(0,
-                                          10), // changes position of shadow
+                                      offset: const Offset(
+                                          0, 10), // changes position of shadow
                                     ),
                                   ],
                                 ),
@@ -247,13 +287,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     },
                                     decoration: InputDecoration(
                                       contentPadding:
-                                      const EdgeInsetsDirectional.only(
-                                          start: 20.0, end: 10.0),
+                                          const EdgeInsetsDirectional.only(
+                                              start: 20.0, end: 10.0),
                                       fillColor: Colors.white,
                                       filled: true,
                                       errorStyle: const TextStyle(
                                           color: Color(0xFF4F4F4F)),
-                                      label: Text(LocaleKeys.txtFieldNationality.tr(),),
+                                      label: Text(
+                                        LocaleKeys.txtFieldNationality.tr(),
+                                      ),
                                       border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                           width: 2,
@@ -267,9 +309,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     items: nationalityItems
                                         .map(buildMenuItem)
                                         .toList(),
-                                    onChanged: (value) => setState(
-                                            () => nationalValue = value),
-                                    onSaved: (v){
+                                    onChanged: (value) =>
+                                        setState(() => nationalValue = value),
+                                    onSaved: (v) {
                                       FocusScope.of(context).unfocus();
                                     },
                                   ),
@@ -279,14 +321,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               DefaultFormField(
                                 controller: dateOfBirthController,
                                 type: TextInputType.datetime,
-                                validatedText: LocaleKeys.txtFieldDateOfBirth.tr(),
+                                validatedText:
+                                    LocaleKeys.txtFieldDateOfBirth.tr(),
                                 label: LocaleKeys.txtFieldDateOfBirth.tr(),
                                 onTap: () {
                                   showDatePicker(
                                     context: context,
                                     initialDate: DateTime?.now(),
-                                    firstDate:
-                                    DateTime?.parse('1950-01-01'),
+                                    firstDate: DateTime?.parse('1950-01-01'),
                                     lastDate: DateTime?.now(),
                                   ).then((value) {
                                     dateOfBirthController.text =
@@ -311,8 +353,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       color: Colors.grey.withOpacity(0.2),
                                       spreadRadius: 3,
                                       blurRadius: 10,
-                                      offset: const Offset(0,
-                                          10), // changes position of shadow
+                                      offset: const Offset(
+                                          0, 10), // changes position of shadow
                                     ),
                                   ],
                                 ),
@@ -325,13 +367,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     },
                                     decoration: InputDecoration(
                                       contentPadding:
-                                      const EdgeInsetsDirectional.only(
-                                          start: 20.0, end: 10.0),
+                                          const EdgeInsetsDirectional.only(
+                                              start: 20.0, end: 10.0),
                                       fillColor: Colors.white,
                                       filled: true,
                                       errorStyle: const TextStyle(
                                           color: Color(0xFF4F4F4F)),
-                                      label: Text(LocaleKeys.txtFieldGender.tr(),),
+                                      label: Text(
+                                        LocaleKeys.txtFieldGender.tr(),
+                                      ),
                                       border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                           width: 2,
@@ -342,12 +386,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     value: genderValue,
                                     isExpanded: true,
                                     iconSize: 35,
-                                    items: genderItems
-                                        .map(buildMenuItem)
-                                        .toList(),
-                                    onChanged: (value) => setState(
-                                            () => genderValue = value),
-                                    onSaved: (v){
+                                    items:
+                                        genderItems.map(buildMenuItem).toList(),
+                                    onChanged: (value) =>
+                                        setState(() => genderValue = value),
+                                    onSaved: (v) {
                                       FocusScope.of(context).unfocus();
                                     },
                                   ),
@@ -368,8 +411,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         name: nameController.text,
                                         phone: mobileController.text,
                                         email: emailController.text,
-                                        nationality: nationalValue ?? user?.data?.nationality,
-                                        gender: genderValue ?? user?.data?.gender,
+                                        nationality: nationalValue ??
+                                            user?.data?.nationality,
+                                        gender:
+                                            genderValue ?? user?.data?.gender,
                                         birthdate: dateOfBirthController.text,
                                         image: profileImage == null
                                             ? user?.data?.idImage
@@ -385,8 +430,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               GeneralButton(
                                 title: LocaleKeys.BtnChangePassword.tr(),
                                 onPress: () {
-                                  Navigator.push(
-                                      context, FadeRoute(page: ChangePasswordScreen()));
+                                  Navigator.push(context,
+                                      FadeRoute(page: ChangePasswordScreen()));
+                                },
+                              ),
+                              verticalMediumSpace,
+                              GeneralButton(
+                                title: LocaleKeys.txtChangeEmail.tr(),
+                                onPress: () {
+                                  Navigator.push(context,
+                                      FadeRoute(page: ChangeEmailScreen()));
                                 },
                               ),
                             ],
@@ -407,8 +460,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-    value: item,
-    child: Text(item),
-  );
-
+        value: item,
+        child: Text(item),
+      );
 }

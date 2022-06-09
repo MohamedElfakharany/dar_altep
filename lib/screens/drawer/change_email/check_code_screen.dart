@@ -3,7 +3,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
-import 'package:dar_altep/screens/auth/login_screen.dart';
+import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';
@@ -14,13 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ResetPasswordScreen extends StatelessWidget {
-  ResetPasswordScreen({required this.email, Key? key}) : super(key: key);
+class CheckCodeScreen extends StatelessWidget {
+  CheckCodeScreen({required this.email, Key? key}) : super(key: key);
 
   String email;
   final codeController = TextEditingController();
-  final newPasswordController = TextEditingController();
-  final reEnterNewPasswordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -29,28 +27,41 @@ class ResetPasswordScreen extends StatelessWidget {
       create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
-          if (state is AppResetPasswordSuccessState) {
-            if (state.resetPasswordModel.status) {
-              navigateAndFinish(context, LoginScreen());
+          if (state is AppResetEmailSuccessState) {
+            if (state.resetEmailModel.status) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    // title: Text(LocaleKeys.txtError.tr()),
+                    content: Text('${state.resetEmailModel.message}'),
+                    actions: [
+                      GeneralButton(title: LocaleKeys.BtnDone, onPress: (){
+                        navigateAndFinish(context, const HomeScreen());
+                      }),
+                    ],
+                  );
+                },
+              );
             } else {
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
                     title: Text(LocaleKeys.txtError.tr()),
-                    content: Text('${state.resetPasswordModel.message}'),
+                    content: Text('${state.resetEmailModel.message}'),
                   );
                 },
               );
             }
           }
-          if (state is AppResetPasswordErrorState) {
+          if (state is AppResetEmailErrorState){
             showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
                   title: Text(LocaleKeys.txtError.tr()),
-                  content: Text('${state.error.toString()}'),
+                  content: Text(state.error.toString()),
                 );
               },
             );
@@ -104,7 +115,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          LocaleKeys.resetTxtMain.tr(),
+                          LocaleKeys.txtChangeEmail.tr(),
                           style: TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.bold,
@@ -114,7 +125,7 @@ class ResetPasswordScreen extends StatelessWidget {
                         ),
                         verticalSmallSpace,
                         Text(
-                          LocaleKeys.resetTxtSecondary.tr(),
+                          LocaleKeys.txtChangeEmailSecond.tr(),
                           style: TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.normal,
@@ -144,9 +155,9 @@ class ResetPasswordScreen extends StatelessWidget {
                                     ),
                                     verticalLargeSpace,
                                     Text(
-                                      LocaleKeys.resetTxtThird.tr(),
-                                      maxLines: 2,
+                                      LocaleKeys.txtCheckCode.tr(),
                                       textAlign: TextAlign.center,
+                                      maxLines: 2,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 20,
@@ -162,65 +173,22 @@ class ResetPasswordScreen extends StatelessWidget {
                                           LocaleKeys.txtFieldCodeReset.tr(),
                                       onTap: () {},
                                     ),
-                                    verticalSmallSpace,
-                                    DefaultFormField(
-                                      controller: newPasswordController,
-                                      type: TextInputType.text,
-                                      validatedText:
-                                          LocaleKeys.TxtFieldNewPassword.tr(),
-                                      label:
-                                          LocaleKeys.TxtFieldNewPassword.tr(),
-                                      obscureText: cubit.isPassword,
-                                      suffixIcon: cubit.sufIcon,
-                                      suffixPressed: () {
-                                        cubit.changePasswordVisibility();
-                                      },
-                                      onTap: () {},
-                                    ),
-                                    verticalSmallSpace,
-                                    DefaultFormField(
-                                      controller: reEnterNewPasswordController,
-                                      type: TextInputType.text,
-                                      validatedText: LocaleKeys
-                                          .TxtFieldReEnterPassword.tr(),
-                                      label: LocaleKeys.TxtFieldReEnterPassword
-                                          .tr(),
-                                      obscureText: cubit.isPassword,
-                                      suffixIcon: cubit.sufIcon,
-                                      isConfirm: true,
-                                      confirm: newPasswordController.text,
-                                      suffixPressed: () {
-                                        cubit.changePasswordVisibility();
-                                      },
-                                      onTap: () {},
-                                    ),
                                     verticalMediumSpace,
                                     ConditionalBuilder(
                                       condition: state
-                                          is! AppResetPasswordLoadingState,
-                                      builder: (context) => ConditionalBuilder(
-                                        condition:
-                                            state is! AppLoginLoadingState,
-                                        builder: (context) {
-                                          return GeneralButton(
-                                            title: LocaleKeys.BtnReset.tr(),
-                                            onPress: () {
-                                              if (formKey.currentState!
-                                                  .validate()) {
-                                                AppCubit.get(context)
-                                                    .resetPassword(
-                                                  code: codeController.text,
-                                                  email: email,
-                                                  newPassword:
-                                                      newPasswordController
-                                                          .text,
-                                                );
-                                              }
-                                            },
-                                          );
+                                          is! AppResetEmailLoadingState,
+                                      builder: (context) => GeneralButton(
+                                        title: LocaleKeys.BtnReset.tr(),
+                                        onPress: () {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            AppCubit.get(context)
+                                                .resetEmail(
+                                              code: codeController.text,
+                                              email: email,
+                                            );
+                                          }
                                         },
-                                        fallback: (context) => const Center(
-                                            child: CircularProgressIndicator()),
                                       ),
                                       fallback: (context) => const Center(
                                           child: CircularProgressIndicator()),

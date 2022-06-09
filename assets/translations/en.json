@@ -110,5 +110,10 @@
   "txtNewOldPasswordsNotMatch": "New password can't match old password",
   "txtPasswordsNotMatch": "Passwords Not Match",
   "txtMobileLessNine": "Mobile must be 9 Numbers or more",
-  "txtPasswordValidate": "Password must be 8 digits at least"
+  "txtPasswordValidate": "Password must be 8 digits at least",
+  "txtChangeMobile": "Request to change mobile",
+  "txtChangeEmail": "Change E-mail",
+  "txtChangeEmailSecond": "Change to new Email",
+  "txtChangeEmailThird": "Enter your password to varify your self",
+  "txtCheckCode": "Before you reset your E-mail, you have\\u000b to enter the code sent to your E-mail"
 }

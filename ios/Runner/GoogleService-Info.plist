@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:450437050994:ios:2b4ce23f932df3918e48eb</string>
+	<string>1:450437050994:ios:d85f69e9b0301cbb8e48eb</string>
 	<key>DATABASE_URL</key>
 	<string>https://dar-eltep-default-rtdb.firebaseio.com</string>
 </dict>

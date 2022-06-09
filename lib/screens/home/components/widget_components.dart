@@ -269,7 +269,7 @@ class TestLibraryCard extends StatelessWidget {
               width: 130,
               height: double.infinity,
             ),
-            horizontalSmallSpace,
+            horizontalMiniSpace,
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -528,7 +528,7 @@ class OffersCard extends StatelessWidget {
                     ),
                     Expanded(
                       child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           GeneralUnfilledButton(
                             title: LocaleKeys.BtnMore.tr(),
@@ -710,6 +710,8 @@ class _NotificationCardState extends State<NotificationCard> {
                     ),
                   ),
                 ),
+                Spacer(),
+                Spacer(),
                 Spacer(),
                 Spacer(),
                 Spacer(),

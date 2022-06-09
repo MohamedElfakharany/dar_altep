@@ -3,7 +3,7 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/appointments_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
-import 'package:dar_altep/screens/home/components/widet_components.dart';
+import 'package:dar_altep/screens/home/components/widget_components.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
 import 'package:dar_altep/shared/constants/generalConstants.dart';

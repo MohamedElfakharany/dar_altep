@@ -1,6 +1,7 @@
 import 'package:dar_altep/models/appointments_model.dart';
 import 'package:dar_altep/models/auth/check_code_model.dart';
 import 'package:dar_altep/models/cancel_reservation_model.dart';
+import 'package:dar_altep/models/change_email_model.dart';
 import 'package:dar_altep/models/delete_reservation_model.dart';
 import 'package:dar_altep/models/change_password_model.dart';
 import 'package:dar_altep/models/home_reservation_model.dart';
@@ -45,6 +46,14 @@ class AppChangePasswordSuccessState extends AppStates{
 
 class AppChangePasswordErrorState extends AppStates{}
 
+class AppConfirmPasswordLoadingState extends AppStates{}
+
+class AppConfirmPasswordSuccessState extends AppStates{
+  final ConfirmPasswordModel confirmPasswordModel;
+  AppConfirmPasswordSuccessState(this.confirmPasswordModel);
+}
+
+class AppConfirmPasswordErrorState extends AppStates{}
 
 class AppGetUserResultsLoadingState extends AppStates{}
 
@@ -236,6 +245,18 @@ class AppSendEmailErrorState extends AppStates{
   AppSendEmailErrorState(this.error);
 }
 
+class AppSendNewEmailLoadingState extends AppStates{}
+
+class AppSendNewEmailSuccessState extends AppStates{
+  final SendNewEmailModel sendNewEmailModel;
+  AppSendNewEmailSuccessState(this.sendNewEmailModel);
+}
+
+class AppSendNewEmailErrorState extends AppStates{
+  final String error;
+  AppSendNewEmailErrorState(this.error);
+}
+
 class AppResetPasswordLoadingState extends AppStates{}
 
 class AppResetPasswordSuccessState extends AppStates{
@@ -246,6 +267,18 @@ class AppResetPasswordSuccessState extends AppStates{
 class AppResetPasswordErrorState extends AppStates{
   final String error;
   AppResetPasswordErrorState(this.error);
+}
+
+class AppResetEmailLoadingState extends AppStates{}
+
+class AppResetEmailSuccessState extends AppStates{
+  final ResetEmailModel resetEmailModel;
+  AppResetEmailSuccessState(this.resetEmailModel);
+}
+
+class AppResetEmailErrorState extends AppStates{
+  final String error;
+  AppResetEmailErrorState(this.error);
 }
 
 class AppDeleteReservationsLoadingState extends AppStates{}

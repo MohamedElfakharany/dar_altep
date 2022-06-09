@@ -113,5 +113,10 @@ abstract class  LocaleKeys {
   static const txtPasswordsNotMatch = 'txtPasswordsNotMatch';
   static const txtMobileLessNine = 'txtMobileLessNine';
   static const txtPasswordValidate = 'txtPasswordValidate';
+  static const txtChangeMobile = 'txtChangeMobile';
+  static const txtChangeEmail = 'txtChangeEmail';
+  static const txtChangeEmailSecond = 'txtChangeEmailSecond';
+  static const txtChangeEmailThird = 'txtChangeEmailThird';
+  static const txtCheckCode = 'txtCheckCode';
 
 }

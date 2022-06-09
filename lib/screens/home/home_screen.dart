@@ -3,7 +3,7 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/drawer/drawer_screen.dart';
 import 'package:dar_altep/screens/drawer/my_results_screen.dart';
-import 'package:dar_altep/screens/home/components/widet_components.dart';
+import 'package:dar_altep/screens/home/components/widget_components.dart';
 import 'package:dar_altep/screens/home/contact_us_screen.dart';
 import 'package:dar_altep/screens/home/lab_visit_appointment/lab_visit_appointment_screen.dart';
 import 'package:dar_altep/screens/home/messaging_screen.dart';

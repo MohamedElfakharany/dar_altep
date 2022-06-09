@@ -8,9 +8,15 @@ const updateProfileURL = mainURL+'update_profile';
 
 const changePasswordURL = mainURL+'changePassword';
 
+const confirmPasswordURL = mainURL+'confirm_password';
+
 const sendEmailURL = mainURL+'code_check_email';
 
+const sendNewEmailURL = mainURL+'send_new_email';
+
 const resetPasswordURL = mainURL+'Reset_password';
+
+const resetEmailURL = mainURL+'reset_email';
 
 const homeReservationURL = mainURL+'homeReservation';
 
