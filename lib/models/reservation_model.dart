@@ -30,38 +30,34 @@ class ReservationData {
   ReservationData({
     this.id,
     this.time,
+    this.timing,
     this.date,
     this.appointmentId,
     this.type,
     this.status,
     this.testName,
+    this.technicalId,
   });
 
   dynamic id;
   dynamic time;
+  dynamic timing;
   dynamic date;
   dynamic appointmentId;
   dynamic type;
   dynamic status;
   dynamic testName;
+  dynamic technicalId;
 
   factory ReservationData.fromJson(Map<dynamic, dynamic> json) => ReservationData(
     id: json["id"],
     time: json["time"],
+    timing: json["timing"],
     date: json["date"],
     appointmentId: json["appointment_id"],
     type: json["type"],
     status: json["status"],
     testName: json["test_name"],
+    technicalId: json["technical_id"],
   );
-
-  Map<dynamic, dynamic> toJson() => {
-    "id": id,
-    "time": time,
-    "date": date,
-    "appointment_id": appointmentId,
-    "type": type,
-    "status": status,
-    "test_name": testName,
-  };
 }

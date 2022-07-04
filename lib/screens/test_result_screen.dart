@@ -7,7 +7,7 @@ import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/shared/components/cached_network_image.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:dio/dio.dart';
@@ -72,7 +72,7 @@ class _TestResultScreenState extends State<TestResultScreen> {
                         children: [
                           Text(
                             LocaleKeys.TxtAccurateResults.tr(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                               fontFamily: fontFamily,
@@ -83,7 +83,7 @@ class _TestResultScreenState extends State<TestResultScreen> {
                           verticalMiniSpace,
                           Text(
                             '${widget.testName}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.normal,
                               fontFamily: fontFamily,

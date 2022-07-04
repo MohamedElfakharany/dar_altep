@@ -1,6 +1,6 @@
 import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:flutter/material.dart';
 

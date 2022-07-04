@@ -3,10 +3,9 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
-import 'package:dar_altep/screens/drawer/change_email/send_email_to_change_email_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,11 +13,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChangeEmailScreen extends StatelessWidget {
-  ChangeEmailScreen({Key? key}) : super(key: key);
+class ChangePasswordScreen extends StatelessWidget {
+  ChangePasswordScreen({Key? key}) : super(key: key);
 
-  final passwordController = TextEditingController();
-  final enterPasswordController = TextEditingController();
+  final oldPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final reEnterNewPasswordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -27,20 +27,19 @@ class ChangeEmailScreen extends StatelessWidget {
       create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
-          if (state is AppConfirmPasswordSuccessState) {
-            if (state.confirmPasswordModel.status) {
+          if (state is AppChangePasswordSuccessState) {
+            if (state.changePasswordModel.status) {
               showToast(
-                  msg: state.confirmPasswordModel.message,
+                  msg: state.changePasswordModel.message,
                   state: ToastState.success);
               Navigator.pop(context);
-              Navigator.push(context, FadeRoute(page: SendNewEmailToChangeEmailScreen()));
             } else {
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
                     title: const Text('Error...!'),
-                    content: Text('${state.confirmPasswordModel.message}'),
+                    content: Text('${state.changePasswordModel.message}'),
                   );
                 },
               );
@@ -95,7 +94,7 @@ class ChangeEmailScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          LocaleKeys.txtChangeEmail.tr(),
+                          LocaleKeys.resetTxtMain.tr(),
                           style: TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.bold,
@@ -105,7 +104,7 @@ class ChangeEmailScreen extends StatelessWidget {
                         ),
                         verticalSmallSpace,
                         Text(
-                          LocaleKeys.txtChangeEmailSecond.tr(),
+                          LocaleKeys.resetTxtSecondary.tr(),
                           style: TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.normal,
@@ -135,60 +134,67 @@ class ChangeEmailScreen extends StatelessWidget {
                                       width: 100,
                                     ),
                                     verticalLargeSpace,
-                                    Text(
-                                      LocaleKeys.txtChangeEmailThird.tr(),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 20,
-                                        fontFamily: fontFamily,
-                                      ),
-                                    ),
-                                    verticalLargeSpace,
+                                    // const Text("Before you reset your password, you have to enter the password sent to your Mobile"),
+                                    // verticalLargeSpace,
                                     DefaultFormField(
-                                      controller: passwordController,
+                                      controller: oldPasswordController,
                                       type: TextInputType.text,
-                                      validatedText:
-                                          LocaleKeys.txtFieldPassword.tr(),
-                                      label: LocaleKeys.txtFieldPassword.tr(),
+                                      label: LocaleKeys.TxtFieldOldPassword.tr(),
+                                      validatedText: LocaleKeys.TxtFieldOldPassword.tr(),
                                       obscureText: cubit.isPassword,
                                       suffixIcon: cubit.sufIcon,
                                       suffixPressed: () {
                                         cubit.changePasswordVisibility();
                                       },
-                                      onTap: () {},
+                                      onTap: (){},
                                     ),
                                     verticalSmallSpace,
                                     DefaultFormField(
-                                      controller: enterPasswordController,
+                                      controller: newPasswordController,
                                       type: TextInputType.text,
-                                      validatedText: LocaleKeys
-                                          .TxtFieldReEnterPassword.tr(),
-                                      label: LocaleKeys.TxtFieldReEnterPassword
-                                          .tr(),
+                                      validatedText: LocaleKeys.TxtFieldNewPassword.tr(),
+                                      label: LocaleKeys.TxtFieldNewPassword.tr(),
                                       obscureText: cubit.isPassword,
                                       suffixIcon: cubit.sufIcon,
                                       isConfirm: true,
-                                      confirm: passwordController.text,
+                                      confirm: oldPasswordController.text,
                                       suffixPressed: () {
                                         cubit.changePasswordVisibility();
                                       },
-                                      onTap: () {},
+                                      onTap: (){},
+                                    ),
+                                    verticalSmallSpace,
+                                    DefaultFormField(
+                                      controller: reEnterNewPasswordController,
+                                      type: TextInputType.text,
+                                      validatedText: LocaleKeys.TxtFieldReEnterPassword.tr(),
+                                      label: LocaleKeys.TxtFieldReEnterPassword.tr(),
+                                      obscureText: cubit.isPassword,
+                                      suffixIcon: cubit.sufIcon,
+                                      isConfirm: true,
+                                      confirm: newPasswordController.text,
+                                      suffixPressed: () {
+                                        cubit.changePasswordVisibility();
+                                      },
+                                      onTap: (){},
                                     ),
                                     verticalMediumSpace,
                                     ConditionalBuilder(
                                       condition: state
-                                          is! AppConfirmPasswordLoadingState,
+                                          is! AppChangePasswordLoadingState,
                                       builder: (context) => GeneralButton(
-                                        title: LocaleKeys.BtnContinue.tr(),
+                                        title:  LocaleKeys.BtnReset.tr(),
                                         onPress: () {
                                           if (formKey.currentState!
                                               .validate()) {
                                             AppCubit.get(context)
-                                                .confirmPassword(
-                                                    password: passwordController
-                                                        .text);
+                                                .changePassword(
+                                                    oldPassword:
+                                                        oldPasswordController
+                                                            .text,
+                                                    newPassword:
+                                                        newPasswordController
+                                                            .text);
                                           }
                                         },
                                       ),

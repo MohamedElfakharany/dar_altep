@@ -6,7 +6,7 @@ import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/auth/reset_password.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';

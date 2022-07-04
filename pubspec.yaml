@@ -46,17 +46,33 @@ dependencies:
   flutter_shapes: ^0.3.0
   intl: ^0.17.0
   easy_localization: ^3.0.0
-  image_picker: ^0.8.5+3
+  image_picker: ^0.8.5
   http: any
   path_provider: ^2.0.10
   open_file: ^3.2.1
   image_downloader: ^0.31.0
   permission_handler: ^9.2.0
+  table_calendar: ^3.0.5
+  flutter_screenutil: ^5.5.3+2
+  country_picker: ^2.0.15
+  flutter_rating_bar: ^4.0.1
+  flutter_phone_direct_caller: ^2.1.1
+  searchfield: ^0.6.6
+  flutter_image_compress: ^1.1.0
+  path: ^1.8.2
+
+  #map
+  google_maps_flutter: ^2.1.8
+  location: ^4.4.0
+  geocoding: ^2.0.4
 
   #firebase
   firebase_messaging: ^11.4.1
   cloud_firestore: ^3.1.17
   firebase_core: ^1.17.1
+
+dependency_overrides:
+  image_picker_android: 0.8.4+13
 
 dev_dependencies:
   flutter_test:

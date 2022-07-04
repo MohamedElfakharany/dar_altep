@@ -15,22 +15,24 @@ class NotificationsModel {
 
   dynamic status;
   dynamic message;
-  List<NotificationsData>? data;
+  List<NotificationsDataModel>? data;
 
   factory NotificationsModel.fromJson(Map<dynamic, dynamic> json) => NotificationsModel(
     status: json["status"],
     message: json["message"],
-    data: List<NotificationsData>.from(json["data"].map((x) => NotificationsData.fromJson(x))),
+    data: List<NotificationsDataModel>.from(json["data"].map((x) => NotificationsDataModel.fromJson(x))),
   );
 }
 
-class NotificationsData {
-  NotificationsData({
+class NotificationsDataModel {
+  NotificationsDataModel({
     this.type,
     this.message,
     this.title,
     this.date,
     this.time,
+    this.seen,
+    this.id,
   });
 
   dynamic type;
@@ -38,13 +40,17 @@ class NotificationsData {
   dynamic title;
   dynamic date;
   dynamic time;
+  dynamic seen;
+  dynamic id;
 
-  factory NotificationsData.fromJson(Map<dynamic, dynamic> json) => NotificationsData(
+  factory NotificationsDataModel.fromJson(Map<dynamic, dynamic> json) => NotificationsDataModel(
     type: json["type"],
     message: json["message"],
     title: json["title"],
     date: json["date"],
-    time: json["time "],
+    time: json["time"],
+    seen: json["seen"],
+    id: json["id"],
   );
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -61,6 +67,25 @@ class DeleteNotificationsModel {
   dynamic message;
 
   factory DeleteNotificationsModel.fromJson(Map<dynamic, dynamic> json) => DeleteNotificationsModel(
+    status: json["status"],
+    message: json["message"],
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+
+SeenNotificationsModel seenNotificationsModelFromJson(dynamic str) => SeenNotificationsModel.fromJson(json.decode(str));
+
+class SeenNotificationsModel {
+  SeenNotificationsModel({
+    this.status,
+    this.message,
+  });
+
+  dynamic status;
+  dynamic message;
+
+  factory SeenNotificationsModel.fromJson(Map<dynamic, dynamic> json) => SeenNotificationsModel(
     status: json["status"],
     message: json["message"],
   );

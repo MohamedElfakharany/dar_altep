@@ -29,15 +29,15 @@ class SearchModel {
 class Data {
   Data({
     this.checked,
-    this.dataNew,
+    // this.dataNew,
   });
 
   List<Checked>? checked;
-  List<Checked>? dataNew;
+  // List<Checked>? dataNew;
 
   factory Data.fromJson(Map<dynamic, dynamic> json) => Data(
     checked: List<Checked>.from(json["checked"].map((x) => Checked.fromJson(x))),
-    dataNew: List<Checked>.from(json["new"].map((x) => Checked.fromJson(x))),
+    // dataNew: List<Checked>.from(json["new"].map((x) => Checked.fromJson(x))),
   );
 }
 

@@ -1,57 +1,69 @@
 const mainURL = 'http://darelteb.orcav.com/api/';
 
-const loginURL = mainURL+'login';
+const loginURL = '${mainURL}login';
 
-const registerURL = mainURL+'register';
+const registerURL = '${mainURL}register';
 
-const updateProfileURL = mainURL+'update_profile';
+const updateProfileURL = '${mainURL}update_profile';
 
-const changePasswordURL = mainURL+'changePassword';
+const changePasswordURL = '${mainURL}changePassword';
 
-const confirmPasswordURL = mainURL+'confirm_password';
+const confirmPasswordURL = '${mainURL}confirm_password';
 
-const sendEmailURL = mainURL+'code_check_email';
+const sendEmailURL = '${mainURL}code_check_email';
 
-const sendNewEmailURL = mainURL+'send_new_email';
+const sendNewEmailURL = '${mainURL}send_new_email';
 
-const resetPasswordURL = mainURL+'Reset_password';
+const resetPasswordURL = '${mainURL}Reset_password';
 
-const resetEmailURL = mainURL+'reset_email';
+const resetEmailURL = '${mainURL}reset_email';
 
-const homeReservationURL = mainURL+'homeReservation';
+const homeReservationURL = '${mainURL}homeReservation';
 
-const labReservationUrl = mainURL+'LabReservation';
+const labReservationUrl = '${mainURL}LabReservation';
 
-const getProfileURL = mainURL+'profile';
+const getProfileURL = '${mainURL}profile';
 
-const getAllResultsURL = mainURL+'all_results';
+const getTechnicalProfileURL = '${mainURL}technician';
 
-const getAppointmentsURL = mainURL+'appointments';
+const rateTechnicalProfileURL = '${mainURL}rate_tech';
 
-const contactURL = mainURL+'contact';
+const getAllResultsURL = '${mainURL}all_results';
 
-const getTestNamesURL = mainURL+'get_test';
+const getAppointmentsURL = '${mainURL}appointments';
 
-const verificationURL = mainURL+'code_check';
+const getHomeAppointmentsURL = '${mainURL}home_appointments';
 
-const cancelReservationURL = mainURL+'CancelReservation';
+const contactURL = '${mainURL}contact';
 
-const deleteReservationURL = mainURL+'DeleteReservation';
+const getTestNamesURL = '${mainURL}get_test';
 
-const getOffersURL = mainURL+'UserOffers';
+const verificationURL = '${mainURL}code_check';
 
-const getHomeOfferURL = mainURL+'home_offer';
+const cancelReservationURL = '${mainURL}CancelReservation';
 
-const getLabOfferURL = mainURL+'lap_offer';
+const deleteReservationURL = '${mainURL}DeleteReservation';
 
-const userReservationUrl = mainURL+'UserReservation';
+const getOffersURL = '${mainURL}UserOffers';
 
-const getTestsURL = mainURL+'test';
+const getHomeOfferURL = '${mainURL}home_offer';
 
-const getTestResultURL = mainURL+'ReservationResult';
+const getLabOfferURL = '${mainURL}lap_offer';
 
-const getOffersDetailsURL = mainURL+'OfferDetails';
+const userReservationUrl = '${mainURL}UserReservation';
 
-const userNotificationsURL = mainURL+'UserNotifications';
+const getTestsURL = '${mainURL}test';
 
-const deleteNotificationURL = mainURL+'DeleteNotification';
+const countriesURL = '${mainURL}countries';
+
+const getTestResultURL = '${mainURL}ReservationResult';
+
+const getOffersDetailsURL = '${mainURL}OfferDetails';
+
+const userNotificationsURL = '${mainURL}UserNotifications';
+
+const deleteNotificationURL = '${mainURL}DeleteNotification';
+
+const deleteOneNotificationURL = '${mainURL}delete_one_notification';
+
+const notificationSeenURL = '${mainURL}notification_seen';

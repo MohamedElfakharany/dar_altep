@@ -1,15 +1,16 @@
 // ignore_for_file: must_be_immutable, body_might_complete_normally_nullable
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
-import 'package:dar_altep/screens/drawer/change_email/change_email_screen.dart';
-import 'package:dar_altep/screens/drawer/change_password.dart';
+import 'package:dar_altep/screens/drawer/settings_screens/change_email/change_email_screen.dart';
+import 'package:dar_altep/screens/drawer/settings_screens/change_password.dart';
 import 'package:dar_altep/screens/home/contact_us_screen.dart';
 import 'package:dar_altep/shared/components/cached_network_image.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -41,7 +42,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   var formKey = GlobalKey<FormState>();
 
-  final nationalityItems = ['Saudi Arabia', 'U A E', 'Qatar', 'Egyptian'];
   String? nationalValue;
 
   final genderItems = ['Male', 'Female'];
@@ -50,7 +50,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getProfileData(),
+      create: (BuildContext context) => AppCubit()
+        ..getProfileData()
+        ..getCountriesData(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
           if (state is AppEditProfileSuccessState) {
@@ -79,7 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Error...!'),
+                    title: Text(LocaleKeys.txtError.tr()),
                     content: Text(state.error),
                   );
                 });
@@ -93,16 +95,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: LocaleKeys.drawerSettings.tr(),
             ),
             body: ConditionalBuilder(
-              condition: state is! AppGetProfileLoadingState,
+              condition: state is! AppGetProfileLoadingState ||
+                  state is! AppGetCountriesLoadingState,
               builder: (context) {
                 nameController.text = user?.data?.name ?? '';
                 emailController.text = user?.data?.email ?? '';
                 dateOfBirthController.text = user?.data?.birthrate ?? '';
                 mobileController.text = user?.data?.phone ?? '';
-                if (kDebugMode) {
-                  print('user?.data?.nationality : ${user?.data?.nationality}');
-                  print('user?.data?.nationality : ${user?.data?.gender}');
-                }
+                // if (kDebugMode) {
+                //   print('user?.data?.nationality : ${user?.data?.nationality}');
+                //   print('user?.data?.nationality : ${user?.data?.gender}');
+                // }
                 // nationalValue = user?.data?.nationality;
                 // genderValue = user?.data?.gender;
                 return Container(
@@ -177,7 +180,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 children: [
                                   Text(
                                     user?.data?.name ?? '',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontFamily: fontFamily,
                                       fontWeight: FontWeight.bold,
@@ -188,7 +191,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   verticalMiniSpace,
                                   Text(
                                     user?.data?.email ?? '',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontFamily: fontFamily,
                                       fontWeight: FontWeight.normal,
@@ -230,13 +233,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     context,
                                     Container(
                                       height: 200,
-                                      width: MediaQuery.of(context).size.width * 0.9,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0, horizontal: 10.0),
                                       child: Column(
                                         children: [
                                           verticalSmallSpace,
-                                          Text(
+                                          const Text(
                                             'Hint....',
                                             style: TextStyle(
                                               fontSize: 20,
@@ -246,76 +250,154 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           verticalMediumSpace,
-                                          const Text('If you want, Please contact Us'),
+                                          const Text(
+                                              'If you want, Please contact Us'),
                                           verticalMediumSpace,
                                           GeneralButton(
                                             radius: radius,
                                             title: 'Change Phone',
                                             onPress: () {
                                               Navigator.pop(context);
-                                              Navigator.push(context, FadeRoute(page: ContactUsScreen(user: user)));
+                                              Navigator.push(
+                                                  context,
+                                                  FadeRoute(
+                                                      page: ContactUsScreen(
+                                                          user: user)));
                                             },
                                           ),
                                         ],
                                       ),
                                     ),
                                   );
-                                  },
+                                },
                               ),
                               verticalSmallSpace,
-                              Container(
-                                height: 60.0,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.2),
-                                      spreadRadius: 3,
-                                      blurRadius: 10,
-                                      offset: const Offset(
-                                          0, 10), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButtonFormField<String>(
-                                    validator: (String? value) {
-                                      if (value == null) {
-                                        return 'Select Nationality';
-                                      }
+                              // Container(
+                              //   height: 60.0,
+                              //   padding: const EdgeInsets.symmetric(
+                              //       horizontal: 20.0),
+                              //   decoration: BoxDecoration(
+                              //     boxShadow: [
+                              //       BoxShadow(
+                              //         color: Colors.grey.withOpacity(0.2),
+                              //         spreadRadius: 3,
+                              //         blurRadius: 10,
+                              //         offset: const Offset(
+                              //             0, 10), // changes position of shadow
+                              //       ),
+                              //     ],
+                              //   ),
+                              //   child: DropdownButtonHideUnderline(
+                              //     child: DropdownButtonFormField<String>(
+                              //       validator: (String? value) {
+                              //         if (value == null) {
+                              //           return 'Select Nationality';
+                              //         }
+                              //       },
+                              //       decoration: InputDecoration(
+                              //         contentPadding:
+                              //             const EdgeInsetsDirectional.only(
+                              //                 start: 20.0, end: 10.0),
+                              //         fillColor: Colors.white,
+                              //         filled: true,
+                              //         errorStyle: const TextStyle(
+                              //             color: Color(0xFF4F4F4F)),
+                              //         label: Text(
+                              //           LocaleKeys.txtFieldNationality.tr(),
+                              //         ),
+                              //         border: const OutlineInputBorder(
+                              //           borderSide: BorderSide(
+                              //             width: 2,
+                              //             color: blueDark,
+                              //           ),
+                              //         ),
+                              //       ),
+                              //       value: nationalValue,
+                              //       isExpanded: true,
+                              //       iconSize: 35,
+                              //       items: nationalityItems
+                              //           .map(buildMenuItem)
+                              //           .toList(),
+                              //       onChanged: (value) =>
+                              //           setState(() => nationalValue = value),
+                              //       onSaved: (v) {
+                              //         FocusScope.of(context).unfocus();
+                              //       },
+                              //     ),
+                              //   ),
+                              // ),
+                              // Container(
+                              //   height: 60.0,
+                              //   padding: const EdgeInsets.symmetric(
+                              //       horizontal: 20.0),
+                              //   decoration: BoxDecoration(
+                              //     boxShadow: [
+                              //       BoxShadow(
+                              //         color: Colors.grey.withOpacity(0.2),
+                              //         spreadRadius: 3,
+                              //         blurRadius: 10,
+                              //         offset: const Offset(0,
+                              //             10), // changes position of shadow
+                              //       ),
+                              //     ],
+                              //   ),
+                              //   child: DropdownButtonHideUnderline(
+                              //     child: DropdownButtonFormField<String>(
+                              //       validator: (String? value) {
+                              //         if (value == null) {
+                              //           return LocaleKeys
+                              //               .txtFieldNationality
+                              //               .tr();
+                              //         }
+                              //       },
+                              //       decoration: InputDecoration(
+                              //         contentPadding:
+                              //         const EdgeInsetsDirectional.only(
+                              //             start: 20.0, end: 10.0),
+                              //         fillColor: Colors.white,
+                              //         filled: true,
+                              //         errorStyle: const TextStyle(
+                              //             color: Color(0xFF4F4F4F)),
+                              //         label: Text(LocaleKeys
+                              //             .txtFieldNationality
+                              //             .tr()),
+                              //         border: const OutlineInputBorder(
+                              //           borderSide: BorderSide(
+                              //             width: 2,
+                              //             color: blueDark,
+                              //           ),
+                              //         ),
+                              //       ),
+                              //       value: nationalValue,
+                              //       isExpanded: true,
+                              //       iconSize: 35,
+                              //       items: AppCubit.get(context).countriesName
+                              //           .map(buildMenuItem)
+                              //           .toList(),
+                              //       onChanged: (value) => setState(
+                              //               () => nationalValue = value),
+                              //       onTap: (){},
+                              //       // onSaved: (v) {
+                              //       //   FocusScope.of(context).unfocus();
+                              //       // },
+                              //     ),
+                              //   ),
+                              // ),
+                              DefaultFormField(
+                                controller: nationalityController,
+                                type: TextInputType.none,
+                                validatedText:
+                                    LocaleKeys.txtFieldNationality.tr(),
+                                label: LocaleKeys.txtFieldNationality.tr(),
+                                onTap: () {
+                                  showCountryPicker(
+                                    context: context,
+                                    onSelect: (Country country){
+                                      nationalityController.text = country.displayNameNoCountryCode;
+                                      nationalValue = country.name;
                                     },
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.only(
-                                              start: 20.0, end: 10.0),
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      errorStyle: const TextStyle(
-                                          color: Color(0xFF4F4F4F)),
-                                      label: Text(
-                                        LocaleKeys.txtFieldNationality.tr(),
-                                      ),
-                                      border: const OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 2,
-                                          color: blueDark,
-                                        ),
-                                      ),
-                                    ),
-                                    value: nationalValue,
-                                    isExpanded: true,
-                                    iconSize: 35,
-                                    items: nationalityItems
-                                        .map(buildMenuItem)
-                                        .toList(),
-                                    onChanged: (value) =>
-                                        setState(() => nationalValue = value),
-                                    onSaved: (v) {
-                                      FocusScope.of(context).unfocus();
-                                    },
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                               verticalSmallSpace,
                               DefaultFormField(

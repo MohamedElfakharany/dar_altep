@@ -34,12 +34,20 @@ void main() async {
       print('onMessage message.data.toString() ${message.data.toString()}');
     }
     // showToast(msg: 'on Message', state: ToastState.success);
-    // RemoteNotification? _notification = message.notification;
-    // AndroidNotification? _android = message.notification?.android;
+    // RemoteNotification? notification = message.notification;
+    // AndroidNotification? android = message.notification?.android;
+
+    if (message.data['message'] == 'ReservationScreen') {
+      if (kDebugMode) {
+        print('message Reservation Screen');
+      }
+    }
   });
 
   void permission() async {
-    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -68,6 +76,11 @@ void main() async {
     if (kDebugMode) {
       print(
           'onMessageOpenedApp event.data.toString() ${event.data.toString()}');
+    }
+    if (event.data['message'] == 'ReservationScreen') {
+      if (kDebugMode) {
+        print('message Reservation Screen');
+      }
     }
     // showToast(msg: 'on Message Opened App', state: ToastState.success);
   });
@@ -121,7 +134,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('on background message');
     print(message.data.toString());
   }
-  showToast(msg: 'on background message', state: ToastState.success);
+  // showToast(msg: 'on background message', state: ToastState.success);
 }
 
 class MyApp extends StatelessWidget {
@@ -149,10 +162,10 @@ class MyApp extends StatelessWidget {
         ..getProfileData()
         ..getReservationsData()
         ..getTestNameData()
-        ..getAppointmentsData()
         ..getHomeOffersData()
         ..getLabOffersData()
-        ..getNotifications(),
+        ..getNotifications()
+        ..getCountriesData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

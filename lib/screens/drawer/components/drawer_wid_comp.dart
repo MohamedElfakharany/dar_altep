@@ -3,10 +3,12 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/reservation_model.dart';
 import 'package:dar_altep/models/search_model.dart';
+import 'package:dar_altep/screens/drawer/rating_screens/rate_technicen__screen.dart';
+import 'package:dar_altep/screens/drawer/rating_screens/view_technician_profile_screen.dart';
 import 'package:dar_altep/screens/test_result_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -77,20 +79,15 @@ class ResevationsCard extends StatelessWidget {
                     children: [
                       Text(
                         '${reservationsModel?.data?[index].testName}',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: fontFamily,
-                          fontWeight: FontWeight.bold,
-                          color: darkColor,
-                        ),
+                        style: titleStyle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       horizontalMicroSpace,
                       if (reservationsModel?.data?[index].status == 'away')
                         Text(
-                          '(Away)',
-                          style: TextStyle(
+                          LocaleKeys.txtAway.tr(),
+                          style: const TextStyle(
                             fontSize: 20,
                             fontFamily: fontFamily,
                             fontWeight: FontWeight.normal,
@@ -99,9 +96,8 @@ class ResevationsCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      if (reservationsModel?.data?[index].status ==
-                          'finished')
-                        Text(
+                      if (reservationsModel?.data?[index].status == 'finished')
+                        const Text(
                           '(Finished)',
                           style: TextStyle(
                             fontSize: 20,
@@ -113,7 +109,7 @@ class ResevationsCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       if (reservationsModel?.data?[index].status == 'cancel')
-                        Text(
+                        const Text(
                           '(Cancelled)',
                           style: TextStyle(
                             fontSize: 20,
@@ -135,7 +131,7 @@ class ResevationsCard extends StatelessWidget {
                         '${reservationsModel?.data?[index].date}, ',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontFamily: fontFamily,
                           fontWeight: FontWeight.bold,
@@ -143,17 +139,30 @@ class ResevationsCard extends StatelessWidget {
                         ),
                       ),
                       horizontalMicroSpace,
-                      Text(
-                        '${reservationsModel?.data?[index].time}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: fontFamily,
+                      if (reservationsModel?.data?[index].type == 'home')
+                        Text(
+                          '${reservationsModel?.data?[index].timing}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: fontFamily,
+                          ),
                         ),
-                      ),
+                      if (reservationsModel?.data?[index].type == 'lab')
+                        Text(
+                          '${reservationsModel?.data?[index].time}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: fontFamily,
+                          ),
+                        ),
                     ],
                   ),
                   verticalMicroSpace,
@@ -175,22 +184,22 @@ class ResevationsCard extends StatelessWidget {
                         ),
                       horizontalMiniSpace,
                       if (reservationsModel?.data?[index].type == 'home')
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'At home',
+                            LocaleKeys.BtnAtHome.tr(),
                             textAlign: TextAlign.start,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               color: darkColor,
                             ),
                           ),
                         ),
                       if (reservationsModel?.data?[index].type == 'lab')
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'At Laboratory',
+                            LocaleKeys.BtnAtLab.tr(),
                             textAlign: TextAlign.start,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               color: darkColor,
                             ),
@@ -208,8 +217,7 @@ class ResevationsCard extends StatelessWidget {
                               context,
                               Container(
                                 height: 200,
-                                width:
-                                    MediaQuery.of(context).size.width * 0.9,
+                                width: MediaQuery.of(context).size.width * 0.9,
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 10.0),
                                 child: Column(
@@ -217,7 +225,7 @@ class ResevationsCard extends StatelessWidget {
                                     verticalSmallSpace,
                                     Text(
                                       LocaleKeys.TxtdeleteMain.tr(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 20,
                                         fontFamily: fontFamily,
                                         fontWeight: FontWeight.bold,
@@ -247,9 +255,44 @@ class ResevationsCard extends StatelessWidget {
                             );
                           },
                         ),
+                      if (reservationsModel?.data?[index].status == 'accepted')
+                        GeneralUnfilledButton(
+                          title: LocaleKeys.BtnContact.tr(),
+                          height: 35,
+                          width: 60,
+                          btnRadius: 8,
+                          color: greenTxtColor,
+                          borderColor: greenTxtColor,
+                          onPress: () {
+                            showCustomBottomSheet(context,
+                                bottomSheetContent: ViewTechnicianProfileScreen(
+                                  technicalId: reservationsModel
+                                      ?.data?[index].technicalId,
+                                ),
+                                bottomSheetHeight: 0.6);
+                          },
+                        ),
                       if (reservationsModel?.data?[index].status ==
-                          'finished')
-
+                          'sample_drawn')
+                        GeneralUnfilledButton(
+                          title: LocaleKeys.BtnRate.tr(),
+                          height: 35,
+                          width: 60,
+                          btnRadius: 8,
+                          color: greenTxtColor,
+                          borderColor: greenTxtColor,
+                          onPress: () {
+                            showCustomBottomSheet(context,
+                                bottomSheetContent: RateTechnicanScreen(
+                                  technicalId: reservationsModel
+                                      ?.data?[index].technicalId,
+                                  reservationId:
+                                      '${reservationsModel?.data?[index].id}',
+                                ),
+                                bottomSheetHeight: 0.9);
+                          },
+                        ),
+                      if (reservationsModel?.data?[index].status == 'finished')
                         ConditionalBuilder(
                           condition: state is! AppGetUserResultsLoadingState,
                           builder: (context) => GeneralButton(
@@ -263,13 +306,14 @@ class ResevationsCard extends StatelessWidget {
                                 print('result');
                               }
                               AppCubit.get(context).getTestResultData(
-                                  reservationId: reservationsModel?.data?[index].id);
+                                  reservationId:
+                                      reservationsModel?.data?[index].id);
                             },
                           ),
-                          fallback: (context) => const Center(child: CircularProgressIndicator()),
+                          fallback: (context) =>
+                              const Center(child: CircularProgressIndicator()),
                         ),
-                      if (reservationsModel?.data?[index].status == 'away' ||
-                          reservationsModel?.data?[index].status == 'lab')
+                      if (reservationsModel?.data?[index].status == 'away')
                         GeneralUnfilledButton(
                           title: LocaleKeys.BtnCancel.tr(),
                           height: 35,
@@ -281,8 +325,7 @@ class ResevationsCard extends StatelessWidget {
                               context,
                               Container(
                                 height: 200,
-                                width:
-                                    MediaQuery.of(context).size.width * 0.9,
+                                width: MediaQuery.of(context).size.width * 0.9,
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 10.0),
                                 child: Column(
@@ -291,7 +334,7 @@ class ResevationsCard extends StatelessWidget {
                                     Text(
                                       LocaleKeys.TxtCancelMain.tr(),
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 20,
                                         fontFamily: fontFamily,
                                         fontWeight: FontWeight.bold,
@@ -332,7 +375,7 @@ class ResevationsCard extends StatelessWidget {
   }
 }
 
-class MyResultsCard extends StatelessWidget {
+class MyResultsCard extends StatefulWidget {
   const MyResultsCard(
       {Key? key, this.checkedData, required this.context, required this.index})
       : super(key: key);
@@ -341,12 +384,38 @@ class MyResultsCard extends StatelessWidget {
   final int index;
 
   @override
+  State<MyResultsCard> createState() => _MyResultsCardState();
+}
+
+class _MyResultsCardState extends State<MyResultsCard> {
+  @override
   Widget build(BuildContext context) {
+    Color containerColor = whiteColor;
+    setState(() {
+      if (widget.index == 0) {
+        containerColor = blueLight.withOpacity(0.15);
+      } else {
+        containerColor = whiteColor;
+      }
+    });
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Container(
           height: 70,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 4,
+                blurRadius: 6,
+                offset: const Offset(0, 3), // changes position of shadow
+              ),
+            ],
+            border: Border.all(color: whiteColor),
+            color: containerColor,
+            borderRadius: BorderRadius.circular(15),
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -356,20 +425,20 @@ class MyResultsCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    checkedData?.name ?? '',
+                    widget.checkedData?.name ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: fontFamily,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   // verticalMicroSpace,
                   Text(
-                    '${checkedData?.date}, ${checkedData?.time}',
+                    '${widget.checkedData?.date}, ${widget.checkedData?.time}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: fontFamily,
                       fontWeight: FontWeight.normal,
                     ),

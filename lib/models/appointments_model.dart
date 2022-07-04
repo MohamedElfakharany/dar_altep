@@ -37,21 +37,24 @@ class Datum {
     this.id,
     this.day,
     this.date,
-    this.time,
+    this.start_time,
+    this.end_time,
     this.status,
   });
 
   dynamic id;
   dynamic day;
   dynamic date;
-  dynamic time;
+  dynamic start_time;
+  dynamic end_time;
   dynamic status;
 
   factory Datum.fromJson(Map<dynamic, dynamic> json) => Datum(
     id: json["id"],
     day: json["day"],
     date: json["date"],
-    time: json["time"],
+    start_time: json["start_time"],
+    end_time: json["end_time"],
     status: json["status"],
   );
 

@@ -6,10 +6,11 @@ import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/auth/login_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,11 @@ class ResetPasswordScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is AppResetPasswordSuccessState) {
             if (state.resetPasswordModel.status) {
+              showToast(msg: state.resetPasswordModel.message, state: ToastState.success);
               navigateAndFinish(context, LoginScreen());
+              if (kDebugMode) {
+                print('true state : ${state.resetPasswordModel.message}');
+              }
             } else {
               showDialog(
                 context: context,
@@ -42,6 +47,9 @@ class ResetPasswordScreen extends StatelessWidget {
                   );
                 },
               );
+              if (kDebugMode) {
+                print('false state : ${state.resetPasswordModel.message}');
+              }
             }
           }
           if (state is AppResetPasswordErrorState) {
@@ -185,12 +193,12 @@ class ResetPasswordScreen extends StatelessWidget {
                                           .TxtFieldReEnterPassword.tr(),
                                       label: LocaleKeys.TxtFieldReEnterPassword
                                           .tr(),
-                                      obscureText: cubit.isPassword,
-                                      suffixIcon: cubit.sufIcon,
+                                      obscureText: cubit.resetIsPassword,
+                                      suffixIcon: cubit.resetSufIcon,
                                       isConfirm: true,
                                       confirm: newPasswordController.text,
                                       suffixPressed: () {
-                                        cubit.changePasswordVisibility();
+                                        cubit.resetChangePasswordVisibility();
                                       },
                                       onTap: () {},
                                     ),
@@ -200,7 +208,7 @@ class ResetPasswordScreen extends StatelessWidget {
                                           is! AppResetPasswordLoadingState,
                                       builder: (context) => ConditionalBuilder(
                                         condition:
-                                            state is! AppLoginLoadingState,
+                                            state is! AppResetPasswordLoadingState,
                                         builder: (context) {
                                           return GeneralButton(
                                             title: LocaleKeys.BtnReset.tr(),

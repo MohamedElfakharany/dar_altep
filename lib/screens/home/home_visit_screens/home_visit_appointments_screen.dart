@@ -10,38 +10,47 @@ import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LabVisitAppointmentScreen extends StatefulWidget {
-  LabVisitAppointmentScreen(
-      {Key? key, this.user, this.testNames, this.appointments, this.testName})
-      : super(key: key);
+class HomeVisitAppointmentScreen extends StatefulWidget {
+  const HomeVisitAppointmentScreen({
+    Key? key,
+    this.user,
+    this.testName,
+    this.testNames,
+    required this.address,
+    required this.lat,
+    required this.long,
+  }) : super(key: key);
   final UserModel? user;
+  final String? testName;
   final List<String>? testNames;
-  String? testName;
-  final AppointmentsModel? appointments;
+  final String address;
+  final double lat;
+  final double long;
 
   @override
-  State<LabVisitAppointmentScreen> createState() => _LabVisitAppointmentScreenState();
+  State<HomeVisitAppointmentScreen> createState() =>
+      _HomeVisitAppointmentScreenState();
 }
 
-class _LabVisitAppointmentScreenState extends State<LabVisitAppointmentScreen> {
+class _HomeVisitAppointmentScreenState
+    extends State<HomeVisitAppointmentScreen> {
   @override
   Widget build(BuildContext context) {
+    final DateTime today = DateTime.now();
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getLabAppointmentsData(),
+      create: (BuildContext context) =>
+          AppCubit()..getHomeAppointmentsData(date: today.toString()),
       child: Scaffold(
         appBar: GeneralAppBar(title: LocaleKeys.AppointmentScreenTxtTitle.tr()),
         body: BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) => {},
           builder: (context, state) {
-            if (kDebugMode) {
-              print('widget.testName from lab appointment ${widget.testName}');
-            }
-            return ScreenUtilInit(builder: (ctx,_){
+            print('widget.testName from home appointments ${widget.testName}');
+            return ScreenUtilInit(builder: (ctx, _) {
               return Container(
                 padding: const EdgeInsetsDirectional.only(
                     start: 10.0, top: 12.0, bottom: 12.0, end: 10.0),
@@ -75,11 +84,12 @@ class _LabVisitAppointmentScreenState extends State<LabVisitAppointmentScreen> {
                           ),
                         ),
                         verticalSmallSpace,
-                        const CalenderView(),
+                        const HomeCalenderView(),
                         verticalSmallSpace,
                         ConditionalBuilder(
                           condition:
-                          AppCubit.get(context).appointmentsModel != null,
+                              AppCubit.get(context).homeAppointmentsModel !=
+                                  null,
                           builder: (context) => Container(
                             decoration: BoxDecoration(
                               boxShadow: [
@@ -95,29 +105,38 @@ class _LabVisitAppointmentScreenState extends State<LabVisitAppointmentScreen> {
                             height: MediaQuery.of(context).size.height * 0.65,
                             child: ConditionalBuilder(
                               condition:
-                              AppCubit.get(context).appointmentsModel != null,
+                                  AppCubit.get(context).homeAppointmentsModel !=
+                                      null,
                               builder: (context) => ListView.separated(
                                 physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) => AppointmentCard(
-                                    user: widget.user,
-                                    testNames: widget.testNames,
-                                    index: index,
-                                    testName: widget.testName,
-                                    context: context,
-                                    appointments: AppCubit.get(context).appointmentsModel),
+                                itemBuilder: (context, index) =>
+                                    HomeAppointmentCard(
+                                  user: widget.user,
+                                  testName: widget.testName,
+                                  testNames: widget.testNames,
+                                  index: index,
+                                  context: context,
+                                  homeAppointments: AppCubit.get(context)
+                                      .homeAppointmentsModel,
+                                  address: widget.address,
+                                  lat: widget.lat,
+                                  long: widget.long,
+                                ),
                                 separatorBuilder: (context, index) => Container(
                                   // color: Colors.grey,
                                   height: 10,
                                 ),
-                                itemCount: AppCubit.get(context).appointmentsModel!
+                                itemCount: AppCubit.get(context)
+                                    .homeAppointmentsModel!
                                     .data!
                                     .length,
                               ),
-                              fallback: (context) =>
-                              const Center(child: CircularProgressIndicator()),
+                              fallback: (context) => const Center(
+                                  child: CircularProgressIndicator()),
                             ),
                           ),
-                          fallback: (context) => ScreenHolder(LocaleKeys.AppointmentScreenTxtTitle.tr()),
+                          fallback: (context) => ScreenHolder(
+                              LocaleKeys.AppointmentScreenTxtTitle.tr()),
                         ),
                       ],
                     ),

@@ -1,13 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/screens/home/components/widget_components.dart';
-import 'package:dar_altep/shared/components/cached_network_image.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
-import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -58,85 +58,99 @@ class _OffersScreenState extends State<OffersScreen> {
                       bottom: TabBar(
                         tabs: [
                           Tab(
-                            child: Container(
-                              height: 60,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: blueLight, width: 2),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.15),
-                                    spreadRadius: 2,
-                                    blurRadius: 2,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                                color: whiteColor,
-                              ),
-                              child: Row(
-                                children: [
-                                  horizontalMiniSpace,
-                                  Image.asset(
-                                    'assets/images/offersLabIcon.png',
-                                    fit: BoxFit.cover,
-                                    height: 30,
-                                    width: 30,
-                                  ),
-                                  horizontalSmallSpace,
-                                  Expanded(
-                                    child: Text(
-                                      LocaleKeys.BtnAtLab.tr(),
-                                      textAlign: TextAlign.start,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: darkColor,
-                                      ),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 60,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(color: blueLight, width: 2),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.15),
+                                          spreadRadius: 2,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                      color: whiteColor,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        horizontalMiniSpace,
+                                        Image.asset(
+                                          'assets/images/offersLabIcon.png',
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                        horizontalSmallSpace,
+                                        Expanded(
+                                          child: Text(
+                                            LocaleKeys.BtnAtLab.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: darkColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                verticalMicroSpace,
+                              ],
                             ),
                           ),
                           Tab(
-                            child: Container(
-                              height: 60,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: blueLight, width: 2),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.15),
-                                    spreadRadius: 2,
-                                    blurRadius: 2,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                                color: whiteColor,
-                              ),
-                              child: Row(
-                                children: [
-                                  horizontalMiniSpace,
-                                  Image.asset(
-                                    'assets/images/offersHomeIcon.png',
-                                    fit: BoxFit.cover,
-                                    height: 30,
-                                    width: 30,
-                                  ),
-                                  horizontalSmallSpace,
-                                  Expanded(
-                                    child: Text(
-                                      LocaleKeys.BtnAtHome.tr(),
-                                      textAlign: TextAlign.start,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: darkColor,
-                                      ),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 60,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(color: blueLight, width: 2),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.15),
+                                          spreadRadius: 2,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                      color: whiteColor,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        horizontalMiniSpace,
+                                        Image.asset(
+                                          'assets/images/offersHomeIcon.png',
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                        horizontalSmallSpace,
+                                        Expanded(
+                                          child: Text(
+                                            LocaleKeys.BtnAtHome.tr(),
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: darkColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                verticalMicroSpace,
+                              ],
                             ),
                           ),
                         ],
@@ -169,7 +183,7 @@ class _OffersScreenState extends State<OffersScreen> {
                             ),
                           ],
                         ),
-                        // second tab bar viiew widget
+                        // second tab bar view widget
                         Column(
                           children: [
                             verticalSmallSpace,

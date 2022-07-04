@@ -8,7 +8,7 @@ import 'package:dar_altep/models/auth/user_model.dart';
 import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,18 +17,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LabVisitSubmitScreen extends StatefulWidget {
-  const LabVisitSubmitScreen(
+  LabVisitSubmitScreen(
       {Key? key,
       required this.appointmentId,
       required this.appointments,
       required this.index,
       this.testNames,
-      this.user})
+      this.user, this.testName})
       : super(key: key);
   final int appointmentId;
   final AppointmentsModel appointments;
   final int index;
   final List<String>? testNames;
+  String? testName;
   final UserModel? user;
 
   @override
@@ -41,6 +42,8 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
   final mobileController = TextEditingController();
 
   final dateController = TextEditingController();
+
+  final testNameController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
 
@@ -93,7 +96,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                           verticalMediumSpace,
                           Text(
                             LocaleKeys.txtThank.tr(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontFamily: fontFamily,
                               fontWeight: FontWeight.bold,
@@ -103,9 +106,9 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                           ),
                           verticalMediumSpace,
                           Text(
-                            LocaleKeys.txtThankSecond.tr(),
+                            LocaleKeys.txtLabReservationSucceeded.tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontFamily: fontFamily,
                               fontWeight: FontWeight.normal,
@@ -137,8 +140,12 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
         builder: (context, state) {
           nameController.text = widget.user?.data?.name;
           mobileController.text = widget.user?.data?.phone;
-          dateController.text = widget.appointments.data?[widget.index].date;
+          dateController.text = '${widget.appointments.data?[widget.index].date} ${widget.appointments.data?[widget.index].day} from: ${widget.appointments.data?[widget.index].start_time} to: ${widget.appointments.data?[widget.index].end_time}';
+          testNameController.text = widget.testName ?? '';
           var uploadImage = AppCubit.get(context).labVisitImage;
+          if (kDebugMode) {
+            print('widget.testName from submit ${widget.testName}');
+          }
           return Scaffold(
             // extendBodyBehindAppBar: true,
             appBar: GeneralAppBar(
@@ -172,9 +179,9 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                         children: [
                           Center(
                             child: Text(
-                              'Enter patient data and we will contact you to reserve',
+                              LocaleKeys.txtHomeMain.tr(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: fontFamily,
@@ -191,6 +198,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                             hintText: LocaleKeys.TxtFieldMessage.tr(),
                             contentPadding: const EdgeInsetsDirectional.only(
                                 top: 10.0, start: 20.0, bottom: 10.0),
+                            onTap: (){},
                           ),
                           verticalSmallSpace,
                           DefaultFormField(
@@ -200,9 +208,12 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                             validatedText: LocaleKeys.txtFieldMobile.tr(),
                             hintText: LocaleKeys.txtFieldMobile.tr(),
                             suffixPressed: () {},
+                            onTap: (){},
                           ),
-                          verticalSmallSpace,
-                          Container(
+                          if (widget.testName == null)
+                            verticalSmallSpace,
+                          if (widget.testName == null)
+                            Container(
                             height: 60.0,
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
@@ -220,8 +231,8 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                             child: DropdownButtonHideUnderline(
                               child: DropdownButtonFormField<String>(
                                 validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Choose Test Name';
+                                  if (value == null) {
+                                    return LocaleKeys.txtTestName.tr();
                                   }
                                 },
                                 decoration: InputDecoration(
@@ -247,20 +258,34 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                                     ?.map(buildMenuItem)
                                     .toList(),
                                 onChanged: (value) =>
-                                    setState(() => serviceValue = value),
+                                    setState(() {
+                                      serviceValue = value;
+                                      print(serviceValue);
+                                    }),
                               ),
                             ),
                           ),
+                          if (widget.testName != null)
+                            DefaultFormField(
+                              readOnly: true,
+                              controller: testNameController,
+                              type: TextInputType.text,
+                              label: LocaleKeys.txtTestName.tr(),
+                              validatedText: LocaleKeys.txtTestName.tr(),
+                              onTap: (){},
+                            ),
                           verticalSmallSpace,
                           DefaultFormField(
                             controller: dateController,
+                            readOnly: true,
                             type: TextInputType.text,
-                            validatedText: 'Date',
-                            label: 'Date',
-                            hintText: 'Date',
+                            validatedText: LocaleKeys.TxtFieldDateOfVisit.tr(),
+                            label: LocaleKeys.TxtFieldDateOfVisit.tr(),
+                            hintText: LocaleKeys.TxtFieldDateOfVisit.tr(),
+                            onTap: (){},
                           ),
                           verticalLargeSpace,
-                          GeneralButton(title: 'Upload Image', onPress: (){
+                          GeneralButton(title: LocaleKeys.BtnUploadImage.tr(), onPress: (){
                             showPopUp(
                               context,
                               Container(
@@ -277,8 +302,8 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                                       padding:
                                       const EdgeInsetsDirectional.only(start: 20.0),
                                       child: Text(
-                                        'Pick Image',
-                                        style: TextStyle(
+                                        LocaleKeys.txtPickImage.tr(),
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           fontFamily: fontFamily,
                                           fontWeight: FontWeight.bold,
@@ -293,7 +318,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                                       borderWidth: 1,
                                       btnRadius: radius - 5,
                                       borderColor: blueLight,
-                                      title: 'Open Camera',
+                                      title: LocaleKeys.BtnOpenCamera.tr(),
                                       // image: 'assets/images/homeIcon.png',
                                       width: double.infinity,
                                       onPress: () {
@@ -305,7 +330,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                                     GeneralUnfilledButton(
                                       btnRadius: radius - 5,
                                       borderColor: whiteColor,
-                                      title: 'Open Gallery',
+                                      title: LocaleKeys.BtnGallery.tr(),
                                       // image: 'assets/images/labIcon.png',
                                       width: double.infinity,
                                       onPress: () {
@@ -349,7 +374,7 @@ class _LabVisitSubmitScreenState extends State<LabVisitSubmitScreen> {
                                     date: widget
                                         .appointments.data?[widget.index].date,
                                     time: widget
-                                        .appointments.data?[widget.index].time,
+                                        .appointments.data?[widget.index].start_time,
                                     image: uploadImage == null
                                         ? ''
                                         : 'storage/photosOffer/${Uri.file(uploadImage.path).pathSegments.last}',

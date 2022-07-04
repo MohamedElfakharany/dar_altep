@@ -5,20 +5,23 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/models/appointments_model.dart';
 import 'package:dar_altep/models/auth/user_model.dart';
+import 'package:dar_altep/models/home_appointments_model.dart';
 import 'package:dar_altep/models/notification_model.dart';
 import 'package:dar_altep/models/offers_model.dart';
 import 'package:dar_altep/models/tests_model.dart';
+import 'package:dar_altep/screens/home/home_visit_screens/map_screen.dart';
 import 'package:dar_altep/screens/home/lab_visit_appointment/lab_visit_appointment_screen.dart';
 import 'package:dar_altep/screens/home/lab_visit_appointment/lab_visit_submit_screen.dart';
-import 'package:dar_altep/screens/home/test_screen/home_visit_screen.dart';
+import 'package:dar_altep/screens/home/home_visit_screens/home_visit_screen.dart';
 import 'package:dar_altep/screens/home/test_screen/precautions_screen.dart';
 import 'package:dar_altep/shared/components/cached_network_image.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -100,7 +103,7 @@ class HomeOffersCard extends StatelessWidget {
                         children: [
                           Text(
                             '${offersModel?.data?[index].name}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: fontFamily,
                               fontWeight: FontWeight.bold,
                             ),
@@ -109,24 +112,20 @@ class HomeOffersCard extends StatelessWidget {
                           ),
                           // verticalMicroSpace,
                           Text(
-                            '${offersModel?.data?[index].duration} ${LocaleKeys.txthomeOfferCardDays.tr()}',
+                            '${LocaleKeys.txtDuration.tr()}: ${offersModel?.data?[index].duration} ${LocaleKeys.txthomeOfferCardDays.tr()}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: fontFamily,
-                              color: Colors.black54,
-                            ),
+                            style: subTitleSmallStyle,
                           ),
                           // verticalMicroSpace,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                offersModel?.data?[index].price,
+                                '${offersModel?.data?[index].price} ${LocaleKeys.salary.tr()}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
                                   fontFamily: fontFamily,
                                   decoration: TextDecoration.lineThrough,
@@ -136,15 +135,10 @@ class HomeOffersCard extends StatelessWidget {
                               horizontalSmallSpace,
                               horizontalSmallSpace,
                               Text(
-                                offersModel?.data?[index].discount,
+                                '${offersModel?.data?[index].discount} ${LocaleKeys.salary.tr()}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: fontFamily,
-                                  fontWeight: FontWeight.bold,
-                                  color: blueDark,
-                                ),
+                                style: titleSmallStyle,
                               ),
                             ],
                           ),
@@ -171,32 +165,42 @@ class HomeOffersCard extends StatelessWidget {
                             ),
                             child: MaterialButton(
                               onPressed: () {
-                                if (offersModel?.data?[index].testOffer ==
-                                    'individual') {
-                                  Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                          page: HomeVisitScreen(
-                                        user: user,
-                                        testName:
-                                            offersModel?.data?[index].type,
-                                      )));
-                                }
-                                if (offersModel?.data?[index].testOffer ==
-                                    'laboratory') {
-                                  Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                          page: LabVisitAppointmentScreen(
-                                        appointments: appointments,
-                                        user: user,
-                                        testNames: testNames,
-                                      )));
-                                }
+                                Navigator.push(
+                                  context,
+                                  FadeRoute(
+                                    page: PrecautionsScreen(
+                                      offersModel: offersModel,
+                                      index: index,
+                                    ),
+                                  ),
+                                );
+                                // if (offersModel?.data?[index].testOffer ==
+                                //     'individual') {
+                                //   Navigator.push(
+                                //     context,
+                                //     FadeRoute(
+                                //       page: MapScreen(
+                                //         testName:
+                                //             offersModel?.data?[index].type,
+                                //       ),
+                                //     ),
+                                //   );
+                                // }
+                                // if (offersModel?.data?[index].testOffer ==
+                                //     'laboratory') {
+                                //   Navigator.push(
+                                //       context,
+                                //       FadeRoute(
+                                //           page: LabVisitAppointmentScreen(
+                                //         appointments: appointments,
+                                //         user: user,
+                                //         testNames: testNames,
+                                //       )));
+                                // }
                               },
                               child: Center(
                                 child: Text(
-                                  LocaleKeys.BtnGetOffers.tr(),
+                                  LocaleKeys.BtnMore.tr(),
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
@@ -224,229 +228,235 @@ class HomeOffersCard extends StatelessWidget {
 }
 
 class TestLibraryCard extends StatelessWidget {
-  const TestLibraryCard(
-      {Key? key,
-      this.testsModel,
-      required this.context,
-      required this.index,
-      this.user,
-      this.testNames,
-      this.appointments})
-      : super(key: key);
+  TestLibraryCard({
+    Key? key,
+    this.testsModel,
+    required this.context,
+    required this.index,
+    this.user,
+    this.testNames,
+    // this.appointments
+  }) : super(key: key);
   final UserModel? user;
   final List<String>? testNames;
   final TestsModel? testsModel;
-  final AppointmentsModel? appointments;
+
+  // final AppointmentsModel? appointments;
   final BuildContext context;
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    return Padding(
-      padding:
-          const EdgeInsetsDirectional.only(start: 10.0, top: 12.0, end: 10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 4,
-              blurRadius: 6,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-          border: Border.all(color: whiteColor),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        width: double.infinity,
-        height: 115.0,
-        child: Row(
-          children: [
-            CachedNetworkImageNormal(
-              imageUrl: testsModel?.data?[index].image,
-              width: 130,
-              height: double.infinity,
-            ),
-            horizontalMiniSpace,
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: whiteColor,
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsetsDirectional.only(
+              start: 10.0, top: 12.0, end: 10.0),
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 4,
+                  blurRadius: 6,
+                  offset: const Offset(0, 3), // changes position of shadow
                 ),
-                // padding: const EdgeInsetsDirectional.all(10.0),
-                // height: 115,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              ],
+              border: Border.all(color: whiteColor),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            width: double.infinity,
+            height: 115.0,
+            child: Row(
+              children: [
+                CachedNetworkImageNormal(
+                  imageUrl: testsModel?.data?[index].image,
+                  width: 130,
+                  height: double.infinity,
+                ),
+                horizontalMiniSpace,
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: whiteColor,
+                    ),
+                    // padding: const EdgeInsetsDirectional.all(10.0),
+                    // height: 115,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '${testsModel?.data?[index].name}',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: fontFamily,
-                            fontWeight: FontWeight.bold,
-                            color: blueDark,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        Row(
+                          children: [
+                            Text(
+                              '${AppCubit.get(context).testsModel?.data?[index].name}',
+                              style: titleStyle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                  top: 10.0, end: 20.0),
+                              child: CircleAvatar(
+                                radius: 12,
+                                backgroundColor: blueDark,
+                                child: FloatingActionButton(
+                                  elevation: 10,
+                                  backgroundColor: blueDark,
+                                  child: const Icon(
+                                    Icons.add_rounded,
+                                    color: whiteColor,
+                                    size: 25,
+                                  ),
+                                  onPressed: () {
+                                    showPopUp(
+                                      context,
+                                      Container(
+                                        height: 230,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            verticalMiniSpace,
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .only(start: 20.0),
+                                              child: Text(
+                                                LocaleKeys
+                                                        .TxtPopUpReservationType
+                                                    .tr(),
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontFamily: fontFamily,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            verticalMicroSpace,
+                                            myDivider(),
+                                            verticalMiniSpace,
+                                            GeneralUnfilledButton(
+                                              borderWidth: 1,
+                                              btnRadius: radius - 5,
+                                              borderColor: blueLight,
+                                              title: LocaleKeys.BtnAtHome.tr(),
+                                              image:
+                                                  'assets/images/homeIcon.png',
+                                              width: double.infinity,
+                                              onPress: () {
+                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                  context,
+                                                  FadeRoute(
+                                                    page: MapScreen(testName: AppCubit.get(context).testsModel?.data?[index].name),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            verticalMediumSpace,
+                                            GeneralUnfilledButton(
+                                              btnRadius: radius - 5,
+                                              borderColor: whiteColor,
+                                              title: LocaleKeys.BtnAtLab.tr(),
+                                              image:
+                                                  'assets/images/labIcon.png',
+                                              width: double.infinity,
+                                              onPress: () {
+                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                    context,
+                                                    FadeRoute(
+                                                        page:
+                                                            LabVisitAppointmentScreen(
+                                                              testName: AppCubit.get(context).testsModel?.data?[index].name,
+                                                      appointments: AppCubit
+                                                              .get(context)
+                                                          .appointmentsModel,
+                                                      user: user,
+
+                                                      testNames: testNames,
+                                                    )));
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         const Spacer(),
                         Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                              top: 10.0, end: 20.0),
-                          child: CircleAvatar(
-                            radius: 12,
-                            backgroundColor: blueDark,
-                            child: FloatingActionButton(
-                              elevation: 10,
-                              backgroundColor: blueDark,
-                              child: const Icon(
-                                Icons.add_rounded,
-                                color: whiteColor,
-                                size: 25,
+                          padding: const EdgeInsetsDirectional.only(end: 30),
+                          child: Text(
+                            '${LocaleKeys.txtDuration.tr()}: ${testsModel?.data?[index].duration} ${LocaleKeys.txthomeOfferCardDays.tr()}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontFamily: fontFamily,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Text(
+                              '${testsModel?.data?[index].price} ${LocaleKeys.salary.tr()}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontFamily: fontFamily,
                               ),
-                              onPressed: () {
-                                showPopUp(
+                            ),
+                            const Spacer(),
+                            GeneralUnfilledButton(
+                              title: LocaleKeys.BtnPrecautions.tr(),
+                              titleSize: 12,
+                              height: 30,
+                              width: 80,
+                              btnRadius: 8,
+                              borderColor: blueLight,
+                              onPress: () {
+                                Navigator.push(
                                   context,
-                                  Container(
-                                    height: 280,
-                                    width: width * 0.9,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        verticalMediumSpace,
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 20.0),
-                                          child: Text(
-                                            LocaleKeys.TxtPopUpReservationType
-                                                .tr(),
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: fontFamily,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        verticalMicroSpace,
-                                        myDivider(),
-                                        verticalLargeSpace,
-                                        GeneralUnfilledButton(
-                                          borderWidth: 1,
-                                          btnRadius: radius - 5,
-                                          borderColor: blueLight,
-                                          title: LocaleKeys.BtnAtHome.tr(),
-                                          image: 'assets/images/homeIcon.png',
-                                          width: double.infinity,
-                                          onPress: () {
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                                context,
-                                                FadeRoute(
-                                                    page: HomeVisitScreen(
-                                                  testName: testsModel
-                                                      ?.data?[index].name,
-                                                  user: user,
-                                                  testNames: testNames,
-                                                )));
-                                          },
-                                        ),
-                                        verticalLargeSpace,
-                                        GeneralUnfilledButton(
-                                          btnRadius: radius - 5,
-                                          borderColor: whiteColor,
-                                          title: LocaleKeys.BtnAtLab.tr(),
-                                          image: 'assets/images/labIcon.png',
-                                          width: double.infinity,
-                                          onPress: () {
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              FadeRoute(
-                                                page: LabVisitAppointmentScreen(
-                                                  appointments: appointments,
-                                                  user: user,
-                                                  testNames: testNames,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ],
+                                  FadeRoute(
+                                    page: PrecautionsScreen(
+                                      testsModel: testsModel,
+                                      index: index,
                                     ),
                                   ),
                                 );
                               },
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(end: 30),
-                      child: Text(
-                        '${LocaleKeys.txtDuration.tr()} : ${testsModel?.data?[index].duration} ${LocaleKeys.txthomeOfferCardDays.tr()}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: fontFamily,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        Text(
-                          '${testsModel?.data?[index].price} \$',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontFamily: fontFamily,
-                          ),
-                        ),
-                        const Spacer(),
-                        GeneralUnfilledButton(
-                          title: LocaleKeys.BtnPrecautions.tr(),
-                          titleSize: 12,
-                          height: 30,
-                          width: 80,
-                          btnRadius: 8,
-                          borderColor: blueLight,
-                          onPress: () {
-                            Navigator.push(
-                                context,
-                                FadeRoute(
-                                    page: PrecautionsScreen(
-                                        title: testsModel?.data?[index].name ??
-                                            'Test Precautions',
-                                        description: testsModel
-                                            ?.data?[index].description,
-                                        type: testsModel?.data?[index].type)));
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -495,7 +505,7 @@ class OffersCard extends StatelessWidget {
             horizontalMicroSpace,
             CachedNetworkImageNormal(
               imageUrl: offersModel?.data?[index].image,
-              width: 120,
+              width: 115,
               height: 90,
             ),
             Expanded(
@@ -506,12 +516,7 @@ class OffersCard extends StatelessWidget {
                   children: [
                     Text(
                       '${offersModel?.data?[index].name}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: fontFamily,
-                        fontWeight: FontWeight.bold,
-                        color: blueDark,
-                      ),
+                      style: titleStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -520,11 +525,7 @@ class OffersCard extends StatelessWidget {
                       '${offersModel?.data?[index].description}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: fontFamily,
-                        color: Colors.grey,
-                      ),
+                      style: subTitleSmallStyle,
                     ),
                     Expanded(
                       child: Row(
@@ -537,10 +538,8 @@ class OffersCard extends StatelessWidget {
                                 context,
                                 FadeRoute(
                                   page: PrecautionsScreen(
-                                    description:
-                                        offersModel?.data?[index].description,
-                                    title: offersModel?.data?[index].name,
-                                    type: offersModel?.data?[index].type,
+                                    offersModel: offersModel,
+                                    index: index,
                                   ),
                                 ),
                               );
@@ -549,35 +548,64 @@ class OffersCard extends StatelessWidget {
                             height: 30,
                             btnRadius: 8.0,
                           ),
-                          GeneralButton(
-                            title: LocaleKeys.BtnGetOffers.tr(),
-                            onPress: () {
-                              if (offersModel?.data?[index].testOffer ==
-                                  'individual') {
-                                Navigator.push(
-                                    context,
-                                    FadeRoute(
-                                        page: HomeVisitScreen(
-                                      user: user,
-                                      testName: offersModel?.data?[index].type,
-                                    )));
-                              }
-                              if (offersModel?.data?[index].testOffer ==
-                                  'laboratory') {
-                                Navigator.push(
-                                    context,
-                                    FadeRoute(
-                                        page: LabVisitAppointmentScreen(
-                                      user: user,
-                                      testNames: testNames,
-                                      appointments: appointments,
-                                    )));
-                              }
-                            },
+                          Container(
                             height: 30.0,
                             width: 90,
-                            radius: 8.0,
-                          )
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              gradient: const LinearGradient(
+                                colors: [blueDark, blueLight],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: blueDark.withOpacity(0.25),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(
+                                      0, 5), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: MaterialButton(
+                              onPressed: () {
+                                if (offersModel?.data?[index].testOffer ==
+                                    'individual') {
+                                  Navigator.push(
+                                    context,
+                                    FadeRoute(
+                                      page: MapScreen(
+                                        testName:
+                                            offersModel?.data?[index].type,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                if (offersModel?.data?[index].testOffer ==
+                                    'laboratory') {
+                                  Navigator.push(
+                                      context,
+                                      FadeRoute(
+                                          page: LabVisitAppointmentScreen(
+                                        appointments: appointments,
+                                        user: user,
+                                        testNames: testNames,
+                                      )));
+                                }
+                              },
+                              child: Center(
+                                child: Text(
+                                  LocaleKeys.BtnConfirm.tr(),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -593,13 +621,14 @@ class OffersCard extends StatelessWidget {
 }
 
 class AppointmentCard extends StatelessWidget {
-  const AppointmentCard({
+  AppointmentCard({
     Key? key,
     this.appointments,
     required this.context,
     required this.index,
     this.user,
     this.testNames,
+    this.testName,
   }) : super(key: key);
 
   final AppointmentsModel? appointments;
@@ -607,6 +636,7 @@ class AppointmentCard extends StatelessWidget {
   final int index;
   final UserModel? user;
   final List<String>? testNames;
+  String? testName;
 
   @override
   Widget build(BuildContext context) {
@@ -618,41 +648,208 @@ class AppointmentCard extends StatelessWidget {
                 page: LabVisitSubmitScreen(
               user: user,
               testNames: testNames,
+              testName: testName,
               index: index,
               appointments: appointments!,
               appointmentId: appointments?.data?[index].id,
             )));
       },
+      /*appointments?.data?[index].day,
+              style: const TextStyle(
+                  fontFamily: fontFamily,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),*/
       child: Container(
         height: 50,
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
         decoration: const BoxDecoration(color: whiteColor),
-        child: Row(
-          children: [
-            Text(
-              appointments?.data?[index].day,
-              style: TextStyle(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+          decoration: BoxDecoration(
+            color: whiteColor,
+            border: Border.all(color: blueLight),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Text(
+                      LocaleKeys.txtStartAt.tr(),
+                      style: const TextStyle(
+                        color: blueDark2,
+                        fontFamily: fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      '${appointments?.data?[index].start_time}',
+                      style: const TextStyle(
+                        color: blueDark,
+                        fontFamily: fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              Expanded(
+                child: Row(
+                  children: [
+                    Text(
+                      LocaleKeys.txtEndAt.tr(),
+                      style: const TextStyle(
+                        color: blueDark2,
+                        fontFamily: fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      '${appointments?.data?[index].end_time}',
+                      style: const TextStyle(
+                        color: blueDark,
+                        fontFamily: fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeAppointmentCard extends StatelessWidget {
+  HomeAppointmentCard({
+    Key? key,
+    required this.context,
+    required this.index,
+    this.user,
+    this.testNames,
+    required this.address,
+    this.lat,
+    this.long,
+    this.homeAppointments,
+    this.testName,
+  }) : super(key: key);
+
+  final HomeAppointmentsModel? homeAppointments;
+  final BuildContext context;
+  final int index;
+  final UserModel? user;
+  final List<String>? testNames;
+  final String address;
+  final String? testName;
+  dynamic lat = 0.0;
+  dynamic long = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            FadeRoute(
+                page: HomeVisitScreen(
+              user: user,
+              testNames: testNames,
+              testName: testName,
+              address: address,
+              timing: homeAppointments?.data?[index].timing,
+              date: homeAppointments?.data?[index].date,
+              lat: lat,
+              long: long,
+            )));
+      },
+      child: Container(
+        height: 85,
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+        decoration: const BoxDecoration(color: whiteColor),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+          decoration: BoxDecoration(
+            color: whiteColor,
+            border: Border.all(color: blueLight),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${homeAppointments?.data?[index].timing}',
+                style: const TextStyle(
+                  color: blueDark,
                   fontFamily: fontFamily,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16),
-            ),
-            const Spacer(),
-            Text(
-              appointments?.data?[index].date,
-              style: TextStyle(
-                  fontFamily: fontFamily,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
-            ),
-            const Spacer(),
-            Text(
-              appointments?.data?[index].time,
-              style: TextStyle(
-                  fontFamily: fontFamily,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
-            ),
-          ],
+                  fontSize: 16,
+                ),
+              ),
+              verticalMicroSpace,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          LocaleKeys.txtStartAt.tr(),
+                          style: const TextStyle(
+                            color: blueDark2,
+                            fontFamily: fontFamily,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          '${homeAppointments?.data?[index].startTime}',
+                          style: const TextStyle(
+                            color: blueDark,
+                            fontFamily: fontFamily,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        Text(
+                          LocaleKeys.txtEndAt.tr(),
+                          style: const TextStyle(
+                            color: blueDark2,
+                            fontFamily: fontFamily,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          '${homeAppointments?.data?[index].endTime}',
+                          style: const TextStyle(
+                            color: blueDark,
+                            fontFamily: fontFamily,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -673,11 +870,22 @@ class NotificationCard extends StatefulWidget {
 class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit,AppStates>(
-      listener: (context,state) {},
-      builder: (context,state){
+    Color containerColor = whiteColor;
+    setState((){
+      if (widget.notificationsModel?.data?[widget.index].seen ==
+          0) {
+        containerColor = blueLight.withOpacity(0.1);
+      } else {
+        containerColor = whiteColor;
+      }
+    });
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0,),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+          ),
           child: Container(
             constraints: const BoxConstraints(
               maxHeight: double.infinity,
@@ -693,7 +901,7 @@ class _NotificationCardState extends State<NotificationCard> {
                 ),
               ],
               border: Border.all(color: whiteColor),
-              color: Colors.white,
+              color: containerColor,
               borderRadius: BorderRadius.circular(15),
             ),
             padding: const EdgeInsets.all(10.0),
@@ -703,19 +911,46 @@ class _NotificationCardState extends State<NotificationCard> {
               children: <Widget>[
                 Flexible(
                   flex: 4,
-                  child: Container(
-                    child: Text(
-                      widget.notificationsModel?.data?[widget.index].message,
-                      maxLines: 3,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        AppCubit.get(context)
+                            .notificationsModel
+                            ?.data?[widget.index]
+                            .message,
+                        maxLines: 3,
+                        textAlign: TextAlign.start,
+                        style: titleStyle,
+                      ),
+                      Text(
+                        AppCubit.get(context)
+                            .notificationsModel
+                            ?.data?[widget.index]
+                            .title,
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
                   ),
                 ),
-                Spacer(),
-                Spacer(),
-                Spacer(),
-                Spacer(),
-                Spacer(),
-                Text(widget.notificationsModel?.data?[widget.index].time),
+                const Spacer(),
+                // const Spacer(),
+                // const Spacer(),
+                // const Spacer(),
+                // const Spacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(AppCubit.get(context)
+                        .notificationsModel
+                        ?.data?[widget.index]
+                        .date),
+                    Text(AppCubit.get(context)
+                        .notificationsModel
+                        ?.data?[widget.index]
+                        .time),
+                  ],
+                ),
               ],
             ),
           ),

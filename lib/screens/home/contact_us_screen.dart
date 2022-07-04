@@ -7,7 +7,7 @@ import 'package:dar_altep/models/auth/user_model.dart';
 import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,8 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContactUsScreen extends StatefulWidget {
-  ContactUsScreen({Key? key,required this.user}) : super(key: key);
+  ContactUsScreen({Key? key, required this.user}) : super(key: key);
   UserModel? user;
+
   @override
   State<ContactUsScreen> createState() => _ContactUsScreenState();
 }
@@ -31,7 +32,11 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
 
   var formKey = GlobalKey<FormState>();
 
-  final serviceItems = [LocaleKeys.txtExplanation.tr(), LocaleKeys.txtComplaint.tr(), LocaleKeys.txtChangeMobile.tr()];
+  final serviceItems = [
+    LocaleKeys.txtExplanation.tr(),
+    LocaleKeys.txtComplaint.tr(),
+    LocaleKeys.txtChangeMobile.tr()
+  ];
 
   String? serviceValue;
 
@@ -82,7 +87,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                           verticalMediumSpace,
                           Text(
                             LocaleKeys.txtThank.tr(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontFamily: fontFamily,
                               fontWeight: FontWeight.bold,
@@ -94,7 +99,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                           Text(
                             LocaleKeys.txtThankSecond.tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontFamily: fontFamily,
                               fontWeight: FontWeight.normal,
@@ -142,8 +147,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image:
-                      const AssetImage("assets/images/onboardingbackground.png"),
+                  image: const AssetImage(
+                      "assets/images/onboardingbackground.png"),
                   colorFilter: ColorFilter.mode(
                       Colors.black.withOpacity(0.15), BlendMode.dstATop),
                   fit: BoxFit.cover,
@@ -163,7 +168,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                             child: Text(
                               LocaleKeys.contactUsMainTxt.tr(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: fontFamily,
@@ -174,7 +179,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                           verticalLargeSpace,
                           Container(
                             height: 60.0,
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -189,18 +195,20 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                             child: DropdownButtonHideUnderline(
                               child: DropdownButtonFormField<String>(
                                 validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Choose Test Name';
+                                  if (value == null) {
+                                    return LocaleKeys.txtServiceType.tr();
                                   }
                                 },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   fillColor: Colors.white,
                                   filled: true,
-                                  contentPadding: EdgeInsetsDirectional.only(
+                                  contentPadding: const EdgeInsetsDirectional.only(
                                       start: 20.0, end: 10.0),
-                                  errorStyle: TextStyle(color: Color(0xFF4F4F4F)),
-                                  label: Text('Service Type'),
-                                  border: OutlineInputBorder(
+                                  errorStyle:
+                                      const TextStyle(color: Color(0xFF4F4F4F)),
+                                  label:
+                                    Text(LocaleKeys.txtServiceType.tr()),
+                                  border: const OutlineInputBorder(
                                     borderSide: BorderSide(
                                       width: 2,
                                       color: blueDark,
@@ -261,7 +269,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                               onPress: () {
                                 if (formKey.currentState!.validate()) {
                                   if (kDebugMode) {
-                                    print('from ConditionalBuilder btn pressed');
+                                    print(
+                                        'from ConditionalBuilder btn pressed');
                                   }
                                   AppCubit.get(context).sendContactUs(
                                     serviceName: serviceValue ?? '',
@@ -272,8 +281,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                                 }
                               },
                             ),
-                            fallback: (context) =>
-                                const Center(child: CircularProgressIndicator()),
+                            fallback: (context) => const Center(
+                                child: CircularProgressIndicator()),
                           ),
                         ],
                       ),

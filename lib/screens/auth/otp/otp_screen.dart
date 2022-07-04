@@ -6,9 +6,11 @@ import 'package:dar_altep/screens/auth/confirmed_screen.dart';
 import 'package:dar_altep/screens/auth/otp/components/body.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/cache_helper.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
+import 'package:dar_altep/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -137,10 +139,21 @@ class OtpScreen extends StatelessWidget {
                                       width: 100,
                                     ),
                                     verticalLargeSpace,
-                                    const Text(
-                                        "Your verification code send to your E-mail"),
+                                    Text(
+                                      LocaleKeys.txtCheckCode.tr(),
+                                      maxLines: 3,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20,
+                                        fontFamily: fontFamily,
+                                      ),
+                                    ),
                                     verticalLargeSpace,
-                                    Body(mobile: mobile,verification: verification,),
+                                    Body(
+                                      mobile: mobile,
+                                      verification: verification,
+                                    ),
                                   ],
                                 ),
                               ),

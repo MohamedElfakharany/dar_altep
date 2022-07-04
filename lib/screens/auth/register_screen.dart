@@ -1,13 +1,14 @@
 // ignore_for_file: must_be_immutable, body_might_complete_normally_nullable
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/auth/login_screen.dart';
 import 'package:dar_altep/screens/auth/otp/otp_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -15,11 +16,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({Key? key})
+      : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -40,7 +41,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final ageController = TextEditingController();
 
-  final nationalityItems = ['Saudi Arabia', 'U A E', 'Qatar', 'Egyptian'];
+  final nationalityController = TextEditingController();
+
   String? nationalValue;
 
   final genderItems = ['Male', 'Female'];
@@ -85,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title:  Text(LocaleKeys.txtError.tr()),
+                  title: Text(LocaleKeys.txtError.tr()),
                   content: const Text(
                     'Please contact with lab',
                   ),
@@ -141,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Text(
                         LocaleKeys.registerTxtMain.tr(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: whiteColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 25,
@@ -151,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       verticalSmallSpace,
                       Text(
                         LocaleKeys.registerTxtSecondary.tr(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: whiteColor,
                           fontWeight: FontWeight.normal,
                           fontSize: 20,
@@ -236,88 +238,107 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     // onTap: (){},
                                   ),
                                   verticalSmallSpace,
-                                  Container(
-                                    height: 60.0,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0),
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 3,
-                                          blurRadius: 10,
-                                          offset: const Offset(0,
-                                              10), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButtonFormField<String>(
-                                        validator: (String? value) {
-                                          if (value != null && value.isEmpty) {
-                                            return LocaleKeys
-                                                .txtFieldNationality
-                                                .tr();
-                                          }
+                                  // Container(
+                                  //   height: 60.0,
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       horizontal: 20.0),
+                                  //   decoration: BoxDecoration(
+                                  //     boxShadow: [
+                                  //       BoxShadow(
+                                  //         color: Colors.grey.withOpacity(0.2),
+                                  //         spreadRadius: 3,
+                                  //         blurRadius: 10,
+                                  //         offset: const Offset(0,
+                                  //             10), // changes position of shadow
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  //   child: DropdownButtonHideUnderline(
+                                  //     child: DropdownButtonFormField<String>(
+                                  //       validator: (String? value) {
+                                  //         if (value == null) {
+                                  //           return LocaleKeys
+                                  //               .txtFieldNationality
+                                  //               .tr();
+                                  //         }
+                                  //       },
+                                  //       decoration: InputDecoration(
+                                  //         contentPadding:
+                                  //             const EdgeInsetsDirectional.only(
+                                  //                 start: 20.0, end: 10.0),
+                                  //         fillColor: Colors.white,
+                                  //         filled: true,
+                                  //         errorStyle: const TextStyle(
+                                  //             color: Color(0xFF4F4F4F)),
+                                  //         label: Text(LocaleKeys
+                                  //             .txtFieldNationality
+                                  //             .tr()),
+                                  //         border: const OutlineInputBorder(
+                                  //           borderSide: BorderSide(
+                                  //             width: 2,
+                                  //             color: blueDark,
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       value: nationalValue,
+                                  //       isExpanded: true,
+                                  //       iconSize: 35,
+                                  //       items: AppCubit.get(context).countriesName
+                                  //           .map(buildMenuItem)
+                                  //           .toList(),
+                                  //       onChanged: (value) => setState(
+                                  //           () => nationalValue = value),
+                                  //       onTap: (){},
+                                  //       // onSaved: (v) {
+                                  //       //   FocusScope.of(context).unfocus();
+                                  //       // },
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  DefaultFormField(
+                                    controller: nationalityController,
+                                    type: TextInputType.none,
+                                    validatedText:
+                                    LocaleKeys.txtFieldNationality.tr(),
+                                    label: LocaleKeys.txtFieldNationality.tr(),
+                                    onTap: () {
+                                      showCountryPicker(
+                                        context: context,
+                                        onSelect: (Country country){
+                                          nationalityController.text = country.name;
+                                          nationalValue = country.name;
+                                          print (country);
                                         },
-                                        decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 20.0, end: 10.0),
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          errorStyle: const TextStyle(
-                                              color: Color(0xFF4F4F4F)),
-                                          label: Text(LocaleKeys
-                                              .txtFieldNationality
-                                              .tr()),
-                                          border: const OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              width: 2,
-                                              color: blueDark,
-                                            ),
-                                          ),
-                                        ),
-                                        value: nationalValue,
-                                        isExpanded: true,
-                                        iconSize: 35,
-                                        items: nationalityItems
-                                            .map(buildMenuItem)
-                                            .toList(),
-                                        onChanged: (value) => setState(
-                                            () => nationalValue = value),
-                                        onSaved: (v) {
-                                          FocusScope.of(context).unfocus();
-                                        },
-                                      ),
-                                    ),
+                                      );
+                                    },
                                   ),
                                   verticalSmallSpace,
                                   DefaultFormField(
                                     controller: dateOfBirthController,
-                                    type: TextInputType.none,
+                                    type: TextInputType.datetime,
                                     validatedText:
                                         LocaleKeys.txtFieldDateOfBirth.tr(),
                                     label: LocaleKeys.txtFieldDateOfBirth.tr(),
                                     onTap: () {
-                                      showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime?.now(),
-                                        firstDate:
-                                            DateTime?.parse('1950-01-01'),
-                                        lastDate: DateTime?.now(),
-                                      ).then((value) {
-                                        dateOfBirthController.text =
-                                            DateFormat.yMd().format(value!);
-                                        FocusScope.of(context).unfocus();
-                                      }).catchError((error) {
-                                        if (kDebugMode) {
-                                          print('error in fetching date');
-                                          print(error.toString());
-                                        }
-                                      });
+                                      // showDatePicker(
+                                      //   context: context,
+                                      //   initialDate: DateTime?.now(),
+                                      //   firstDate:
+                                      //       DateTime?.parse('1950-01-01'),
+                                      //   lastDate: DateTime?.now(),
+                                      // ).then((value) {
+                                      //   dateOfBirthController.text =
+                                      //       DateFormat.yMd().format(value!);
+                                      //   FocusScope.of(context).unfocus();
+                                      // }).catchError((error) {
+                                      //   if (kDebugMode) {
+                                      //     print('error in fetching date');
+                                      //     print(error.toString());
+                                      //   }
+                                      // });
                                     },
-                                    suffixIcon: Icons.calendar_month,
+                                    hintText: 'mm/dd/yyyy',
+                                    // suffixIcon: Icons.calendar_month,
                                   ),
                                   verticalSmallSpace,
                                   Container(
@@ -381,6 +402,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     builder: (context) => GeneralButton(
                                       title: LocaleKeys.BtnSignUp.tr(),
                                       onPress: () {
+                                        if (kDebugMode) {
+                                          print(
+                                              'from ConditionalBuilder btn pressed before validate');
+                                        }
                                         if (formKey.currentState!.validate()) {
                                           if (kDebugMode) {
                                             print(

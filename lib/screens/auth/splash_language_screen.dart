@@ -4,7 +4,7 @@ import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/auth/login_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -62,24 +62,26 @@ class _SplashLanguageScreenState extends State<SplashLanguageScreen> {
                       width: 100,
                       title: 'English',
                       onPress: () async {
-                        if (AppCubit.get(context).local == 'en'){
-                          await context
-                              .setLocale(Locale(AppCubit.get(context).local)).then((value) {
-                            Navigator.push(context, FadeRoute(page: LoginScreen()));
-                          });
-                          if (kDebugMode) {
-                            print(LocaleKeys.languageA.tr());
+                        setState(()async{
+                          if (AppCubit.get(context).local == 'en'){
+                            await context
+                                .setLocale(Locale(AppCubit.get(context).local)).then((value) {
+                              Navigator.push(context, FadeRoute(page: LoginScreen()));
+                            });
+                            if (kDebugMode) {
+                              print(LocaleKeys.languageA.tr());
+                            }
+                          }else {
+                            AppCubit.get(context).changeLanguage();
+                            await context
+                                .setLocale(Locale(AppCubit.get(context).local)).then((value) {
+                              Navigator.push(context, FadeRoute(page: LoginScreen()));
+                            });
+                            if (kDebugMode) {
+                              print(LocaleKeys.languageA.tr());
+                            }
                           }
-                        }else {
-                          AppCubit.get(context).changeLanguage();
-                          await context
-                              .setLocale(Locale(AppCubit.get(context).local)).then((value) {
-                            Navigator.push(context, FadeRoute(page: LoginScreen()));
-                          });
-                          if (kDebugMode) {
-                            print(LocaleKeys.languageA.tr());
-                          }
-                        }
+                        });
                       },
                     ),
                     verticalLargeSpace,

@@ -3,10 +3,10 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
-import 'package:dar_altep/screens/home/home_screen.dart';
+import 'package:dar_altep/screens/drawer/settings_screens/change_email/send_email_to_change_email_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,11 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CheckCodeScreen extends StatelessWidget {
-  CheckCodeScreen({required this.email, Key? key}) : super(key: key);
+class ChangeEmailScreen extends StatelessWidget {
+  ChangeEmailScreen({Key? key}) : super(key: key);
 
-  String email;
-  final codeController = TextEditingController();
+  final passwordController = TextEditingController();
+  final enterPasswordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -27,44 +27,24 @@ class CheckCodeScreen extends StatelessWidget {
       create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
-          if (state is AppResetEmailSuccessState) {
-            if (state.resetEmailModel.status) {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    // title: Text(LocaleKeys.txtError.tr()),
-                    content: Text('${state.resetEmailModel.message}'),
-                    actions: [
-                      GeneralButton(title: LocaleKeys.BtnDone, onPress: (){
-                        navigateAndFinish(context, const HomeScreen());
-                      }),
-                    ],
-                  );
-                },
-              );
+          if (state is AppConfirmPasswordSuccessState) {
+            if (state.confirmPasswordModel.status) {
+              showToast(
+                  msg: state.confirmPasswordModel.message,
+                  state: ToastState.success);
+              Navigator.pop(context);
+              Navigator.push(context, FadeRoute(page: SendNewEmailToChangeEmailScreen()));
             } else {
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: Text(LocaleKeys.txtError.tr()),
-                    content: Text('${state.resetEmailModel.message}'),
+                    title: const Text('Error...!'),
+                    content: Text('${state.confirmPasswordModel.message}'),
                   );
                 },
               );
             }
-          }
-          if (state is AppResetEmailErrorState){
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text(LocaleKeys.txtError.tr()),
-                  content: Text(state.error.toString()),
-                );
-              },
-            );
           }
         },
         builder: (context, state) {
@@ -146,6 +126,7 @@ class CheckCodeScreen extends StatelessWidget {
                             child: Form(
                               key: formKey,
                               child: SingleChildScrollView(
+                                physics: const NeverScrollableScrollPhysics(),
                                 child: Column(
                                   children: [
                                     Image.asset(
@@ -155,7 +136,7 @@ class CheckCodeScreen extends StatelessWidget {
                                     ),
                                     verticalLargeSpace,
                                     Text(
-                                      LocaleKeys.txtCheckCode.tr(),
+                                      LocaleKeys.txtChangeEmailThird.tr(),
                                       textAlign: TextAlign.center,
                                       maxLines: 2,
                                       style: TextStyle(
@@ -166,32 +147,57 @@ class CheckCodeScreen extends StatelessWidget {
                                     ),
                                     verticalLargeSpace,
                                     DefaultFormField(
-                                      controller: codeController,
+                                      controller: passwordController,
                                       type: TextInputType.text,
-                                      label: LocaleKeys.txtFieldCodeReset.tr(),
                                       validatedText:
-                                          LocaleKeys.txtFieldCodeReset.tr(),
+                                          LocaleKeys.txtFieldPassword.tr(),
+                                      label: LocaleKeys.txtFieldPassword.tr(),
+                                      obscureText: cubit.isPassword,
+                                      suffixIcon: cubit.sufIcon,
+                                      suffixPressed: () {
+                                        cubit.changePasswordVisibility();
+                                      },
+                                      onTap: () {},
+                                    ),
+                                    verticalSmallSpace,
+                                    DefaultFormField(
+                                      controller: enterPasswordController,
+                                      type: TextInputType.text,
+                                      validatedText: LocaleKeys
+                                          .TxtFieldReEnterPassword.tr(),
+                                      label: LocaleKeys.TxtFieldReEnterPassword
+                                          .tr(),
+                                      obscureText: cubit.resetIsPassword,
+                                      suffixIcon: cubit.resetSufIcon,
+                                      isConfirm: true,
+                                      confirm: passwordController.text,
+                                      onChange: (val){
+                                        enterPasswordController.text = val;
+                                      },
+                                      suffixPressed: () {
+                                        cubit.resetChangePasswordVisibility();
+                                      },
                                       onTap: () {},
                                     ),
                                     verticalMediumSpace,
                                     ConditionalBuilder(
                                       condition: state
-                                          is! AppResetEmailLoadingState,
+                                          is! AppConfirmPasswordLoadingState,
                                       builder: (context) => GeneralButton(
-                                        title: LocaleKeys.BtnReset.tr(),
+                                        title: LocaleKeys.BtnContinue.tr(),
                                         onPress: () {
                                           if (formKey.currentState!
                                               .validate()) {
                                             AppCubit.get(context)
-                                                .resetEmail(
-                                              code: codeController.text,
-                                              email: email,
-                                            );
+                                                .confirmPassword(
+                                                    password: passwordController
+                                                        .text);
                                           }
                                         },
                                       ),
                                       fallback: (context) => const Center(
-                                          child: CircularProgressIndicator()),
+                                        child: CircularProgressIndicator(),
+                                      ),
                                     ),
                                   ],
                                 ),

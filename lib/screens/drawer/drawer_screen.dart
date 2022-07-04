@@ -3,11 +3,11 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:dar_altep/cubit/cubit.dart';
 import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/screens/drawer/reservation_screen.dart';
-import 'package:dar_altep/screens/drawer/settings_screen.dart';
+import 'package:dar_altep/screens/drawer/settings_screens/settings_screen.dart';
 import 'package:dar_altep/screens/drawer/my_results_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -42,7 +42,7 @@ class DrawerScreen extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: Center(child: Text('no results for this user')),
+                    title: Center(child: Text(LocaleKeys.txtNoResults.tr()),),
                   );
                 });
           }

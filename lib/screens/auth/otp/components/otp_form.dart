@@ -1,6 +1,6 @@
 import 'package:dar_altep/screens/auth/otp/otp_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +54,7 @@ class _OtpFormState extends State<OtpForm> {
           children: [
             verticalMiniSpace,
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 60,
@@ -71,6 +71,7 @@ class _OtpFormState extends State<OtpForm> {
                     },
                   ),
                 ),
+                const Spacer(),
                 SizedBox(
                   width: 60,
                   child: TextFormField(
@@ -84,6 +85,7 @@ class _OtpFormState extends State<OtpForm> {
                     onChanged: (value) => nextField(value, pin3FocusNode),
                   ),
                 ),
+                const Spacer(),
                 SizedBox(
                   width: 60,
                   child: TextFormField(
@@ -97,8 +99,8 @@ class _OtpFormState extends State<OtpForm> {
                     onChanged: (value) => nextField(value, pin4FocusNode),
                   ),
                 ),
+                const Spacer(),
                 SizedBox(
-                  height: 65,
                   width: 60,
                   child: TextFormField(
                     controller: fourthController,

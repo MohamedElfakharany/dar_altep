@@ -5,29 +5,47 @@ import 'package:dar_altep/screens/drawer/drawer_screen.dart';
 import 'package:dar_altep/screens/drawer/my_results_screen.dart';
 import 'package:dar_altep/screens/home/components/widget_components.dart';
 import 'package:dar_altep/screens/home/contact_us_screen.dart';
+import 'package:dar_altep/screens/home/home_visit_screens/map_screen.dart';
 import 'package:dar_altep/screens/home/lab_visit_appointment/lab_visit_appointment_screen.dart';
 import 'package:dar_altep/screens/home/messaging_screen.dart';
 import 'package:dar_altep/screens/home/offers/offers_screen.dart';
-import 'package:dar_altep/screens/home/test_screen/home_visit_screen.dart';
 import 'package:dar_altep/screens/home/test_screen/test_library_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var searchModel = AppCubit.get(context).searchModel;
     var testItems = AppCubit.get(context).testName;
-    var notificationModel = AppCubit.get(context).notificationsModel;
+    Object day;
+    Object month;
+    if(DateTime.now().day <= 9){
+      day = '0${DateTime.now().day}';
+    }else {
+      day = DateTime.now().day;
+    }
+
+    if(DateTime.now().month <= 9){
+      month = '0${DateTime.now().month}';
+    }else {
+      month = DateTime.now().month;
+    }
+
+    AppCubit.get(context).getLabAppointmentsData(date: '${DateTime.now().year.toString()}-${month.toString()}-${day.toString()}');
     return BlocProvider(
       create: (BuildContext context) => AppCubit()
         ..getOffersData()
@@ -35,57 +53,69 @@ class HomeScreen extends StatelessWidget {
         ..getProfileData()
         ..getReservationsData()
         ..getTestNameData()
-        ..getAppointmentsData()
         ..getHomeOffersData()
-        ..getLabOffersData(),
+        ..getLabOffersData()
+        ..getNotifications(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
-          if (state is AppGetNotificationsSuccessState) {
-            if (state.notificationsModel.status){
-              notificationModel = AppCubit.get(context).notificationsModel;
+          // if (state is AppGetNotificationsSuccessState) {
+          //   if (state.notificationsModel.status) {} else {
+          //     showDialog(
+          //         context: context,
+          //         builder: (context) {
+          //           return AlertDialog(
+          //             title: Center(
+          //               child: Text(
+          //                 LocaleKeys.txtNoNotifications.tr(),
+          //               ),
+          //             ),
+          //           );
+          //         });
+          //   }
+          // } else if (state is AppGetNotificationsErrorState) {
+          //   showDialog(
+          //       context: context,
+          //       builder: (context) {
+          //         return AlertDialog(
+          //           title: Center(
+          //               child: Text(
+          //             LocaleKeys.txtNoNotifications.tr(),
+          //           )),
+          //         );
+          //       });
+          // }
+
+          if (state is AppGetUserResultsSuccessState) {
+            if (state.searchModel.status) {
+              searchModel = AppCubit.get(context).searchModel;
               Navigator.push(
                 context,
                 FadeRoute(
-                  page: MessagingScreen(),
+                  page: MyResultsScreen(
+                    testNames: testItems,
+                    searchModel: searchModel,
+                  ),
                 ),
               );
-            }else {
+            } else {
               showDialog(
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title:
-                      Center(child: Text(state.notificationsModel.message)),
+                      title: Center(
+                        child: Text(state.searchModel.message),
+                      ),
                     );
                   });
             }
-          } else if (state is AppGetNotificationsErrorState) {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return const AlertDialog(
-                    title:
-                        Center(child: Text('no notifications for you')),
-                  );
-                });
-          }
-
-          if (state is AppGetUserResultsSuccessState) {
-            searchModel = AppCubit.get(context).searchModel;
-            Navigator.push(
-                context,
-                FadeRoute(
-                    page: MyResultsScreen(
-                  testNames: testItems,
-                  searchModel: searchModel,
-                )));
           } else if (state is AppGetUserResultsErrorState) {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return const AlertDialog(
-                    title:
-                        const Center(child: Text('no results for this user')),
+                  return AlertDialog(
+                    title: Center(
+                      child: Text(LocaleKeys.txtNoResults.tr()),
+                    ),
                   );
                 });
           }
@@ -111,18 +141,49 @@ class HomeScreen extends StatelessWidget {
               elevation: 0.0,
               backgroundColor: Colors.transparent,
               actions: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      FadeRoute(
+                        page: MessagingScreen(notificationsModel: AppCubit.get(context).notificationsModel!),
+                      ),);
+                  },
+                  child: Stack(
+                    alignment: AlignmentDirectional.centerStart,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.notifications_active_outlined,
+                            size: 30,
+                          ),
+                        ],
+                      ),
+                      if (AppCubit.get(context)
+                          .notificationsModel
+                          ?.data?[0]
+                          .seen ==
+                          0)
+                        const CircleAvatar(
+                          backgroundColor: redTxtColor,
+                          radius: 4,
+                        ),
+                    ],
+                  ),
+                ),
                 TextButton(
-                  onPressed: () async {
-                    AppCubit.get(context).changeLanguage();
-                    await context
-                        .setLocale(Locale(AppCubit.get(context).local));
-                    if (kDebugMode) {
-                      print(LocaleKeys.language.tr());
-                    }
+                  onPressed: () {
+                    setState(() async {
+                      AppCubit.get(context).changeLanguage();
+                      await context
+                          .setLocale(Locale(AppCubit.get(context).local));
+                    });
                   },
                   child: Text(
                     LocaleKeys.language.tr(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: whiteColor,
                       fontWeight: FontWeight.bold,
                       fontFamily: fontFamily,
@@ -142,7 +203,7 @@ class HomeScreen extends StatelessWidget {
                         alignment: AlignmentDirectional.centerStart,
                         child: Text(
                           '${LocaleKeys.homeTxtWelcome.tr()} ${AppCubit.get(context).userModel?.data?.name ?? 'Sir'},',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.bold,
                             fontFamily: fontFamily,
@@ -187,7 +248,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Text(
                             LocaleKeys.homeTxtDiscover.tr(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: darkColor,
                               fontWeight: FontWeight.w600,
                               fontFamily: fontFamily,
@@ -286,7 +347,7 @@ class HomeScreen extends StatelessWidget {
                                   child: Center(
                                     child: Text(
                                       LocaleKeys.homeTxtTestLibrary.tr(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 20,
                                         fontFamily: fontFamily,
                                         fontWeight: FontWeight.bold,
@@ -344,7 +405,7 @@ class HomeScreen extends StatelessWidget {
                                     child: Center(
                                       child: Text(
                                         LocaleKeys.drawerResults.tr(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           fontFamily: fontFamily,
                                           fontWeight: FontWeight.bold,
@@ -369,65 +430,65 @@ class HomeScreen extends StatelessWidget {
                       fallback: (context) =>
                           const Center(child: CircularProgressIndicator()),
                     ),
-                    ConditionalBuilder(
-                      condition: state is! AppGetNotificationsLoadingState,
-                      builder: (context) => Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                            top: 20.0, start: 10.0, end: 20.0),
-                        child: InkWell(
-                          onTap: () {
-                            AppCubit.get(context).getNotifications();
-                          },
-                          child: Column(
-                            children: [
-                              Stack(
-                                alignment: AlignmentDirectional.centerStart,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 4,
-                                          blurRadius: 6,
-                                          offset: const Offset(0,
-                                              5), // changes position of shadow
-                                        ),
-                                      ],
-                                      border: Border.all(color: whiteColor),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    height: 50,
-                                    child: Center(
-                                      child: Text(
-                                        LocaleKeys.homeTxtNotifications.tr(),
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: fontFamily,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: Colors.transparent,
-                                    child: Image.asset(
-                                      'assets/images/homeNotification.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      fallback: (context) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
+                    // ConditionalBuilder(
+                    //   condition: state is! AppGetNotificationsLoadingState,
+                    //   builder: (context) => Padding(
+                    //     padding: const EdgeInsetsDirectional.only(
+                    //         top: 20.0, start: 10.0, end: 20.0),
+                    //     child: InkWell(
+                    //       onTap: () {
+                    //         AppCubit.get(context).getNotifications();
+                    //       },
+                    //       child: Column(
+                    //         children: [
+                    //           Stack(
+                    //             alignment: AlignmentDirectional.centerStart,
+                    //             children: [
+                    //               Container(
+                    //                 decoration: BoxDecoration(
+                    //                   boxShadow: [
+                    //                     BoxShadow(
+                    //                       color: Colors.grey.withOpacity(0.2),
+                    //                       spreadRadius: 4,
+                    //                       blurRadius: 6,
+                    //                       offset: const Offset(0,
+                    //                           5), // changes position of shadow
+                    //                     ),
+                    //                   ],
+                    //                   border: Border.all(color: whiteColor),
+                    //                   color: Colors.white,
+                    //                   borderRadius: BorderRadius.circular(30),
+                    //                 ),
+                    //                 height: 50,
+                    //                 child: Center(
+                    //                   child: Text(
+                    //                     LocaleKeys.homeTxtNotifications.tr(),
+                    //                     style: const TextStyle(
+                    //                       fontSize: 20,
+                    //                       fontFamily: fontFamily,
+                    //                       fontWeight: FontWeight.bold,
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               CircleAvatar(
+                    //                 radius: 30,
+                    //                 backgroundColor: Colors.transparent,
+                    //                 child: Image.asset(
+                    //                   'assets/images/homeNotification.png',
+                    //                   fit: BoxFit.cover,
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   fallback: (context) => const Center(
+                    //     child: CircularProgressIndicator(),
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
                           top: 20.0, start: 10.0, end: 20.0),
@@ -468,7 +529,7 @@ class HomeScreen extends StatelessWidget {
                                   child: Center(
                                     child: Text(
                                       LocaleKeys.homeTxtOffers.tr(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 20,
                                         fontFamily: fontFamily,
                                         fontWeight: FontWeight.bold,
@@ -526,7 +587,7 @@ class HomeScreen extends StatelessWidget {
                                   child: Center(
                                     child: Text(
                                       LocaleKeys.homeTxtContactUs.tr(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 20,
                                         fontFamily: fontFamily,
                                         fontWeight: FontWeight.bold,
@@ -567,22 +628,22 @@ class HomeScreen extends StatelessWidget {
                 showPopUp(
                   context,
                   Container(
-                    height: 280,
-                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: 230,
+                    width: MediaQuery.of(context).size.width * 0.6,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        verticalMediumSpace,
+                        verticalMiniSpace,
                         Padding(
                           padding:
                               const EdgeInsetsDirectional.only(start: 20.0),
                           child: Text(
                             LocaleKeys.TxtPopUpReservationType.tr(),
-                            style: TextStyle(
-                              fontSize: 20,
+                            style: const TextStyle(
+                              fontSize: 18,
                               fontFamily: fontFamily,
                               fontWeight: FontWeight.bold,
                             ),
@@ -591,7 +652,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         verticalMicroSpace,
                         myDivider(),
-                        verticalLargeSpace,
+                        verticalMiniSpace,
                         GeneralUnfilledButton(
                           borderWidth: 1,
                           btnRadius: radius - 5,
@@ -601,16 +662,22 @@ class HomeScreen extends StatelessWidget {
                           width: double.infinity,
                           onPress: () {
                             Navigator.pop(context);
+                            // Navigator.push(
+                            //     context,
+                            //     FadeRoute(
+                            //         page: HomeVisitScreen(
+                            //       testNames: testNames,
+                            //       user: user,
+                            //     )));
                             Navigator.push(
-                                context,
-                                FadeRoute(
-                                    page: HomeVisitScreen(
-                                  testNames: testNames,
-                                  user: user,
-                                )));
+                              context,
+                              FadeRoute(
+                                page: MapScreen(),
+                              ),
+                            );
                           },
                         ),
-                        verticalLargeSpace,
+                        verticalMediumSpace,
                         GeneralUnfilledButton(
                           btnRadius: radius - 5,
                           borderColor: whiteColor,

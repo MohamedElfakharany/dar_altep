@@ -78,7 +78,6 @@ abstract class  LocaleKeys {
   static const MyResultScreenNew = 'MyResultScreenNew';
   static const MyResultScreenChecked = 'MyResultScreenChecked';
   static const TxtAccurateResults = 'TxtAccurateResults';
-  static const BtnGetOffers = 'BtnGetOffers';
   static const BtnMore = 'BtnMore';
   static const AppointmentScreenTxtSelect = 'AppointmentScreenTxtSelect';
   static const AppointmentScreenTxtDay = 'AppointmentScreenTxtDay';
@@ -118,5 +117,27 @@ abstract class  LocaleKeys {
   static const txtChangeEmailSecond = 'txtChangeEmailSecond';
   static const txtChangeEmailThird = 'txtChangeEmailThird';
   static const txtCheckCode = 'txtCheckCode';
+  static const txtAway = 'txtAway';
+  static const txtLabReservationSucceeded = 'txtLabReservationSucceeded';
+  static const txtHomeReservationSucceeded = 'txtHomeReservationSucceeded';
+  static const txtThereIsNo = 'txtThereIsNo';
+  static const txtYet = 'txtYet';
+  static const txtNoNotifications = 'txtNoNotifications';
+  static const txtNoResults = 'txtNoResults';
+  static const txtDeleteNotifications = 'txtDeleteNotifications';
+  static const txtServiceType = 'txtServiceType';
+  static const txtCheckCodeTrue = 'txtCheckCodeTrue';
+  static const BtnContact = 'BtnContact';
+  static const txtHomeReserveAccepted = 'txtHomeReserveAccepted';
+  static const BtnOk = 'BtnOk';
+  static const BtnContactT = 'BtnContactT';
+  static const txtRate = 'txtRate';
+  static const txtTrustThanks = 'txtTrustThanks';
+  static const BtnBackMain = 'BtnBackMain';
+  static const salary = 'salary';
+  static const BtnConfirm = 'BtnConfirm';
+  static const BtnRate = 'BtnRate';
+  static const txtStartAt = 'txtStartAt';
+  static const txtEndAt = 'txtEndAt';
 
 }

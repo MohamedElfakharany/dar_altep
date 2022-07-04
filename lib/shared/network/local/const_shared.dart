@@ -2,6 +2,8 @@ String? token;
 
 String? deviceToken;
 
-String fontFamily = 'OpenSans';
+const String fontFamily = 'OpenSans';
 
 double radius = 15;
+
+String sharedLanguage = 'en';

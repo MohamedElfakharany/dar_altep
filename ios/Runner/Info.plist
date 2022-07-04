@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>tel</string>
+    </array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -38,7 +42,11 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>DarAltep want to accesses your Location</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>DarAltep want to accesses your Location</string>
+    <key>NSCameraUsageDescription</key>
 	<string>DarAltep want to accesses your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>DarAltep want to accesses your photo library</string>
@@ -63,6 +71,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+    <true/>
 	<key>FirebaseMessagingAutoInitEnabled</key>
 	<false/>
 </dict>

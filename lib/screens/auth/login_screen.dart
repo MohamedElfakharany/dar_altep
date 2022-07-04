@@ -8,7 +8,7 @@ import 'package:dar_altep/screens/auth/send_email_reset_password_screen.dart';
 import 'package:dar_altep/screens/home/home_screen.dart';
 import 'package:dar_altep/shared/components/general_components.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:flutter/foundation.dart';
@@ -33,9 +33,12 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit(),
+      create: (BuildContext context) => AppCubit()..getCountriesData(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {
+          if (kDebugMode) {
+            print(AppCubit.get(context).local);
+          }
           if (state is AppLoginSuccessState) {
             if (state.userModel.status) {
               tokenSaving(state.userModel.data?.token);
@@ -62,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title:  Text(LocaleKeys.txtError.tr()),
+                    title: Text(LocaleKeys.txtError.tr()),
                     content: const Text('please contact with lab'),
                   );
                 });
@@ -107,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         Text(
                           LocaleKeys.loginTxtMain.tr(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 25,
@@ -117,7 +120,7 @@ class LoginScreen extends StatelessWidget {
                         verticalSmallSpace,
                         Text(
                           LocaleKeys.loginTxtSecondary.tr(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: whiteColor,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -214,10 +217,11 @@ class LoginScreen extends StatelessWidget {
                                           InkWell(
                                             onTap: () {
                                               Navigator.push(
-                                                  context,
-                                                  FadeRoute(
-                                                      page:
-                                                          const RegisterScreen()));
+                                                context,
+                                                FadeRoute(
+                                                  page: const RegisterScreen(),
+                                                ),
+                                              );
                                             },
                                             child: DefaultTextButton(
                                               title: LocaleKeys.registerTxtMain

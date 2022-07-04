@@ -1,13 +1,18 @@
-// ignore_for_file: must_be_immutable, body_might_complete_normally_nullable
+// ignore_for_file: must_be_immutable, body_might_complete_normally_nullable, library_private_types_in_public_api
 
+import 'package:dar_altep/cubit/cubit.dart';
+import 'package:dar_altep/cubit/states.dart';
 import 'package:dar_altep/shared/constants/colors.dart';
-import 'package:dar_altep/shared/constants/generalConstants.dart';
+import 'package:dar_altep/shared/constants/general_constants.dart';
 import 'package:dar_altep/shared/network/local/const_shared.dart';
 import 'package:dar_altep/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 void navigateAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
       context,
@@ -106,6 +111,7 @@ class GeneralButton extends StatelessWidget {
         child: Center(
           child: Text(
             title,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: fontSize,
               color: Colors.white,
@@ -242,7 +248,7 @@ class GeneralAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           color: whiteColor,
           fontWeight: FontWeight.bold,
           fontFamily: fontFamily,
@@ -354,7 +360,6 @@ class DefaultFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      // height:  height,
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -375,22 +380,23 @@ class DefaultFormField extends StatelessWidget {
               return 'Fill $validatedText';
             }
             if (isConfirm == true) {
-              if (value != confirm && validatedText == LocaleKeys.TxtFieldReEnterPassword.tr()){
+              if (value != confirm &&
+                  validatedText == LocaleKeys.TxtFieldReEnterPassword.tr()) {
                 return LocaleKeys.txtPasswordsNotMatch.tr();
-              }else if (value == confirm && validatedText == LocaleKeys.TxtFieldNewPassword.tr()){
+              } else if (value != confirm &&
+                  validatedText == LocaleKeys.TxtFieldNewPassword.tr()) {
                 return LocaleKeys.txtNewOldPasswordsNotMatch.tr();
               }
             }
-            if (validatedText == LocaleKeys.txtFieldMobile.tr()){
-              if (value.length < 9 ){
+            if (validatedText == LocaleKeys.txtFieldMobile.tr()) {
+              if (value.length < 9) {
                 return LocaleKeys.txtMobileLessNine.tr();
               }
             }
             if (validatedText == LocaleKeys.txtFieldPassword.tr() ||
                 validatedText == LocaleKeys.TxtFieldNewPassword.tr() ||
                 validatedText == LocaleKeys.TxtFieldReEnterPassword.tr() ||
-                validatedText == LocaleKeys.TxtFieldOldPassword.tr()
-            ){
+                validatedText == LocaleKeys.TxtFieldOldPassword.tr()) {
               if (value.length < 8) {
                 return LocaleKeys.txtPasswordValidate.tr();
               }
@@ -456,7 +462,7 @@ class DefaultFormField extends StatelessWidget {
                     start: 20.0, end: 10.0, bottom: 15.0),
           ),
           style:
-              TextStyle(color: blueLight, fontSize: 14, fontFamily: fontFamily),
+              const TextStyle(color: blueLight, fontSize: 14, fontFamily: fontFamily),
         ),
       ),
     );
@@ -653,10 +659,435 @@ class ScreenHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'No $msg Yet',
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.headline3?.copyWith(color: blueDark),
+    return Center(
+      child: Text(
+        '${LocaleKeys.txtThereIsNo.tr()} $msg ${LocaleKeys.txtYet.tr()}',
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.headline5?.copyWith(color: blueDark),
+      ),
     );
   }
+}
+
+class CalenderView extends StatefulWidget {
+  const CalenderView();
+
+  @override
+  _CalenderViewState createState() => _CalenderViewState();
+}
+
+class _CalenderViewState extends State<CalenderView> {
+  // final DateTime _currentDay = DateTime.now();
+  final DateTime _today = DateTime.now();
+  DateTime? _selectedDay;
+
+  var day;
+  var month;
+
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
+
+  // List<SessionModel> _getEventsForDay(DateTime day) {
+  //   return [];
+  // }
+  // final bool _loadingData = true;
+  // final bool _isCurrentMonthChanged = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AppCubit,AppStates>(
+      listener: (context,state){},
+      builder: (context, state){
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4), color: whiteColor),
+                child: Padding(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 5, vertical: 10.0),
+                  child: TableCalendar(
+                    locale: sharedLanguage,
+                    firstDay: kFirstDay,
+                    lastDay: kLastDay,
+                    focusedDay: _today,
+                    calendarFormat: _calendarFormat,
+                    startingDayOfWeek: StartingDayOfWeek.sunday,
+                    daysOfWeekHeight: 30,
+                    rowHeight: 40,
+                    // eventLoader: _getEventsForDay,
+                    // for badge under day
+                    selectedDayPredicate: (day) {
+                      // Use `selectedDayPredicate` to determine which day is currently selected.
+                      // If this returns true, then `day` will be marked as selected.
+
+                      // Using `isSameDay` is recommended to disregard
+                      // the time-part of compared DateTime objects.
+                      return isSameDay(_selectedDay, day);
+                    },
+                    onFormatChanged: (format) {
+                      // if (_calendarFormat == CalendarFormat.month) {
+                      //   setState(() {
+                      //     _calendarFormat = CalendarFormat.twoWeeks;
+                      //   });
+                      // }
+                      // else if ( _calendarFormat == CalendarFormat.twoWeeks){
+                      //   setState(() {
+                      //     _calendarFormat = CalendarFormat.week;
+                      //   });
+                      // }
+                      // else if (_calendarFormat == CalendarFormat.week){
+                      //   setState(() {
+                      //     _calendarFormat = CalendarFormat.month;
+                      //   });
+                      // }
+                    },
+
+                    onCalendarCreated: (controller) {
+                      // Provider.of<ShiftsProvider>(context,listen: false).fetchCalendarDaysWithOffers(context,startDate: widget.startDate,endDate: widget.endDate,historyType: widget.historyType);
+                    },
+
+                    onPageChanged: (DateTime day) {
+                      // to save current page in Calendar when page changed .
+                    },
+                    onDaySelected: (selectedDay, focusedDay) {
+                      if (!isSameDay(_selectedDay, selectedDay)) {
+                        // Call `setState()` when updating the selected day
+                        setState(() {
+                          _selectedDay = selectedDay;
+                        });
+                      }
+                      if(selectedDay.day <= 9){
+                        day = '0${selectedDay.day}';
+                      }else {
+                        day = selectedDay.day;
+                      }
+
+                      if(selectedDay.month <= 9){
+                        month = '0${selectedDay.month}';
+                      }else {
+                        month = selectedDay.month;
+                      }
+
+                      AppCubit.get(context).getLabAppointmentsData(date: '${selectedDay.year.toString()}-${month.toString()}-${day.toString()}');
+                    },
+                    availableCalendarFormats: const {
+                      CalendarFormat.month: 'Month',
+                    },
+                    headerStyle: HeaderStyle(
+                      headerPadding: EdgeInsets.symmetric(horizontal: 0.2.sw),
+                      // rightChevronIcon: Transform.rotate(
+                      //     angle: Provider.of<LocalizationController>(context,
+                      //                     listen: false)
+                      //                 .locale
+                      //                 .languageCode ==
+                      //             "ar"
+                      //         ? rightRotationAngle
+                      //         : leftRotationAngle,
+                      //     child: SvgPicture.asset("assets/dropDownArrow.svg",
+                      //         color: greenBlue, height: 0.03.sw)),
+                      // leftChevronIcon: Transform.rotate(
+                      //     angle: Provider.of<LocalizationController>(context,
+                      //                     listen: false)
+                      //                 .locale
+                      //                 .languageCode ==
+                      //             "ar"
+                      //         ? leftRotationAngle
+                      //         : rightRotationAngle,
+                      //     child: SvgPicture.asset("assets/dropDownArrow.svg",
+                      //         color: greenBlue, height: 0.03.sw)),
+                    ),
+                    calendarStyle: CalendarStyle(
+                      selectedTextStyle: const TextStyle(color: blueDark),
+                      todayDecoration: const BoxDecoration(
+                          color: blueDark, shape: BoxShape.circle),
+                      selectedDecoration: BoxDecoration(
+                          color: blueDark.withOpacity(0.2),
+                          shape: BoxShape.circle),
+                      defaultDecoration: const BoxDecoration(),
+                      holidayDecoration:
+                      const BoxDecoration(shape: BoxShape.circle),
+                      weekendDecoration:
+                      const BoxDecoration(shape: BoxShape.circle),
+                      rangeEndDecoration:
+                      const BoxDecoration(shape: BoxShape.circle),
+                      outsideDecoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      disabledDecoration:
+                      const BoxDecoration(shape: BoxShape.circle),
+                      weekendTextStyle: const TextStyle(
+                        color: blueDark,
+                      ),
+                      markerSize: 15.0,
+                      markerDecoration: const BoxDecoration(),
+                      isTodayHighlighted: true,
+                    ),
+                    availableGestures: AvailableGestures.horizontalSwipe,
+                    // calendarBuilders: CalendarBuilders<SessionModel>(
+                    //   dowBuilder: (context, day) {
+                    //     return Center(
+                    //       child: ExcludeSemantics(
+                    //         child: Text(
+                    //           "${DateFormat.E("en").format(day)}",
+                    //           style: TextStyle(
+                    //               color: !_isCurrentMonthChanged &&
+                    //                       DateFormat.E("en_US").format(_today) ==
+                    //                           DateFormat.E("en_US").format(day)
+                    //                   ? Theme.of(context).primaryColor
+                    //                   : dustyTeal,
+                    //               fontWeight: FontWeight.w400),
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class HomeCalenderView extends StatefulWidget {
+  const HomeCalenderView();
+
+  @override
+  _HomeCalenderViewState createState() => _HomeCalenderViewState();
+}
+
+class _HomeCalenderViewState extends State<HomeCalenderView> {
+  // final DateTime _currentDay = DateTime.now();
+  final DateTime _today = DateTime.now();
+  DateTime? _selectedDay;
+
+  var day;
+  var month;
+
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
+
+  // List<SessionModel> _getEventsForDay(DateTime day) {
+  //   return [];
+  // }
+  // final bool _loadingData = true;
+  // final bool _isCurrentMonthChanged = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AppCubit,AppStates>(
+      listener: (context,state){},
+      builder: (context, state){
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4), color: whiteColor),
+                child: Padding(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 5, vertical: 10.0),
+                  child: TableCalendar(
+                    locale: sharedLanguage,
+                    firstDay: kFirstDay,
+                    lastDay: kLastDay,
+                    focusedDay: _today,
+                    calendarFormat: _calendarFormat,
+                    startingDayOfWeek: StartingDayOfWeek.sunday,
+                    daysOfWeekHeight: 30,
+                    rowHeight: 40,
+                    // eventLoader: _getEventsForDay,
+                    // for badge under day
+                    selectedDayPredicate: (day) {
+                      // Use `selectedDayPredicate` to determine which day is currently selected.
+                      // If this returns true, then `day` will be marked as selected.
+
+                      // Using `isSameDay` is recommended to disregard
+                      // the time-part of compared DateTime objects.
+                      return isSameDay(_selectedDay, day);
+                    },
+                    onFormatChanged: (format) {
+                      // if (_calendarFormat == CalendarFormat.month) {
+                      //   setState(() {
+                      //     _calendarFormat = CalendarFormat.twoWeeks;
+                      //   });
+                      // }
+                      // else if ( _calendarFormat == CalendarFormat.twoWeeks){
+                      //   setState(() {
+                      //     _calendarFormat = CalendarFormat.week;
+                      //   });
+                      // }
+                      // else if (_calendarFormat == CalendarFormat.week){
+                      //   setState(() {
+                      //     _calendarFormat = CalendarFormat.month;
+                      //   });
+                      // }
+                    },
+
+                    onCalendarCreated: (controller) {
+                      // Provider.of<ShiftsProvider>(context,listen: false).fetchCalendarDaysWithOffers(context,startDate: widget.startDate,endDate: widget.endDate,historyType: widget.historyType);
+                    },
+
+                    onPageChanged: (DateTime day) {
+                      // to save current page in Calendar when page changed .
+                    },
+                    onDaySelected: (selectedDay, focusedDay) {
+                      if (!isSameDay(_selectedDay, selectedDay)) {
+                        // Call `setState()` when updating the selected day
+                        setState(() {
+                          _selectedDay = selectedDay;
+                        });
+                      }
+                      if(selectedDay.day <= 9){
+                        day = '0${selectedDay.day}';
+                      }else {
+                        day = selectedDay.day;
+                      }
+
+                      if(selectedDay.month <= 9){
+                        month = '0${selectedDay.month}';
+                      }else {
+                        month = selectedDay.month;
+                      }
+
+                      AppCubit.get(context).getHomeAppointmentsData(date: '${selectedDay.year.toString()}-${month.toString()}-${day.toString()}');
+                    },
+                    availableCalendarFormats: const {
+                      CalendarFormat.month: 'Month',
+                    },
+                    headerStyle: HeaderStyle(
+                      headerPadding: EdgeInsets.symmetric(horizontal: 0.2.sw),
+                      // rightChevronIcon: Transform.rotate(
+                      //     angle: Provider.of<LocalizationController>(context,
+                      //                     listen: false)
+                      //                 .locale
+                      //                 .languageCode ==
+                      //             "ar"
+                      //         ? rightRotationAngle
+                      //         : leftRotationAngle,
+                      //     child: SvgPicture.asset("assets/dropDownArrow.svg",
+                      //         color: greenBlue, height: 0.03.sw)),
+                      // leftChevronIcon: Transform.rotate(
+                      //     angle: Provider.of<LocalizationController>(context,
+                      //                     listen: false)
+                      //                 .locale
+                      //                 .languageCode ==
+                      //             "ar"
+                      //         ? leftRotationAngle
+                      //         : rightRotationAngle,
+                      //     child: SvgPicture.asset("assets/dropDownArrow.svg",
+                      //         color: greenBlue, height: 0.03.sw)),
+                    ),
+                    calendarStyle: CalendarStyle(
+                      selectedTextStyle: const TextStyle(color: blueDark),
+                      todayDecoration: const BoxDecoration(
+                          color: blueDark, shape: BoxShape.circle),
+                      selectedDecoration: BoxDecoration(
+                          color: blueDark.withOpacity(0.2),
+                          shape: BoxShape.circle),
+                      defaultDecoration: const BoxDecoration(),
+                      holidayDecoration:
+                      const BoxDecoration(shape: BoxShape.circle),
+                      weekendDecoration:
+                      const BoxDecoration(shape: BoxShape.circle),
+                      rangeEndDecoration:
+                      const BoxDecoration(shape: BoxShape.circle),
+                      outsideDecoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      disabledDecoration:
+                      const BoxDecoration(shape: BoxShape.circle),
+                      weekendTextStyle: const TextStyle(
+                        color: blueDark,
+                      ),
+                      markerSize: 15.0,
+                      markerDecoration: const BoxDecoration(),
+                      isTodayHighlighted: true,
+                    ),
+                    availableGestures: AvailableGestures.horizontalSwipe,
+                    // calendarBuilders: CalendarBuilders<SessionModel>(
+                    //   dowBuilder: (context, day) {
+                    //     return Center(
+                    //       child: ExcludeSemantics(
+                    //         child: Text(
+                    //           "${DateFormat.E("en").format(day)}",
+                    //           style: TextStyle(
+                    //               color: !_isCurrentMonthChanged &&
+                    //                       DateFormat.E("en_US").format(_today) ==
+                    //                           DateFormat.E("en_US").format(day)
+                    //                   ? Theme.of(context).primaryColor
+                    //                   : dustyTeal,
+                    //               fontWeight: FontWeight.w400),
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+void showCustomBottomSheet(
+    BuildContext context, {
+      required Widget bottomSheetContent,
+      required double bottomSheetHeight,
+    }) {
+  showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0))),
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (context) {
+        return ScreenUtilInit(
+          builder: (ctx,_) {
+            return SizedBox(
+              height: bottomSheetHeight.sh,
+              child: Stack(
+                children: [
+                  Positioned(
+                    right: 0.4.sw,
+                    left: 0.4.sw,
+                    top: 10,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      height: 5,
+                      decoration: BoxDecoration(
+                          color: blueDark,
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                  ),
+                  bottomSheetContent
+                ],
+              ),
+            );
+          },
+        );
+      });
 }
