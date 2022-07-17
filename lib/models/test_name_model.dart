@@ -5,8 +5,6 @@ import 'dart:convert';
 
 TestNameModel testNameModelFromJson(dynamic str) => TestNameModel.fromJson(json.decode(str));
 
-// dynamic testNameModelToJson(TestNameModel data) => json.encode(data.toJson());
-
 class TestNameModel {
   TestNameModel({
     this.status,
@@ -23,12 +21,6 @@ class TestNameModel {
     message: json["message"],
     data: List<TestModelData>.from(json["data"].map((x) => TestModelData.fromJson(x))),
   );
-
-  // Map<dynamic, dynamic> toJson() => {
-  //   "status": status,
-  //   "message": message,
-  //   "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  // };
 }
 
 class TestModelData {
@@ -44,9 +36,4 @@ class TestModelData {
     id: json["id"],
     name: json["name"],
   );
-
-  Map<dynamic, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-  };
 }

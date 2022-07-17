@@ -408,7 +408,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 label: LocaleKeys.txtFieldDateOfBirth.tr(),
                                 onTap: () {
                                   showDatePicker(
+                                    initialEntryMode: DatePickerEntryMode.calendarOnly,
                                     context: context,
+                                    locale: Locale(sharedLanguage),
                                     initialDate: DateTime?.now(),
                                     firstDate: DateTime?.parse('1950-01-01'),
                                     lastDate: DateTime?.now(),
